@@ -1,2 +1,17 @@
-# lab-report-assistant-
-This platform assists non-native English-speaking teachers in evaluating students' lab reports under the British university system.
+# Lab Report AI 辅助批改工具
+
+面向中国高校教师的英文 Lab Report 理解与批改辅助项目。首个试点聚焦一门课程、一类实验报告和 DOCX 文件，帮助教师理解报告结构、定位原文证据、审核 Rubric 建议并形成最终反馈。
+
+## 项目文档
+
+- [项目规划与设计依据](PROJECT_BRIEF.md)：产品范围、三栏起改页、两类报告导图、数据分析思路、AI 使用约束、隐私原则与试点路径。
+
+## 核心工作流
+
+上传 DOCX → 解析并为段落编号 → 生成报告框架和论点思维导图 → 对照当前作业 Rubric 生成带证据的候选建议 → 教师审核、编辑和确认 → 导出反馈。
+
+## 设计边界
+
+AI 仅提供可审核的理解草稿和候选反馈。报告导图不是评分结论；无原文证据的建议需教师核实；正式分数、反馈和任何面向学生的发送动作均由教师确认。Turnitin 等外部检测结果作为独立参考来源，不自动转化为学术不端判断。
+
+项目目前处于试点规划和交互原型阶段，API 接入、DOCX 解析、正式评分和反馈推送尚未实现。
