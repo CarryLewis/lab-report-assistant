@@ -1,147 +1,149 @@
-# Lab Report AI 辅助批改工具
+# Lab Report AI-Assisted Feedback Tool
 
-## 项目定义
+## Project Definition
 
-这是一个面向中国高校教师的英文 Lab Report 辅助理解与批改工具。系统依据作业要求和评分细则（rubric），帮助教师快速了解报告写了什么、报告的论述结构、原文中的具体证据，以及可审核、可编辑的反馈建议。系统服务于教师判断，不替代教师作出最终评分决定。
+This project is an English lab-report comprehension and feedback assistant for university instructors in China. Based on assignment instructions and a grading rubric, it helps instructors understand what a report says, inspect its argument structure and source evidence, and review and edit candidate feedback. The system supports instructor judgment and does not make final grading decisions.
 
-## 首个 Demo
+## First Demo
 
-首个版本只验证一条完整且可用的教师工作流：
+The first version validates one complete instructor workflow:
 
-> 上传一份 DOCX 报告 → 结构化理解报告 → 对照 rubric 分析 → 定位原文证据 → 教师编辑与确认 → 导出反馈。
+> Upload a DOCX report → build a structured understanding of the report → analyze it against the rubric → locate source evidence → instructor edits and confirms → export feedback.
 
-试点默认只覆盖一门课程、一个 Lab Report 类型和可解析的 DOCX 文件。目标是让教师能够更快读懂英文报告、查看建议依据，并形成自己的最终反馈。
+The pilot is limited to one course, one lab-report type, and parseable DOCX files. The goal is to help instructors understand English reports faster, inspect the basis for suggestions, and prepare their own final feedback.
 
-## 核心体验
+## Core Experience
 
-批改工作台应围绕以下四个部分组织：
+The review workspace is organized around four areas:
 
-- **报告结构视图**：展示章节、论述主线和中文概览，帮助教师快速理解报告内容。
-- **英文原文与证据定位**：每一条建议都能跳转到对应段落或短引文。
-- **Rubric 反馈卡片**：按评分维度展示优点、问题、缺失内容、原文证据和建议理由。
-- **教师审核区**：教师可以编辑、接受或拒绝建议，并确认最终反馈。
+- **Report structure view:** Show sections, the main line of argument, and a Chinese overview to help instructors understand the report quickly.
+- **English source and evidence navigation:** Let each suggestion jump to the relevant paragraph or short quotation.
+- **Rubric feedback cards:** Show strengths, issues, missing elements, source evidence, and the rationale for each suggestion by rubric dimension.
+- **Instructor review area:** Let instructors edit, accept, or reject suggestions and confirm final feedback.
 
-## 起改页设计依据
+## Review Workspace Design Rationale
 
-起改页采用三栏工作区：左侧提供报告理解导航，中间呈现英文原文与证据定位，右侧供教师分析、核对 rubric 和撰写反馈。首屏保留上传 DOCX 与示例报告两个入口，便于独立预览和后续联调。
+The review workspace uses three columns: report navigation on the left, the English source and evidence in the center, and instructor analysis, rubric review, and feedback drafting on the right. The entry page keeps two simple options—upload a DOCX or open a sample report—for preview and future integration testing.
 
-左侧导图提供两种互补视图：
+The left-side report map provides two complementary views:
 
-- **报告框架**：按文档实际章节层级整理目录，显示章节主题与关键内容，帮助教师快速确认文章结构。
-- **论点思维导图**：概括报告主旨、各部分分论点与论证关系，并标记问题、缺失信息或需要核实之处。节点应能定位原文段落。
+- **Report outline:** Organize the document using its actual section hierarchy and show section topics and key content, so instructors can confirm the report structure quickly.
+- **Argument map:** Summarize the report's main claim, supporting claims, relationships between claims, and potential issues or missing information. Each node should link to source paragraphs.
 
-两种视图均为 AI 生成的理解草稿，教师可以切换、修订和核对；不能把导图本身当作评分结论。
+Both views are AI-generated drafts for understanding. Instructors can switch views, revise the content, and verify it. Neither view is itself a grading result.
 
-右侧审核与笔记区覆盖报告概览、Rubric 维度建议、原文证据、教师采纳/编辑/忽略、评分理由、个人复核笔记和最终学生反馈。建议文案可参考经授权的课程反馈语料与教师评分理由，保留语料来源、适用 rubric 维度和证据段落，供教师判断；教师确认后再形成可交付反馈。
+The right-side review and notes area includes a report overview, rubric-dimension suggestions, source evidence, instructor accept/edit/reject actions, grading rationale, private review notes, and final student feedback. Suggested wording may draw on authorized course feedback examples and instructor grading rationales. The system should retain each example's source, applicable rubric dimension, and evidence paragraph for review. Only instructor-confirmed feedback becomes deliverable.
 
-Turnitin 等外部检测能力作为后续集成点：需依据学校已有授权、产品接口和数据治理要求确认可用能力。检测结果应作为独立证据来源展示，不能替代教师判断，也不能让相似度或 AI 检测结论自动变成学术不端认定。反馈推送学生前应由教师审核并明确确认。
+Turnitin and similar external detection services are future integration points. Their availability depends on institutional authorization, product interfaces, and data-governance requirements. Results should be displayed as a separate evidence source and must not replace instructor judgment or automatically establish misconduct based on a similarity score or AI-detection result. An instructor must review and explicitly confirm feedback before it is sent to a student.
 
-思维导图或结构树用于帮助浏览和定位；它们是理解报告的入口，不是独立的评分结果。
+Report maps and outline trees support navigation and comprehension; they are not independent scoring results.
 
-## AI 的角色与边界
+## AI Role and Boundaries
 
-AI 负责理解英文报告、提取结构、按 rubric 提出带原文证据的候选建议，并用清晰的中文解释其理由。
+AI interprets English reports, extracts structure, proposes rubric-aligned suggestions linked to source evidence, and explains its rationale in clear Chinese.
 
-教师负责判断建议是否成立、修改反馈内容和决定最终成绩。没有可定位原文证据的结论应标记为需要教师核实，不能作为确定性评分依据。
+Instructors decide whether suggestions are valid, edit the feedback, and determine final grades. Any conclusion without locatable source evidence must be marked for instructor verification and cannot serve as a definitive grading basis.
 
-## 大模型全流程约束设计
+## End-to-End Constraints on Large Language Model Use
 
-### 总体原则
+### General Principles
 
-- 模型只生成可审核的理解结果和候选反馈，不直接提交成绩、认定学术不端、联系学生或触发外部系统写操作。
-- 模型只能依据当前作业要求、当前 rubric、当前报告文本和明确授权的反馈范例回答。不得把其他学生报告作为当前报告的隐式上下文。
-- 将解析、结构提取、论点分析、Rubric 建议和反馈润色拆成独立步骤；每一步只接收完成该任务所需的最少数据。
-- 模型输出视为不可信数据。所有输出均需经过格式、字段、证据段落和业务规则校验后才能展示。
-- 浏览器端不保存 DeepSeek API 密钥。由服务端调用模型，并按课程、任务和用户权限控制数据访问。
+- The model generates reviewable comprehension results and candidate feedback only. It must not submit grades, determine academic misconduct, contact students, or perform write actions in external systems.
+- The model may use only the current assignment instructions, current rubric, current report text, and explicitly authorized feedback examples. Other students' reports must not be included as implicit context for the current report.
+- Split parsing, structure extraction, argument analysis, rubric suggestions, and feedback editing into separate tasks. Each task receives only the minimum data needed.
+- Treat model output as untrusted data. Validate its format, fields, evidence paragraphs, and business rules before displaying it.
+- Never expose the DeepSeek API key in the browser. Call the model from a server that enforces course, task, and user permissions.
 
-### 分阶段约束
+### Stage-by-Stage Constraints
 
-1. **上传与解析**：仅接受试点支持的 DOCX；文件解析服务提取正文、标题和表格，生成不可变的段落 ID。解析失败、空文档或文本抽取异常时停止分析并提示教师，不让模型猜测文档内容。原始文件与解析文本按课程权限隔离。
-2. **作业与 Rubric 装配**：由服务端从当前课程配置中提供作业要求和 rubric 的版本化快照。模型不得自行补充评分维度、分值、课程政策或未提供的实验事实。
-3. **报告框架生成**：只允许输出有序章节、标题来源、段落 ID 和简短摘要。明确区分文档中实际出现的章节与模型推断的章节；推断项必须标注，不得伪装成原文标题。
-4. **论点思维导图生成**：每个节点包含主旨/分论点/关系/问题类型、支持段落 ID 和置信状态。无法找到直接证据的关系或问题标为“待教师核实”；模型不得将缺失信息自动解释成学生错误。
-5. **Rubric 候选建议**：逐 rubric 维度单独判断。每条建议必须包含维度 ID、对应标准、候选表现描述、原文段落 ID、理由、建议反馈、需核实标记；没有有效证据或标准映射时不得输出确定性结论。评分和分值只由教师填写或确认。
-6. **反馈语料检索与生成**：检索仅限已授权、去标识化且符合当前课程/rubric 范围的教师范例。将范例作为表达参考而非事实来源；输出需引用当前报告证据，不得复制范例中的学生事实、分数或结论。记录检索范例 ID 供追溯。
-7. **教师审核与导出**：初始建议标记为草稿。采纳、修改、拒绝、评分和最终反馈均由教师执行；只有教师显式确认后才允许导出。任何后续学生端推送都必须经过独立的教师确认动作。
+1. **Upload and parsing:** Accept only DOCX files supported by the pilot. Extract body text, headings, and tables, and assign immutable paragraph IDs. Stop and notify the instructor if parsing fails, the document is empty, or text extraction is abnormal; do not let the model guess. Isolate source files and parsed text by course permissions.
+2. **Assignment and rubric assembly:** The server provides versioned snapshots of the current assignment instructions and rubric from course configuration. The model must not invent rubric dimensions, point values, course policy, or experimental facts that were not provided.
+3. **Report-outline generation:** Output ordered sections, heading provenance, paragraph IDs, and brief summaries only. Distinguish headings that appear in the document from inferred sections; label inferences and never present them as source headings.
+4. **Argument-map generation:** Each node includes a claim or issue type, supporting paragraph IDs, and a confidence/review state. Mark relationships or issues without direct evidence as requiring instructor verification. Do not interpret missing information as proof of student error.
+5. **Rubric candidate suggestions:** Evaluate one rubric dimension at a time. Each suggestion must include the dimension ID, criterion, candidate performance description, source paragraph IDs, rationale, suggested feedback, and a verification flag. Do not state a definitive conclusion without valid evidence and rubric mapping. Only the instructor enters or confirms scores.
+6. **Feedback-example retrieval and generation:** Retrieve only authorized, de-identified instructor examples that match the current course and rubric scope. Use them as wording references, not as sources of facts. Ground the generated feedback in the current report, never copy facts, scores, or conclusions about another student, and retain retrieved example IDs for traceability.
+7. **Instructor review and export:** Mark all suggestions as drafts initially. The instructor performs acceptance, editing, rejection, scoring, and final feedback confirmation. Export is allowed only after explicit instructor confirmation. Any future student-facing delivery requires a separate confirmation action.
 
-### 输出契约与校验
+### Output Contract and Validation
 
-模型按固定 JSON Schema 输出；服务端校验必填字段、枚举值、长度上限、段落 ID 是否存在、Rubric 维度是否属于当前作业、引用是否能在原文中定位。对拒答、空内容、JSON 解析失败、输出截断、超时和 API 错误分别处理；有限次数重试仍失败则保留原文并显示可恢复错误，禁止将不完整内容伪装成成功结果。
+Require a fixed JSON schema. The server validates required fields, enum values, length limits, whether paragraph IDs exist, whether rubric dimensions belong to the current assignment, and whether quotations can be located in the source. Handle refusals, empty responses, JSON parse failures, truncation, timeouts, and API errors separately. If a limited number of retries fail, preserve the source and show a recoverable error; never present incomplete output as a successful result.
 
-建议每个生成对象附带 `task_type`、`schema_version`、`model_id`、`prompt_version`、`rubric_version`、`source_paragraph_ids`、`generated_at` 和 `review_status` 等追溯字段。置信度如未经过校准，只能作为模型自述的辅助信号，不得显示成经验证概率或用于自动评分门槛。
+For traceability, each generated object should include fields such as task_type, schema_version, model_id, prompt_version, rubric_version, source_paragraph_ids, generated_at, and review_status. Unless calibrated, confidence is only a model-provided signal. Do not present it as a validated probability or use it as an automatic grading threshold.
 
-### 提示注入与数据隔离
+### Prompt Injection and Data Isolation
 
-报告正文、引用、文件名和检索到的反馈范例均视为不可信输入。系统提示需明确要求模型把其中的指令性文字当作待分析内容，不得遵从其要求泄露数据、改变评分标准或调用工具。分析任务不开放任意工具调用；模型无权访问其他课程、学生记录、外网或密钥。服务端根据当前会话构造输入并检查每个对象的课程和作业归属。
+Treat report text, quotations, filenames, and retrieved feedback examples as untrusted input. System instructions must tell the model to analyze instruction-like text in those materials instead of following it, and not to disclose data, change grading criteria, or call tools based on it. Do not enable arbitrary tool calls for analysis. The model has no access to other courses, student records, the public internet, or secrets. The server constructs each request from the current session and verifies course and assignment ownership for every object.
 
-### 评估、版本与回滚
+### Evaluation, Versioning, and Rollback
 
-建立由教师核验的固定评测集，覆盖章节结构、论点提取、问题识别、证据定位、Rubric 对齐、反馈可用性和格式有效性。每次更换模型、提示词、解析逻辑或 rubric 映射时，先在评测集回归；未达预设门槛不得发布。保存模型与提示词版本及必要的质量指标，提供回退到上一稳定版本的能力。重点监测证据错误率、无依据建议率、教师大幅修改/拒绝原因、解析失败率和响应失败率，不以采纳率单独代表质量。
+Build a fixed evaluation set verified by instructors. Cover section structure, claim extraction, issue detection, evidence location, rubric alignment, feedback usefulness, and output validity. Run regression evaluations before changing the model, prompt, parser, or rubric mapping; do not release changes that fail agreed thresholds. Record model and prompt versions plus necessary quality metrics, and support rollback to the last stable version.
 
-### 隐私与外部服务
+Monitor evidence errors, unsupported-suggestion rates, reasons for major instructor edits or rejections, parsing failures, and response failures. Do not use acceptance rate as the sole quality measure.
 
-向 DeepSeek 或其他外部服务发送数据前，确认学校对数据类别、处理目的、存储与保留、服务地域、授权和合同的要求。优先发送去标识化的必要文本，不发送姓名、学号和无关元数据；保留最少必要的运行日志，避免记录完整报告和 API 密钥。Turnitin 等检测结果作为独立来源保存和呈现，标注来源与时间，不转换为自动定罪或自动评分结论。
+### Privacy and External Services
 
-## 数据使用原则
+Before sending data to DeepSeek or another external service, confirm institutional requirements for data categories, purpose, storage and retention, service region, authorization, and contracts. Prefer sending only necessary de-identified text; exclude names, student IDs, and irrelevant metadata. Keep operational logs to the minimum necessary and do not log complete reports or API keys. Store and present Turnitin or similar results as a separate source, labeled with origin and time; do not convert them into automatic misconduct or grading decisions.
 
-- 历史报告、教师评分理由和 rubric 用于建立评分规则、典型案例和质量评测。
-- 首先使用已授权、适合试点且已去标识化的样本。
-- 报告、解析文本、分析结果和教师反馈按课程与权限隔离。
-- 当前报告的分析只使用当前作业所需的题目要求和 rubric；历史学生作品不直接作为其他学生报告的分析上下文。
-- 数据处理、存储、保留和外部服务使用方式须在试点前按学校要求确认。
+## Data Use Principles
 
-## 试点数据整理与分析
+- Use historical reports, instructor grading rationales, and rubrics to establish grading guidance, representative examples, and evaluation criteria.
+- Start with authorized, de-identified samples suitable for the pilot.
+- Isolate reports, parsed text, analysis results, and instructor feedback by course and permission.
+- Analyze a report using only the assignment instructions and rubric needed for that assignment. Do not use historical student work as context for another student's analysis.
+- Confirm institutional requirements for processing, storage, retention, and external services before the pilot.
 
-首轮试点将数据用于验证流程质量和改进建议，不直接用于训练模型或自动评分。
+## Pilot Data Preparation and Analysis
 
-### 数据准备
+The first pilot uses data to evaluate workflow quality and improve suggestions. It does not use pilot data directly to train a model or automate grading.
 
-先限定一门课程、一个作业和一套 rubric。每个去标识化样本关联作业要求、rubric 版本、报告解析文本、段落 ID、教师原始评分与理由、最终反馈。学生身份信息与分析数据分开保存；仅保留试点评估所需字段。确认样本授权、访问范围、保留期限和外部服务使用条件后再处理。
+### Data Preparation
 
-### 教师参照标注
+Limit the pilot to one course, one assignment, and one rubric. Associate each de-identified sample with assignment instructions, rubric version, parsed report text, paragraph IDs, the instructor's original score and rationale, and final feedback. Store student identity separately from evaluation data and retain only fields needed for the pilot. Confirm sample authorization, access scope, retention period, and external-service conditions before processing.
 
-由课程教师按 rubric 维度标注分数、优点、问题、证据段落、反馈建议和需核实内容。若有多位教师，记录意见一致与分歧，不把分歧简单合并成“标准答案”；通过讨论确认 rubric 的解释边界和需要人工判断的情况。
+### Instructor Reference Annotations
 
-### 质量与使用评估
+Instructors annotate scores, strengths, issues, evidence paragraphs, feedback suggestions, and items requiring verification for each rubric dimension. If multiple instructors participate, record both agreement and disagreement rather than collapsing differences into a single "correct answer." Discuss disagreements to clarify rubric boundaries and situations requiring human judgment.
 
-- **报告框架**：章节识别、顺序、遗漏和章节摘要是否忠于原文。
-- **论点思维导图**：主旨、分论点、论证关系和问题标注是否准确且有段落证据。
-- **Rubric 建议**：维度匹配、标准对齐、证据定位准确性、理由质量和反馈可用性。
-- **教师工作流**：记录建议采纳、编辑、拒绝及原因，教师批改时间、证据查找时间和对结果的评价。
+### Quality and Usability Evaluation
 
-通过小规模同报告或相近难度报告对照，比较系统辅助前后的时间、反馈完整度、证据准确性与教师体验。采纳率只作为行为信号，不单独视为模型正确率；需结合教师抽查和错误类型分析。结果形成三项交付：去标识化样本集、教师标注与分歧记录、试点质量评估报告。
+- **Report outline:** Check section identification, ordering, omissions, and whether summaries reflect the source.
+- **Argument map:** Check the accuracy and evidence for the main claim, supporting claims, argument relationships, and identified issues.
+- **Rubric suggestions:** Check dimension matching, criterion alignment, evidence location, rationale quality, and feedback usefulness.
+- **Instructor workflow:** Record acceptance, edits, rejection reasons, grading time, evidence-search time, and instructor ratings.
 
-### 教师反馈语料
+Use a small comparison involving the same or similarly difficult reports to measure time, feedback completeness, evidence accuracy, and instructor experience with and without the system. Treat acceptance rate as a behavioral signal, not a measure of correctness by itself; combine it with instructor audits and error analysis. Produce three pilot deliverables: a de-identified sample set, instructor annotations and disagreement records, and a pilot quality evaluation report.
 
-将经授权的历史评语按 rubric 维度和反馈功能整理，作为检索示例帮助统一表达和教学重点。每个示例保留来源及适用范围；模型只把它作为表达参考，必须针对当前报告证据重新生成，不能复制旧样本的事实、分数或结论。试点先评估检索增强是否有效，再决定是否需要模型微调。
+### Instructor Feedback Corpus
 
-### 外部检测结果
+Organize authorized historical comments by rubric dimension and feedback purpose. Use them as retrieval examples to support consistent wording and teaching focus. Retain each example's source and applicable scope. The model uses examples only as wording references and must generate feedback grounded in the current report; it must not copy another sample's facts, score, or conclusion. Evaluate retrieval-augmented generation during the pilot before considering fine-tuning.
 
-Turnitin 等外部工具结果单独记录来源、时间和解释范围，作为教师复核材料。将其与 rubric 评价分开呈现，不单凭相似度或 AI 检测结果自动认定学术不端或生成处罚性反馈。
+### External Detection Results
 
-## 后续工作路径
+Store results from Turnitin or similar tools separately with their source, timestamp, and interpretation scope. Present them as material for instructor review, separate from rubric evaluation. Do not use similarity or AI-detection results alone to automatically conclude misconduct or generate punitive feedback.
 
-1. 选择一门课程、一个作业题目和一套 rubric。
-2. 整理少量历史样本，确认教师的真实批改步骤、常见问题和反馈方式。
-3. 做出首个 Demo 闭环，并请少量教师用历史报告试用。
-4. 以教师对建议的采纳、修改、拒绝和对证据准确性的评价作为改进依据。
-5. 试点稳定后，再扩展课程、报告类型、用户规模、部署方案和必要的机器学习能力。
+## Next Steps
 
-## 当前暂缓事项
+1. Select one course, assignment, and rubric.
+2. Prepare a small set of historical samples and confirm instructors' real grading steps, common issues, and feedback style.
+3. Build and test the first end-to-end demo with a small group of instructors using historical reports.
+4. Use instructor acceptance, edits, rejection, and evidence-accuracy ratings to guide improvements.
+5. Expand courses, report types, user scale, deployment options, and machine-learning capabilities only after the pilot is stable.
 
-以下内容不属于首个 Demo 的交付范围：
+## Deferred from the First Demo
 
-- 自动生成正式最终成绩；
-- 支持所有课程和所有 Lab Report 类型；
-- 复杂 PDF、扫描件、OCR、手写内容和复杂公式；
-- 学生端、多人实时协作和跨课程管理报表；
-- 本地模型或校内模型部署；
-- 在缺少稳定标注和评测结果前进行模型训练或微调。
+The following are outside the first demo scope:
 
-## 开发决策原则
+- Automatically assigning final grades.
+- Supporting every course and lab-report type.
+- Complex PDFs, scanned documents, OCR, handwriting, and complex equations.
+- A student-facing application, real-time multi-user collaboration, and cross-course analytics.
+- Local or campus-hosted model deployment.
+- Training or fine-tuning before stable annotations and evaluation results are available.
 
-后续功能必须服务于以下主线：
+## Product Decision Principle
 
-> 让教师更快理解英文 Lab Report，并依据可查看的原文证据和 rubric，完成自己可以审核、编辑和确认的批改反馈。
+All future functionality must support this core goal:
 
-如果一个功能不能提升理解、证据可追溯性、rubric 对齐或教师审核能力，应先验证其价值，再进入开发范围。
+> Help instructors understand English lab reports faster and produce feedback they can review, edit, confirm, and ground in visible source evidence and the rubric.
+
+If a feature does not improve comprehension, evidence traceability, rubric alignment, or instructor review, validate its value before including it in development.
