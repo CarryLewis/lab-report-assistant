@@ -1,0 +1,12 @@
+services:
+  labwise:
+    build: .
+    ports:
+      - "127.0.0.1:8000:8000"
+    volumes:
+      - labwise-data:/data
+    environment:
+      DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
+    restart: unless-stopped
+volumes:
+  labwise-data:

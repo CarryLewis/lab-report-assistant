@@ -4,6 +4,8 @@ A project to help university instructors understand and review English lab repor
 
 ## Project Documentation
 
+- [引用验证模块开发纲领](docs/CITATION_VERIFICATION_CHARTER.md): governing design for all subsequent citation-verification development.
+
 - [Project plan and design brief](PROJECT_BRIEF.md): product scope, three-column review workspace, report map types, pilot data analysis, model-use constraints, privacy principles, and rollout plan.
 - [Historical writing baseline](corpus/historical/BASELINE_ANALYSIS.md): de-identified writing samples, teacher feedback patterns, confirmed scoring rules, and the reusable analysis template.
 - [Citation verification plan](docs/06_CITATION_VERIFICATION.md): reference matching, citation-style checks, scholarly-search integration, claim support review, safeguards, and rollout phases.
@@ -20,6 +22,8 @@ The project is currently in the pilot planning and interactive prototyping stage
 
 ## Local preview
 
+The scholarly search endpoint now queries Crossref, PubMed and Europe PMC concurrently. Results are merged by DOI, PMID or PMCID, with source provenance retained and partial results returned when a provider is unavailable. PubMed requests are throttled across local threads. Set optional `NCBI_API_KEY` on the server for the higher NCBI request allowance; never place it in browser code. `LABWISE_CONTACT_EMAIL` identifies NCBI requests. Full-text retrieval and automated claim-support analysis remain future work.
+
 ```bash
 python3 -m pip install -r requirements.txt
 python3 server.py
@@ -27,3 +31,15 @@ python3 server.py
 
 Open `http://127.0.0.1:8000/#workspace` and select **引用核验**. For responsible Crossref production use, set `LABWISE_CONTACT_EMAIL` to an operational contact address; use `LABWISE_PORT` to override the local port.
 
+
+## Local Runnable Pilot
+
+Run `python3 server.py` and open <http://127.0.0.1:8000/pilot.html>.
+The runnable pilot includes DOCX/PDF text extraction, assignment/Rubric JSON import,
+SQLite draft storage, sample analysis, guarded DeepSeek calls, instructor scores,
+version restoration, and a Phase 1 manual-delivery feedback package. After instructor
+confirmation, the same student-facing data can be printed/saved as PDF, downloaded as
+an editable DOCX or structured JSON, or copied as a Turnitin/LMS entry summary. Private
+instructor notes are excluded from every export; this phase does not write to Turnitin.
+See [pilot setup and limitations](examples/README.md).
+The original interactive preview remains at `/`.

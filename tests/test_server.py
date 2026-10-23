@@ -1,9 +1,19 @@
 import unittest
 
-from server import _normalise_work, _plain_text
+from server import _normalise_work, _plain_text, merge_works
 
 
 class ScholarlyMetadataTests(unittest.TestCase):
+    def test_merge_retains_provenance_and_fills_abstract(self):
+        result = merge_works([[{'doi': '10.1/ABC', 'source': 'Crossref', 'abstract': None}], [{'doi': '10.1/abc', 'source': 'PubMed', 'abstract': 'Evidence', 'pmid': '123'}]])
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0]['sources'], ['Crossref', 'PubMed'])
+        self.assertEqual(result[0]['abstract'], 'Evidence')
+        self.assertEqual(result[0]['pmid'], '123')
+
+    def test_same_title_without_identifier_is_not_merged(self):
+        self.assertEqual(len(merge_works([[{'title': 'Same title', 'source': 'Crossref'}], [{'title': 'Same title', 'source': 'PubMed'}]])), 2)
+
     def test_plain_text_removes_jats_markup(self):
         self.assertEqual(_plain_text("<jats:p>A &amp; B</jats:p>"), "A & B")
 

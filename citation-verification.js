@@ -37,7 +37,7 @@ citationsPane.innerHTML = `
   </div>
   <div class="citation-note">核验顺序：先检查正文与参考文献的对应关系，再核对书目信息和指定格式，最后用摘要或全文判断引用内容是否真的支持学生的主张。外部检索命中本身不能证明引用恰当。</div>
   <div id="citationCards"></div>
-  <div class="sectionlabel">外部文献检索 · Crossref</div>
+  <div class="sectionlabel">外部文献检索 · Crossref / PubMed / Europe PMC</div>
   <div class="citation-search"><input id="citationQuery" maxlength="300" aria-label="文献检索词" placeholder="输入题名、作者、DOI 或关键词"><button id="citationSearchButton">检索</button></div>
   <div id="citationSearchStatus" class="screen-reader-status">仅发送当前检索词，不发送学生报告全文。</div>
   <div id="citationResults"></div>`;
@@ -105,14 +105,14 @@ async function searchCitations() {
   const status = document.getElementById('citationSearchStatus');
   const results = document.getElementById('citationResults');
   if (!query) { status.textContent = '请输入题名、作者、DOI 或关键词。'; return; }
-  status.textContent = '正在查询 Crossref 元数据…'; results.innerHTML = '';
+  status.textContent = '正在联合查询 Crossref、PubMed 与 Europe PMC…'; results.innerHTML = '';
   try {
     const response = await fetch(`/api/scholarly/search?q=${encodeURIComponent(query)}&limit=5`);
     const data = await response.json();
     if (!response.ok) throw new Error(data.error || '检索失败');
-    status.textContent = `找到 ${data.results.length} 条候选。元数据匹配不代表内容支持。`;
+    status.textContent = `找到 ${data.results.length} 条去重候选。${data.providers.map(p => p.provider + '：' + (p.status === 'ok' ? p.count + ' 条' : '暂不可用')).join('；')}。元数据匹配不代表内容支持。`;
     results.innerHTML = data.results.map(work => {
-      const meta = [work.authors.slice(0,3).join(', '), work.year, work.container_title, work.doi ? `DOI: ${work.doi}` : null].filter(Boolean).join(' · ');
+      const meta = [(work.sources || [work.source]).join(' / '), work.authors.slice(0,3).join(', '), work.year, work.container_title, work.doi ? `DOI: ${work.doi}` : null, work.pmid ? `PMID: ${work.pmid}` : null, work.pmcid].filter(Boolean).join(' · ');
       const abstract = work.abstract ? work.abstract.slice(0,260) + (work.abstract.length > 260 ? '…' : '') : '未取得摘要；不能据此判断是否支持学生主张。';
       const sourceUrl = safeExternalUrl(work.url);
       return `<article class="search-result"><b>${escapeText(work.title)}</b><small>${escapeText(meta)}</small><p>${escapeText(abstract)}</p>${sourceUrl ? `<button data-url="${escapeText(sourceUrl)}">打开来源页面 ↗</button>` : ''}</article>`;

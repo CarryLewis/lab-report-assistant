@@ -1,5 +1,17 @@
 # 引用核验与外部文献检索
 
+本文件为详细实施参考，须遵循[引用验证模块开发纲领](CITATION_VERIFICATION_CHARTER.md)。阶段与架构约定冲突时以纲领为准。
+
+## 第一版实施进度（2026-10-23）
+
+真实试点入口 `/pilot.html` 已接入 `citation_core.py`：对已解析 DOCX 段落执行基础作者—年份提取，保留位置、上下文和输入哈希；支持完整/片段输入、孤立及歧义关联、未使用条目和重复 DOI。可选择未指定样式或 APA 7 基础字段规则（年份括号与 DOI URL）。结果随报告写入本地数据库，教师逐条修正说明进入版本历史。每条参考文献可触发三库检索并显示摘要。
+
+新增接口：`POST /api/pilot/reports/{id}/citations`（revision/style/completeness）；`POST /api/pilot/reports/{id}/citation-review`（revision/reference_id/note）。两者均校验报告修订号，保存前创建快照，并取消原反馈确认状态。
+
+第一版仍在建设，尚不满足完整验收：CSL 完整排版规则、跨段条目、ibid、编号制、手工重关联与来源候选确认持久化尚待实现。当前来源检索结果不等于身份已确认；教师复核说明也不自动产生内容支持结论。新增测试覆盖歧义、重复、片段输入、格式字段与原文偏移；连同既有回归共 13 项通过。浏览器交互尚待验收。
+
+当前实现更新：检索入口已并发接入 Crossref、PubMed E-utilities 与 Europe PMC，按 DOI/PMID/PMCID 合并记录并保留来源；单库失败返回其余结果。PubMed 使用进程内共享限流，支持服务端 `NCBI_API_KEY` 和 `LABWISE_CONTACT_EMAIL`。当前取得元数据及可用摘要，尚未自动下载全文或生成内容支持结论。生产多进程部署需使用共享限流器。
+
 ## 目标与边界
 
 引用核验帮助教师回答三个彼此独立的问题：

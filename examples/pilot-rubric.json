@@ -1,0 +1,8 @@
+{
+  "name": "Lab Report Pilot Rubric", "version": "1",
+  "criteria": [
+    {"id":"methods","name":"实验方法与可重复性","maximum_points":30,"descriptor":"Describe the procedure, controls, sampling and replicates clearly."},
+    {"id":"results","name":"结果与数据呈现","maximum_points":30,"descriptor":"Present quantitative results with appropriate units and uncertainty."},
+    {"id":"discussion","name":"讨论与批判性分析","maximum_points":40,"descriptor":"Interpret evidence, acknowledge limitations and justify conclusions."}
+  ]
+}

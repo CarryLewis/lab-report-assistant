@@ -1,0 +1,6 @@
+.git
+.labwise
+__pycache__
+.env*
+corpus/historical
+*.sqlite3*

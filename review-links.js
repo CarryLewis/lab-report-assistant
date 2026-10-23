@@ -13,16 +13,17 @@ const labelFor=f=>f.kind==='strength'?'优点':'问题';
 function badge(f){return `<span class="finding-number ${f.kind}">${f.id}</span>`;}
 const pane=document.getElementById('reviewPane');
 pane.querySelectorAll('.rubric').forEach(n=>n.remove());
-const finalLabel=[...pane.querySelectorAll('.sectionlabel')].find(n=>n.textContent.includes('最终反馈'));
+const finalLabel=[...pane.querySelectorAll('.sectionlabel')].find(n=>n.textContent.includes('学生反馈')||n.textContent.includes('最终反馈'));
 const hint=document.createElement('p');hint.className='link-hint';hint.textContent='悬停建议，同步定位原文与导图；点击编号可固定定位。';finalLabel.before(hint);
 reviewFindings.forEach(f=>{
   const card=document.createElement('article');card.className=`rubric finding-card ${f.kind}`;card.id=`finding-${f.id}`;card.dataset.finding=f.id;card.tabIndex=0;
-  card.innerHTML=`<div class="rubric-top"><b>${badge(f)} ${f.title}</b><span class="finding-type">${labelFor(f)}</span></div><div class="review-status">审核状态：待复核</div><p>${f.detail}</p><button class="evidence-link">↗ ${f.section==='results'?'Results':'Methods'} · 原文与导图定位</button><div class="feedback-example"><b>学术反馈草稿 · 示例</b><div class="feedback-text">${f.feedback}</div><small>教师语料库：待接入 · 请核对后使用</small></div><div class="actions"><button class="accept">✓ 采纳</button><button>编辑</button><button>忽略</button></div>`;
+  card.innerHTML=`<div class="rubric-top"><b>${badge(f)} ${f.title}</b><span class="score">待教师评分</span></div><div class="review-status">审核状态：待教师判断 · ${labelFor(f)}</div><p>${f.detail}</p><div class="evidence-summary"><span class="evidence-pill">${labelFor(f)}证据 · ${f.section==='results'?'Results':'Methods'}</span><span class="evidence-pill">原文编号 ${f.id}</span></div><button class="evidence-link">查看原文与导图定位 →</button><div class="confidence">${f.kind==='strength'?'高':'中等'}置信度 · 仅基于当前报告可见内容，需教师结合 rubric 确认。</div><div class="level-label">教师选择该 criterion 等级</div><div class="level-picker" role="group" aria-label="${f.title}等级"><button data-score="4">优秀</button><button data-score="3">良好</button><button data-score="2">合格</button><button data-score="1">需改进</button></div><div class="feedback-example"><b>学生反馈草稿 · AI 生成</b><div class="feedback-text">${f.feedback}</div><small>尚未确认 · 发布前由教师编辑</small></div><div class="actions"><button class="accept">采用并确认</button><button>编辑理由</button><button>不采用</button></div>`;
   finalLabel.before(card);
   const status=card.querySelector('.review-status'), text=card.querySelector('.feedback-text'), buttons=card.querySelectorAll('.actions button');
-  buttons[0].onclick=()=>{status.textContent='审核状态：已采纳';const t=pane.querySelector('textarea[placeholder]');t.value+=(t.value?'\n\n':'')+text.textContent;};
-  buttons[1].onclick=()=>{text.contentEditable='true';text.focus();status.textContent='审核状态：编辑中';};
-  buttons[2].onclick=()=>{status.textContent='审核状态：已忽略';card.classList.add('dismissed');};
+  card.querySelectorAll('.level-picker button').forEach(level=>level.onclick=()=>{card.querySelectorAll('.level-picker button').forEach(n=>n.classList.remove('active'));level.classList.add('active');card.querySelector('.score').textContent=`${level.textContent} · ${level.dataset.score}/4`;status.textContent='审核状态：教师已选择等级';status.style.color='#245f8f';document.getElementById('saveState').textContent='正在保存…';setTimeout(()=>document.getElementById('saveState').textContent='所有更改已保存',450);});
+  buttons[0].onclick=()=>{if(!card.querySelector('.level-picker .active')){showToast('请先选择该评分项的等级');return;}status.textContent='审核状态：教师已确认';status.style.color='#18794e';const t=pane.querySelector('textarea[placeholder]');if(!t.value.includes(text.textContent))t.value+=(t.value?'\n\n':'')+text.textContent;confirmedCriteria.add(f.title);updateReviewProgress();buttons[0].textContent='已确认';showToast('已确认评分项并加入学生反馈草稿');};
+  buttons[1].onclick=()=>{text.contentEditable='true';text.focus();status.textContent='审核状态：正在编辑理由';};
+  buttons[2].onclick=()=>{status.textContent='审核状态：教师未采用此建议';card.classList.add('dismissed');};
   card.querySelector('.evidence-link').onclick=()=>pinFinding(f.id);
   card.addEventListener('pointerenter',()=>{clearTimeout(hoverTimer);hoverTimer=setTimeout(()=>activateFinding(f.id,'card'),140);});
   card.addEventListener('pointerleave',()=>{clearTimeout(hoverTimer);activateFinding(pinnedFinding,'none');});

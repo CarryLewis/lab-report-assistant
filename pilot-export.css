@@ -1,0 +1,56 @@
+.export-dialog {
+  max-width: 720px;
+  padding: 0;
+  overflow: auto;
+}
+.dialog-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 22px 24px 14px;
+  border-bottom: 1px solid var(--line);
+}
+.dialog-head h2 { font-size: 20px; margin: 4px 0; }
+.dialog-head small { font-size: 9px; letter-spacing: 1.6px; color: var(--blue); }
+.export-ready {
+  display: flex;
+  gap: 13px;
+  margin: 20px 24px;
+  padding: 14px;
+  border-radius: 7px;
+  background: #edf7f1;
+  border: 1px solid #cce5d5;
+}
+.export-ready > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #31815a;
+  color: white;
+  font-weight: bold;
+  flex: 0 0 auto;
+}
+.export-ready b { color: #286a4c; }
+.export-ready p, .phase-note p { margin: 3px 0 0; color: var(--muted); font-size: 12px; }
+.export-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  padding: 0 24px;
+}
+.export-grid button { text-align: left; padding: 15px; min-height: 84px; }
+.export-grid b, .export-grid small { display: block; }
+.export-grid b { color: var(--navy); margin-bottom: 4px; }
+.export-grid small { color: var(--muted); line-height: 1.5; }
+.phase-note {
+  margin: 20px 24px 24px;
+  padding: 14px;
+  border-left: 3px solid #83a9c4;
+  background: #f5f8fb;
+}
+@media (max-width: 820px) {
+  .export-grid { grid-template-columns: 1fr; }
+}
