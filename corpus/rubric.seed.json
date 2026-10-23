@@ -1,0 +1,124 @@
+{
+  "version": "0.1.0",
+  "status": "illustrative_not_course_approved",
+  "notes": "Weights are a provisional 100-point example. Assignment-approved criteria override this seed. Descriptors require course-specific calibration; no automatic grade conversion.",
+  "dimensions": [
+    {
+      "id": "aim",
+      "name_zh": "研究目的与背景",
+      "provisional_weight": 10,
+      "criterion_en": "States a focused aim and explains the relevant scientific context.",
+      "criterion_zh": "目的明确，背景与实验相关。",
+      "descriptors": {
+        "excellent": "Complete, accurate and well justified; all applicable elements are addressed.",
+        "proficient": "Mostly accurate and complete; minor gaps do not substantially weaken the work.",
+        "developing": "Partially addresses the criterion; gaps in detail or reasoning weaken the work.",
+        "limited": "Provides little relevant evidence for the criterion; major elements need development."
+      }
+    },
+    {
+      "id": "hypothesis",
+      "name_zh": "假设与科学依据",
+      "provisional_weight": 10,
+      "criterion_en": "Presents a testable hypothesis supported by scientific reasoning.",
+      "criterion_zh": "假设可检验，预测有科学依据。",
+      "descriptors": {
+        "excellent": "Complete, accurate and well justified; all applicable elements are addressed.",
+        "proficient": "Mostly accurate and complete; minor gaps do not substantially weaken the work.",
+        "developing": "Partially addresses the criterion; gaps in detail or reasoning weaken the work.",
+        "limited": "Provides little relevant evidence for the criterion; major elements need development."
+      }
+    },
+    {
+      "id": "methods",
+      "name_zh": "实验方法与可重复性",
+      "provisional_weight": 15,
+      "criterion_en": "Describes the design, variables, controls and procedure in sufficient detail for replication.",
+      "criterion_zh": "设计、变量、对照与步骤足以支持复现。",
+      "descriptors": {
+        "excellent": "Complete, accurate and well justified; all applicable elements are addressed.",
+        "proficient": "Mostly accurate and complete; minor gaps do not substantially weaken the work.",
+        "developing": "Partially addresses the criterion; gaps in detail or reasoning weaken the work.",
+        "limited": "Provides little relevant evidence for the criterion; major elements need development."
+      }
+    },
+    {
+      "id": "results",
+      "name_zh": "结果与数据呈现",
+      "provisional_weight": 15,
+      "criterion_en": "Reports observations accurately with appropriate tables, figures, units and captions.",
+      "criterion_zh": "观察结果准确，图表、单位与说明完整。",
+      "descriptors": {
+        "excellent": "Complete, accurate and well justified; all applicable elements are addressed.",
+        "proficient": "Mostly accurate and complete; minor gaps do not substantially weaken the work.",
+        "developing": "Partially addresses the criterion; gaps in detail or reasoning weaken the work.",
+        "limited": "Provides little relevant evidence for the criterion; major elements need development."
+      }
+    },
+    {
+      "id": "analysis",
+      "name_zh": "数据处理与分析",
+      "provisional_weight": 15,
+      "criterion_en": "Uses appropriate calculations and analysis, with transparent assumptions and uncertainty where relevant.",
+      "criterion_zh": "计算与分析适当，假设和不确定性清晰。",
+      "descriptors": {
+        "excellent": "Complete, accurate and well justified; all applicable elements are addressed.",
+        "proficient": "Mostly accurate and complete; minor gaps do not substantially weaken the work.",
+        "developing": "Partially addresses the criterion; gaps in detail or reasoning weaken the work.",
+        "limited": "Provides little relevant evidence for the criterion; major elements need development."
+      }
+    },
+    {
+      "id": "discussion",
+      "name_zh": "讨论与科学解释",
+      "provisional_weight": 20,
+      "criterion_en": "Interprets findings using evidence and scientific principles and considers alternative explanations.",
+      "criterion_zh": "以证据和原理解释结果，并考虑其他解释。",
+      "descriptors": {
+        "excellent": "Complete, accurate and well justified; all applicable elements are addressed.",
+        "proficient": "Mostly accurate and complete; minor gaps do not substantially weaken the work.",
+        "developing": "Partially addresses the criterion; gaps in detail or reasoning weaken the work.",
+        "limited": "Provides little relevant evidence for the criterion; major elements need development."
+      }
+    },
+    {
+      "id": "limitations",
+      "name_zh": "局限与改进",
+      "provisional_weight": 5,
+      "criterion_en": "Evaluates specific limitations, their likely effects and feasible improvements.",
+      "criterion_zh": "说明具体局限、影响及可行改进。",
+      "descriptors": {
+        "excellent": "Complete, accurate and well justified; all applicable elements are addressed.",
+        "proficient": "Mostly accurate and complete; minor gaps do not substantially weaken the work.",
+        "developing": "Partially addresses the criterion; gaps in detail or reasoning weaken the work.",
+        "limited": "Provides little relevant evidence for the criterion; major elements need development."
+      }
+    },
+    {
+      "id": "conclusion",
+      "name_zh": "结论",
+      "provisional_weight": 5,
+      "criterion_en": "Answers the aim in proportion to the evidence without introducing unsupported claims.",
+      "criterion_zh": "回应目的，结论强度与证据相称。",
+      "descriptors": {
+        "excellent": "Complete, accurate and well justified; all applicable elements are addressed.",
+        "proficient": "Mostly accurate and complete; minor gaps do not substantially weaken the work.",
+        "developing": "Partially addresses the criterion; gaps in detail or reasoning weaken the work.",
+        "limited": "Provides little relevant evidence for the criterion; major elements need development."
+      }
+    },
+    {
+      "id": "communication",
+      "name_zh": "学术表达与引用",
+      "provisional_weight": 5,
+      "criterion_en": "Uses clear scientific language and consistent, traceable citations.",
+      "criterion_zh": "科学表达清晰，引用规范且可追溯。",
+      "descriptors": {
+        "excellent": "Complete, accurate and well justified; all applicable elements are addressed.",
+        "proficient": "Mostly accurate and complete; minor gaps do not substantially weaken the work.",
+        "developing": "Partially addresses the criterion; gaps in detail or reasoning weaken the work.",
+        "limited": "Provides little relevant evidence for the criterion; major elements need development."
+      }
+    }
+  ]
+}

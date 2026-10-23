@@ -20,6 +20,7 @@ The review workspace is organized around four areas:
 - **English source and evidence navigation:** Let each suggestion jump to the relevant paragraph or short quotation.
 - **Rubric feedback cards:** Show strengths, issues, missing elements, source evidence, and the rationale for each suggestion by rubric dimension.
 - **Instructor review area:** Let instructors edit, accept, or reject suggestions and confirm final feedback.
+- **Citation verification:** Link in-text citations to reference entries, verify bibliographic fields against scholarly metadata, and show claim-to-source evidence for instructor review. A metadata match never proves that the cited work supports the student's claim.
 
 ## Review Workspace Design Rationale
 
@@ -147,3 +148,4 @@ All future functionality must support this core goal:
 > Help instructors understand English lab reports faster and produce feedback they can review, edit, confirm, and ground in visible source evidence and the rubric.
 
 If a feature does not improve comprehension, evidence traceability, rubric alignment, or instructor review, validate its value before including it in development.
+
