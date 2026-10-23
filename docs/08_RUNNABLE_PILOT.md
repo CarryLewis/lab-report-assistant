@@ -1,8 +1,13 @@
-# Local Runnable Pilot
+# Teacher Pilot Interface and Supporting Services
 
-The runnable app is at `/pilot.html`; `/` retains the earlier interactive prototype.
-It uses browser HTML/CSS/JavaScript, a Python HTTP service and SQLite. It has no
-frontend build step. Optional certifi supplies a certificate bundle for external APIs.
+The product now uses the original teacher dashboard at `/` as its single entry.
+The separate runnable UI has been retired and `/pilot.html` redirects to `/`.
+Task summaries and review tasks lead to the original three-column prototype.
+Assignment and grading-criteria import/editing is integrated in this shell,
+using a simple document/pasted-text input and a saved-assignment library.
+
+The review workspace retains sample content; the supporting backend services
+listed below do not imply that live report analysis is connected to that view.
 
 ## Components
 

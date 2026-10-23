@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 
 # Accept explicit criterion maxima; grade ranges are not interpreted as maxima.
-SCORED = re.compile(r'^(.+?)\s*(?:[（(]\s*(\d+(?:\.\d+)?)\s*(分|marks?|points?|%)\s*[）)]|[:：|]\s*(\d+(?:\.\d+)?)\s*(分|marks?|points?|%)?|\s+(\d+(?:\.\d+)?)\s*(分|marks?|points?|%))\s*(?:[-—:：]\s*(.*))?$', re.I)
+SCORED = re.compile(r'^(.+?)\s*(?:[（(]\s*(\d+(?:\.\d+)?)\s*(分|marks?|points?|%)\s*[）)]|[:：|]\s*(\d+(?:\.\d+)?)\s*(分|marks?|points?|%)?|\s+(\d+(?:\.\d+)?)\s*(分|marks?|points?|%))\s*(?:[-—:：，,;；]\s*(.*))?$', re.I)
 TOTAL = re.compile(r'^(总分|合计|满分|total(?:\s+(?:marks|points|score))?)(?:\s|[:：（(]|$)', re.I)
 
 
@@ -17,7 +17,20 @@ def parse_source(source):
     units=set()
     unresolved=[]
     declared_total=None
-    for original in source.splitlines():
+    lines=[line.strip() for line in source.splitlines() if line.strip()]
+    combined=[]
+    i=0
+    while i<len(lines):
+        # Join adjacent criterion/score cells from document tables, only when
+        # the score has an explicit unit; plain numbers remain ambiguous.
+        if i+1<len(lines) and not SCORED.match(lines[i]) and re.fullmatch(r'[（(]?\s*\d+(?:\.\d+)?\s*(分|marks?|points?|%)\s*[）)]?',lines[i+1],re.I):
+            score=lines[i+1].strip('（）() ')
+            combined.append(lines[i]+'：'+score)
+            i+=2
+        else:
+            combined.append(lines[i])
+            i+=1
+    for original in combined:
         line=re.sub(r'^\s*(?:[-*•]\s*|\d+[.、)]\s*)','',original.strip())
         if not line:
             continue

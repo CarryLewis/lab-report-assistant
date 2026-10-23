@@ -154,7 +154,7 @@ class Handler(SimpleHTTPRequestHandler):
         if parsed.path.startswith('/api/pilot/'):
             return self._pilot('GET', parsed.path)
         # Serve explicit public assets only. Never expose SQLite, keys or samples.
-        public = {'/', '/index.html', '/pilot.html', '/pilot.css', '/pilot-export.css', '/pilot.js',
+        public = {'/', '/index.html', '/pilot.html', '/pilot.css', '/pilot-export.css', '/pilot.js', '/assignment-editor.js', '/teacher-shell.js', '/teacher-settings.css',
                   '/review-links.js', '/citation-verification.js', '/pilot-citations.js',
                   '/lab_report_rubric.default.json', '/custom_rubric.template.json',
                   '/examples/pilot-rubric.json'}

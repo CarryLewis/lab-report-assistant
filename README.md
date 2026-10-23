@@ -32,14 +32,16 @@ python3 server.py
 Open `http://127.0.0.1:8000/#workspace` and select **引用核验**. For responsible Crossref production use, set `LABWISE_CONTACT_EMAIL` to an operational contact address; use `LABWISE_PORT` to override the local port.
 
 
-## Local Runnable Pilot
+## Teacher Pilot Interface
 
-Run `python3 server.py` and open <http://127.0.0.1:8000/pilot.html>.
-The runnable pilot includes DOCX/PDF text extraction, assignment/Rubric JSON import,
-SQLite draft storage, sample analysis, guarded DeepSeek calls, instructor scores,
-version restoration, and a Phase 1 manual-delivery feedback package. After instructor
-confirmation, the same student-facing data can be printed/saved as PDF, downloaded as
-an editable DOCX or structured JSON, or copied as a Turnitin/LMS entry summary. Private
-instructor notes are excluded from every export; this phase does not write to Turnitin.
-See [pilot setup and limitations](examples/README.md).
-The original interactive preview remains at `/`.
+Run `python3 server.py` and open <http://127.0.0.1:8000/>.
+On macOS, `start.command` starts the same interface at port 8001.
+The teacher dashboard is the single product entry: task summaries and review
+assignments lead to the original three-column review workspace. Assignment and
+rubric import/editing is integrated into this dashboard. The former `/pilot.html`
+entry now redirects to `/`.
+
+The review workspace currently retains its interactive sample content. Assignment
+settings support local Word/PDF text extraction and pasted grading criteria,
+with readable previews and persisted edits. Existing report rubric snapshots are
+preserved when assignment settings change.
