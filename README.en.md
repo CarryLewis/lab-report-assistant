@@ -2,6 +2,23 @@
 
 [中文](README.md) | **English**
 
+## Download the complete project
+
+**[Download the complete project ZIP (latest main source)](https://github.com/CarryLewis/lab-report-assistant/archive/refs/heads/main.zip)**
+
+Alternatively, select the green **Code → Download ZIP** button in this repository. Extract the archive into `lab-report-assistant-main`, then follow [Run locally](#run-locally) to install dependencies and start the application.
+
+If Git is installed, clone the entire repository from a terminal:
+
+```bash
+git clone https://github.com/CarryLewis/lab-report-assistant.git
+cd lab-report-assistant
+```
+
+This downloads the complete public project on the current `main` branch, including source code, documentation, tests, fictional examples and checked-in dependency assets. It is a source download, not a standalone installer; Python dependencies and Word conversion components still require setup. Local student material, databases and API keys are excluded.
+
+## Project overview
+
 Help university instructors understand English lab reports faster, trace feedback to source evidence, and retain control over every final judgment.
 
 Labwise is a project for understanding, reviewing and providing feedback on university lab reports. It began with the needs of instructors in China who review English reports as non-native English speakers, focusing initially on report writing and rubric-based assessment in the British university context. Its longer-term aim is a workspace that fits everyday teaching practice.

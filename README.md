@@ -2,6 +2,23 @@
 
 **中文** | [English](README.en.md)
 
+## 下载完整项目
+
+**[下载完整项目 ZIP（main 最新源码）](https://github.com/CarryLewis/lab-report-assistant/archive/refs/heads/main.zip)**
+
+也可以点击本仓库的绿色 **Code → Download ZIP**。下载后解压为 `lab-report-assistant-main` 文件夹，再按下方的[本地运行](#本地运行)说明安装依赖并启动。
+
+如果已安装 Git，可在终端克隆整个仓库：
+
+```bash
+git clone https://github.com/CarryLewis/lab-report-assistant.git
+cd lab-report-assistant
+```
+
+该入口下载当前 `main` 分支中的完整公开项目，包含源码、文档、测试、虚构示例和已纳入仓库的依赖资源。它是源码下载，不是免安装应用；Python 依赖和 Word 转换组件仍需按运行说明准备。本地学生资料、数据库及 API 密钥不包含在下载内容中。
+
+## 项目简介
+
 让高校教师更快读懂英文实验报告，让每条反馈都能回到原文证据，让最终判断始终由教师掌握。
 
 Labwise 是一个面向高校教师的实验报告理解、评阅与反馈项目。它从中国高校非英语母语教师批改英文 Lab Report 的需求出发，关注英国大学体系下的报告写作与 Rubric（评分细则）对照，逐步探索可以融入日常教学的教师工作台。
