@@ -7,6 +7,7 @@ import zipfile
 from pathlib import Path
 from unittest.mock import patch
 import pilot_backend as p
+from ai_fixtures import create_assignment, analysis_output
 
 
 class PilotWorkflowTests(unittest.TestCase):
@@ -15,6 +16,7 @@ class PilotWorkflowTests(unittest.TestCase):
         self.patch = patch.object(p, 'DATA', Path(self.temp.name))
         self.patch.start()
         p.init()
+        self.assignment_id = create_assignment()
 
     def tearDown(self):
         self.patch.stop()
@@ -24,14 +26,16 @@ class PilotWorkflowTests(unittest.TestCase):
         return p.dispatch('GET' if body is None else 'POST', '/api/pilot/'+path, body or {}, None)
 
     def sample(self):
-        return self.call('reports', {'assignment_id':'sample-assignment','sample':True})
+        return self.call('reports', {'assignment_id':self.assignment_id,'sample':True})
 
     def test_complete_workflow_and_rollback(self):
         r = self.sample()
         path = 'reports/'+r['id']
         with self.assertRaises(ValueError):
             self.call(path+'/export')
-        r = self.call(path+'/analyze', {'mode':'example','revision':r['revision']})
+        validated = p.validate_analysis(analysis_output(), r)
+        with patch.object(p, 'analyze', return_value=validated):
+            r = self.call(path+'/analyze', {'mode':'deepseek','revision':r['revision']})
         self.assertEqual(len(r['analysis']['findings']),2)
         scores = {c['id']: c['maximum_points']*.8 for c in r['assignment']['rubric']['criteria']}
         body = {'revision':r['revision'],'scores':scores,'reviews':{'1':'accepted','2':'edited'},'notes':'PRIVATE NOTE','feedback':'Instructor final feedback <unsafe>','suggestion_edits':{'2':'Edited feedback'}}
@@ -80,7 +84,7 @@ class PilotWorkflowTests(unittest.TestCase):
         out=io.BytesIO()
         with zipfile.ZipFile(out,'w') as z:
             z.writestr('word/document.xml','<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body><w:p><w:r><w:t>Results</w:t></w:r></w:p><w:p><w:r><w:t>Actual report text</w:t></w:r></w:p></w:body></w:document>')
-        r=self.call('reports',{'assignment_id':'sample-assignment','filename':'real.docx','file':base64.b64encode(out.getvalue()).decode()})
+        r=self.call('reports',{'assignment_id':self.assignment_id,'filename':'real.docx','file':base64.b64encode(out.getvalue()).decode()})
         self.assertEqual(r['paragraphs'][1]['text'],'Actual report text')
         r=self.call('reports/'+r['id']+'/analyze',{'revision':r['revision'],'mode':'example'})
         self.assertEqual(r['analysis']['mode'],'structure')

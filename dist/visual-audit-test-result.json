@@ -1,0 +1,179 @@
+{
+  "report_id": "708bbbfe66964238b53e97fd4648e4d4",
+  "error": null,
+  "reviews": [
+    {
+      "visual_type": "chart",
+      "explanation": "该图是一张虚构的折线图，标题为“Fictional culture growth: one measurement per time”，纵轴标注为 OD600，横轴为时间（分钟），在 0、60、120、180 分钟各有一个数据点，数值约为 0.10、0.31、0.52、0.70。图中没有误差棒、重复测量信息或图例。页面文字声称“这些数据证明稳定期始于 180 分钟”，但图中仅显示 OD600 随时间上升，且每个时间点仅测量一次，无法据此判断生长阶段转换或证明稳定期起点。",
+      "checks": [
+        {
+          "category": "axes_units",
+          "status": "issue",
+          "evidence": "纵轴有 OD600 标签和数值刻度；横轴仅有 0、60、120、180 数值，未见“时间/分钟”等单位文字。",
+          "explanation": "纵轴单位以 OD600 表示，尚可识别；横轴缺少明确单位标注，读者需依赖页面文字推断为分钟。",
+          "recommendation": "建议在横轴补充“时间（分钟）”单位，并确认 OD600 的测量条件或仪器说明。",
+          "provenance": "visual_model_candidate"
+        },
+        {
+          "category": "legend_caption",
+          "status": "issue",
+          "evidence": "图中有标题，但无图例；页面文字未提供正式图注说明数据点、测量次数或误差含义。",
+          "explanation": "单条折线无需复杂图例，但缺少图注说明每个点代表单次测量，容易让读者误以为存在重复测量或误差信息。",
+          "recommendation": "建议增加图注，说明数据点含义、测量次数及是否存在误差棒。",
+          "provenance": "visual_model_candidate"
+        },
+        {
+          "category": "data_statistics",
+          "status": "issue",
+          "evidence": "图中仅显示 4 个单次测量点，无误差棒、无重复测量、无统计检验信息；未提供原始 CSV。",
+          "explanation": "单次测量无法评估测量变异或统计不确定性；仅凭 4 个点也不能可靠判断生长阶段转换。",
+          "recommendation": "建议补充重复测量、误差棒或原始数据，并明确统计方法；若无法提供，应在结论中说明限制。",
+          "provenance": "visual_model_candidate"
+        },
+        {
+          "category": "readability",
+          "status": "pass",
+          "evidence": "坐标轴刻度清晰，数据点与折线可辨，标题和纵轴标签可读。",
+          "explanation": "图表整体清晰，主要元素可读；横轴单位缺失属于标注问题，不影响基本可读性。",
+          "recommendation": "可保留当前视觉样式，补充横轴单位后更完整。",
+          "provenance": "visual_model_candidate"
+        },
+        {
+          "category": "claim_consistency",
+          "status": "uncertain",
+          "evidence": "页面文字声称“这些数据证明稳定期始于 180 分钟”；图中仅显示 OD600 从 0 到 180 分钟持续上升，且每个时间点仅测量一次。",
+          "explanation": "未提供要核对的具体正文论述，图文一致性仍需教师核实。",
+          "recommendation": "建议将结论改为描述性表述，例如“OD600 在 0–180 分钟内上升”，并补充更长时间点或生长速率分析后再讨论稳定期。",
+          "provenance": "visual_model_candidate"
+        }
+      ],
+      "observations": [
+        "图表标题明确标注为虚构数据（Fictional）。",
+        "纵轴标签为 OD600，刻度为 0、0.2、0.4、0.6、0.8；横轴刻度为 0、60、120、180，但横轴未显示单位文字。",
+        "共有 4 个数据点，分别位于 0、60、120、180 分钟，OD600 约为 0.10、0.31、0.52、0.70。",
+        "图中无误差棒、无重复测量标记、无图例。",
+        "页面文字说明每个时间点仅测量一次 OD600。",
+        "页面文字声称数据证明稳定期始于 180 分钟。",
+        "未提供原始 CSV 统计数据。"
+      ],
+      "id": "e028fe2f69c94caaaa421d09d915dc21",
+      "page": 1,
+      "bbox": [
+        0.06608634159482758,
+        0.3133182275931521,
+        0.9475294091235632,
+        0.6451291855488419
+      ],
+      "source_sha256": "ddc62ef705c8cd1263ae5637938627caa53584fcbad4a98926aff032474457a7",
+      "image_sha256": "af135d689ba519845b389e75f87597d6fe6f29d9c18ce7d133e33c516af09ee3",
+      "raw_statistics": {
+        "provided": false,
+        "provenance": "none",
+        "columns": []
+      },
+      "raw_data": "",
+      "model": "deepseek-flash",
+      "generated": "2026-10-25T02:52:17.853336+00:00",
+      "decision": "pending",
+      "related_claim": ""
+    },
+    {
+      "visual_type": "chart",
+      "explanation": "该图是一张虚构的折线图，展示培养物在0、60、120、180分钟四个时间点的OD600单次测量值（0.10、0.32、0.53、0.70）。横轴为时间（min），纵轴为OD600，图题与图注均说明每个时间点仅测一次且未显示误差棒。图中数据呈近似线性上升，至180分钟仍未见平台期；因此所附“这些数据证明稳定期始于180分钟”的结论缺乏证据支持。CSV统计为教师提供的列摘要（4行，时间均值90、OD600均值0.4125），仅作确定性汇总，不能替代原始重复测量或统计检验。",
+      "checks": [
+        {
+          "category": "axes_units",
+          "status": "pass",
+          "evidence": "横轴标注“Time (min)”且刻度为0/60/120/180；纵轴标注“OD600”且刻度为0–0.8。",
+          "explanation": "坐标轴名称与单位清晰可读，时间单位分钟与OD600无量纲吸光度标识一致。",
+          "recommendation": "教师可确认OD600是否需注明测定波长与光程，但当前轴标注本身无问题。",
+          "provenance": "visual_model_candidate"
+        },
+        {
+          "category": "legend_caption",
+          "status": "pass",
+          "evidence": "图题“Fictional culture growth: one measurement per time”；图注“Figure 1. Single measurements; no error bars shown.”；图中无图例。",
+          "explanation": "图注明确说明单次测量且无误差棒，与图形内容一致；无图例不构成缺陷，因为只有一条数据系列。",
+          "recommendation": "可保留现有图注；若后续加入重复测量，应补充图例说明均值与误差类型。",
+          "provenance": "visual_model_candidate"
+        },
+        {
+          "category": "data_statistics",
+          "status": "issue",
+          "evidence": "每个时间点仅一次测量，图中无误差棒；CSV仅提供4行2列的列摘要，未提供重复测量、显著性检验或拟合结果。",
+          "explanation": "单次测量无法估计测量误差或生物学变异，也不能支持“稳定期起点”的统计判断；列摘要不能证明时间点间差异或平台期。",
+          "recommendation": "教师应要求补充重复测量（含误差棒或散点）、明确重复层级，并用适当模型（如分段回归或生长曲线拟合）检验平台期起点。",
+          "provenance": "visual_model_candidate"
+        },
+        {
+          "category": "readability",
+          "status": "pass",
+          "evidence": "白底、蓝色折线与圆点、浅灰网格线；字体与刻度清晰，四个数据点可辨。",
+          "explanation": "图形整体简洁，坐标轴与数据点易于读取；未发现遮挡或颜色对比不足。",
+          "recommendation": "可保持当前样式；若用于正式报告，可考虑标注数据点数值或增加重复测量散点。",
+          "provenance": "visual_model_candidate"
+        },
+        {
+          "category": "claim_consistency",
+          "status": "issue",
+          "evidence": "相关结论为“These data prove that stationary phase starts at 180 minutes.”；图中180分钟处OD600仍为上升趋势，且每点仅一次测量、无误差估计。",
+          "explanation": "现有数据只显示180分钟内OD600上升，未显示增长速率降至零或显著下降，无法证明稳定期始于180分钟；单次测量也不能“证明”总体趋势。",
+          "recommendation": "教师应将该结论改为描述性表述（如“180分钟内OD600持续上升，尚未观察到平台期”），并要求补充更晚时间点与重复测量后再讨论稳定期起点。",
+          "provenance": "visual_model_candidate"
+        }
+      ],
+      "observations": [
+        "折线图含4个数据点：0 min≈0.10、60 min≈0.32、120 min≈0.53、180 min≈0.70。",
+        "横轴标签为“Time (min)”，刻度为0、60、120、180；纵轴标签为“OD600”，刻度为0、0.2、0.4、0.6、0.8。",
+        "图题写明“one measurement per time”，图注写明“Single measurements; no error bars shown”。",
+        "图中无误差棒、无重复测量散点、无统计检验标注。",
+        "曲线在180分钟处仍上升，未显示趋于平缓的平台。",
+        "CSV列摘要：time_min 4个数值，均值90，范围0–180；OD600 4个数值，均值0.4125，范围0.10–0.70，样本标准差约0.2599。",
+        "页面文本说明OD600在180分钟内由0.10升至0.70，并声明为虚构软件测试、无真实学生数据。"
+      ],
+      "id": "0453ea161e3c4c6d85adbcffafa16c29",
+      "page": 1,
+      "bbox": [
+        0.08063491935500128,
+        0.3150291166373556,
+        0.9205819959695979,
+        0.6911709822354423
+      ],
+      "source_sha256": "ddc62ef705c8cd1263ae5637938627caa53584fcbad4a98926aff032474457a7",
+      "image_sha256": "9642ddd451119313788bffa5b38a09a0795175be18183c87aa5bf39064d65ef6",
+      "raw_statistics": {
+        "provided": true,
+        "provenance": "teacher_supplied_csv",
+        "rows": 4,
+        "columns": [
+          {
+            "name": "time_min",
+            "numeric_count": 4,
+            "missing_count": 0,
+            "nonnumeric_count": 0,
+            "mean": 90.0,
+            "minimum": 0.0,
+            "maximum": 180.0,
+            "sample_sd": 77.45966692414834
+          },
+          {
+            "name": "OD600",
+            "numeric_count": 4,
+            "missing_count": 0,
+            "nonnumeric_count": 0,
+            "mean": 0.4125,
+            "minimum": 0.1,
+            "maximum": 0.7,
+            "sample_sd": 0.25991985944389345
+          }
+        ],
+        "limitation": "Column summaries only; no significance tests, pairing, or experimental replicate assumptions."
+      },
+      "raw_data": "time_min,OD600\n0,0.10\n60,0.32\n120,0.53\n180,0.70\n",
+      "model": "deepseek-flash",
+      "generated": "2026-10-25T03:04:32.163409+00:00",
+      "decision": "pending",
+      "related_claim": "These data prove that stationary phase starts at 180 minutes."
+    }
+  ]
+}

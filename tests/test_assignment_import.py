@@ -6,6 +6,7 @@ import zipfile
 from pathlib import Path
 from unittest.mock import patch
 import pilot_backend as p
+from ai_fixtures import create_assignment
 from rubric_import import parse_source,extract
 
 SOURCE='实验方法（30分）\n描述方法、对照与重复次数。\n结果与讨论（70分）\n解释证据与局限。'
@@ -54,6 +55,7 @@ class AssignmentEditingTests(unittest.TestCase):
         self.temp=tempfile.TemporaryDirectory()
         self.data=patch.object(p,'DATA',Path(self.temp.name))
         self.data.start();p.init()
+        self.assignment_id = create_assignment()
 
     def tearDown(self):
         self.data.stop();self.temp.cleanup()
@@ -81,10 +83,26 @@ class AssignmentEditingTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             self.call('assignments',{'title':'Bad import','source_text':'Discuss data quality and limitations'})
 
+    def test_report_summary_retains_scope_and_sample_status(self):
+        report=self.call('reports',{'assignment_id':self.assignment_id,'sample':True})
+        self.assertNotIn(report['id'], [x['id'] for x in self.call('bootstrap')['reports']])
+        # A real imported report is visible; bootstrap contains no private report body.
+        buff=io.BytesIO()
+        with zipfile.ZipFile(buff,'w') as z:
+            z.writestr('word/document.xml','<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body><w:p><w:r><w:t>Fictional report</w:t></w:r></w:p></w:body></w:document>')
+        imported=self.call('reports',{'assignment_id':self.assignment_id,'filename':'test.docx','file':base64.b64encode(buff.getvalue()).decode()})
+        summary=next(x for x in self.call('bootstrap')['reports'] if x['id']==imported['id'])
+        self.assertEqual(summary['assignment_id'],self.assignment_id)
+        self.assertFalse(summary['sample'])
+        self.assertNotIn('paragraphs',summary)
+        self.assertNotIn('notes',summary)
+
     def test_existing_database_migrates(self):
         with p.db() as con:
+            legacy=con.execute('SELECT id,title,instructions,rubric,created FROM assignments WHERE id=?',(self.assignment_id,)).fetchone()
             con.execute('DROP TABLE assignments')
             con.execute('CREATE TABLE assignments (id TEXT PRIMARY KEY,title TEXT,instructions TEXT,rubric TEXT,created TEXT)')
+            con.execute('INSERT INTO assignments VALUES (?,?,?,?,?)',tuple(legacy))
         p.init()
         self.assertEqual(self.call('bootstrap')['assignments'][0]['revision'],1)
 

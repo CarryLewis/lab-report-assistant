@@ -1,0 +1,55 @@
+{
+  "schema_version": "1.3",
+  "rubric_type": "custom",
+  "name": "Replace with rubric name",
+  "version": "Replace if available",
+  "source": {
+    "type": "user_upload",
+    "file_name": "replace-with-source-file.pdf",
+    "institution": "Replace if available",
+    "course_or_module": "Replace if available"
+  },
+  "scale": {
+    "minimum": 0,
+    "maximum": 20,
+    "pass_mark": 8,
+    "preserve_original_scale": true,
+    "bands": [
+      {"min": 14, "max": 20, "label": "Excellent"},
+      {"min": 12, "max": 13.99, "label": "Good"},
+      {"min": 10, "max": 11.99, "label": "Satisfactory"},
+      {"min": 8, "max": 9.99, "label": "Pass"},
+      {"min": 0, "max": 7.99, "label": "Fail"}
+    ]
+  },
+  "criteria_scoring_mode": "points",
+  "citation_policy": {
+    "citations_required": null,
+    "style_id": "Replace with a CSL style id such as apa",
+    "style_version": "Replace with a version such as 7",
+    "source": "assignment_instructions_or_course_policy",
+    "institution_overrides": [],
+    "when_style_unspecified": "check_linkage_and_field_completeness_only"
+  },
+  "criteria": [
+    {
+      "id": "criterion_1",
+      "name": "Replace with criterion name",
+      "maximum_points": 8,
+      "descriptor": "Paste the original criterion wording here"
+    },
+    {
+      "id": "criterion_2",
+      "name": "Replace with criterion name",
+      "maximum_points": 12,
+      "descriptor": "Paste the original criterion wording here"
+    }
+  ],
+  "special_rules": [],
+  "storage_scope": "current_evaluation",
+  "display_mode": "parallel",
+  "conversion": {
+    "show_percentage_equivalent": false,
+    "percentage_is_authoritative": false
+  }
+}

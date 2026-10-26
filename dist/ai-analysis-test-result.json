@@ -1,0 +1,123 @@
+{
+  "report_id": "c69d4f9a18f34e87a7f53416f17646f9",
+  "status": "ready",
+  "error": null,
+  "analysis": {
+    "summary": "该虚构实验报告描述了180分钟内OD600从0.08升至0.72的测量结果，并据此讨论细菌生长。报告在方法部分承认单次测量且未说明校准，结果部分承认无重复与误差棒，讨论部分却声称数据证明培养物在150分钟后进入稳定期，而营养浓度未测。整体上，报告对局限有一定自觉，但结论明显超出证据范围，且方法与结果的可重复性支持不足。",
+    "outline": [
+      {
+        "title": "方法与可重复性",
+        "paragraph_ids": [
+          "p2",
+          "p3"
+        ]
+      },
+      {
+        "title": "结果与证据",
+        "paragraph_ids": [
+          "p4",
+          "p5"
+        ]
+      },
+      {
+        "title": "讨论与局限",
+        "paragraph_ids": [
+          "p6",
+          "p7"
+        ]
+      },
+      {
+        "title": "结论",
+        "paragraph_ids": [
+          "p8",
+          "p9"
+        ]
+      }
+    ],
+    "claims": [
+      {
+        "title": "OD600在180分钟内由0.08升至0.72",
+        "paragraph_ids": [
+          "p5"
+        ]
+      },
+      {
+        "title": "数据被声称证明培养物在150分钟后进入稳定期",
+        "paragraph_ids": [
+          "p7"
+        ]
+      },
+      {
+        "title": "未测量营养浓度",
+        "paragraph_ids": [
+          "p7"
+        ]
+      },
+      {
+        "title": "重复与校准检查可提高结果可信度",
+        "paragraph_ids": [
+          "p9"
+        ]
+      }
+    ],
+    "findings": [
+      {
+        "title": "单次测量且未说明校准，削弱可重复性",
+        "paragraph_ids": [
+          "p3"
+        ],
+        "id": "1",
+        "criterion_id": "methods",
+        "kind": "issue",
+        "quote": "Each measurement was performed once. The report does not describe instrument calibration.",
+        "feedback": "The methods state that each measurement was performed only once and that instrument calibration is not described. To improve reproducibility, specify the calibration procedure and instrument settings, and include replicate measurements at each time point.",
+        "rationale": "方法部分明确说明每个时间点仅测量一次，且未描述仪器校准，缺少重复与校准信息会限制方法可重复性和测量可靠性。报告已如实披露该局限，但未提供任何补救说明。",
+        "review": "pending"
+      },
+      {
+        "title": "结果缺少重复数据与误差棒",
+        "paragraph_ids": [
+          "p5"
+        ],
+        "id": "2",
+        "criterion_id": "results",
+        "kind": "issue",
+        "quote": "No replicate data or error bars were collected.",
+        "feedback": "The results report OD600 values but explicitly note that no replicate data or error bars were collected. Presenting replicate measurements with error estimates would strengthen the evidential support for the observed increase.",
+        "rationale": "结果部分给出了OD600的起止数值，但明确说明没有重复数据或误差棒，因此无法评估测量变异，单一数值对趋势判断的支持有限。",
+        "review": "pending"
+      },
+      {
+        "title": "讨论结论超出证据范围",
+        "paragraph_ids": [
+          "p7"
+        ],
+        "id": "3",
+        "criterion_id": "discussion",
+        "kind": "issue",
+        "quote": "The data prove that the culture entered stationary phase after 150 minutes.",
+        "feedback": "The claim that the data prove entry into stationary phase after 150 minutes is not supported by the reported measurements. With single measurements and no nutrient data, the discussion should describe this as a possible interpretation and explicitly acknowledge the limitations.",
+        "rationale": "报告仅提供0至180分钟、每30分钟一次的OD600单次测量，且未测量营养浓度，无法据此证明培养物在150分钟后进入稳定期。使用“prove”一词明显超出证据支持，属于结论过度推断。",
+        "review": "pending"
+      },
+      {
+        "title": "报告主动识别了部分局限",
+        "paragraph_ids": [
+          "p9"
+        ],
+        "id": "4",
+        "criterion_id": "discussion",
+        "kind": "strength",
+        "quote": "Replication and calibration checks would improve confidence in the results.",
+        "feedback": "The conclusion appropriately acknowledges that replication and calibration checks would improve confidence in the results. This limitation awareness could be integrated into the discussion to temper the strength of the stated conclusions.",
+        "rationale": "结论部分主动指出重复与校准检查能提高结果可信度，体现了对方法局限的识别，与讨论部分过度断言形成对照。",
+        "review": "pending"
+      }
+    ],
+    "mode": "deepseek",
+    "model": "deepseek-flash",
+    "generated": "2026-10-24T06:45:42.585194+00:00",
+    "prompt_version": "pilot-v1",
+    "schema_version": "1"
+  }
+}

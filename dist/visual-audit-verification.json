@@ -1,0 +1,21 @@
+{
+  "local_tests": {
+    "python_passed": 35,
+    "javascript_suites_passed": [
+      "original_preview",
+      "ai_workflow",
+      "document_outline"
+    ]
+  },
+  "browser_verified": [
+    "original PDF rendered",
+    "whole-page image capture",
+    "visual review dialog",
+    "missing-key error"
+  ],
+  "live_vision": {
+    "status": "blocked",
+    "reason": "Current localhost service reports has_key=false; no real model request sent."
+  },
+  "fixture_report_id": "708bbbfe66964238b53e97fd4648e4d4"
+}

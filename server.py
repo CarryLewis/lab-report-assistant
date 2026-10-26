@@ -154,12 +154,17 @@ class Handler(SimpleHTTPRequestHandler):
         if parsed.path.startswith('/api/pilot/'):
             return self._pilot('GET', parsed.path)
         # Serve explicit public assets only. Never expose SQLite, keys or samples.
-        public = {'/', '/index.html', '/pilot.html', '/pilot.css', '/pilot-export.css', '/pilot.js', '/assignment-editor.js', '/teacher-shell.js', '/teacher-settings.css',
+        public = {'/word-reader.html','/word-reader.js','/word-reader.css','/visual-inventory.js', '/original-reader.html', '/original-reader.mjs', '/teacher-live.js', '/teacher-live.css', '/document-viewer.js', '/document-viewer.css', '/turnitin-bridge.js', '/turnitin-bridge.css', '/', '/index.html', '/pilot.html', '/pilot.css', '/pilot-export.css', '/pilot.js', '/assignment-editor.js', '/teacher-shell.js', '/teacher-settings.css', '/teacher-modules.js', '/teacher-modules.css', '/workspace-resize.js', '/workspace-resize.css',
                   '/review-links.js', '/citation-verification.js', '/pilot-citations.js',
                   '/lab_report_rubric.default.json', '/custom_rubric.template.json',
                   '/examples/pilot-rubric.json'}
         if parsed.path == "/api/scholarly/search":
             return self._search_all(parse_qs(parsed.query))
+        if parsed.path.startswith('/vendor/pdfjs/'):
+            asset = (ROOT / parsed.path.lstrip('/')).resolve()
+            vendor_root = (ROOT / 'vendor' / 'pdfjs').resolve()
+            if asset.is_relative_to(vendor_root) and asset.is_file():
+                return super().do_GET()
         if parsed.path not in public:
             return self._json(404, {'error': 'Not found.'})
         super().do_GET()
@@ -261,6 +266,9 @@ class Handler(SimpleHTTPRequestHandler):
 
 if __name__ == "__main__":
     pilot_backend.init()
+    import auto_analysis
     address = (os.environ.get('LABWISE_HOST', '127.0.0.1'), int(os.environ.get("LABWISE_PORT", "8000")))
     print(f"Labwise local preview: http://{address[0]}:{address[1]}")
-    ThreadingHTTPServer(address, Handler).serve_forever()
+    httpd = ThreadingHTTPServer(address, Handler)
+    auto_analysis.start(TLS_CONTEXT)
+    httpd.serve_forever()

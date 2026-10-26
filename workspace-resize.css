@@ -1,0 +1,85 @@
+/* Resizable review workspace side panels. Desktop only; narrow screens keep the stacked layout. */
+.workspace{
+  --rubric-width:340px;
+  --assistant-width:300px;
+}
+
+@media (min-width:901px){
+  .workspace{
+    grid-template-columns:minmax(440px,1fr) var(--rubric-width) var(--assistant-width);
+  }
+  .workspace .right,.workspace .left{position:relative}
+  .workspace-resize-handle{
+    position:absolute;
+    z-index:8;
+    top:0;
+    bottom:0;
+    left:-6px;
+    width:12px;
+    border:0;
+    padding:0;
+    background:transparent;
+    cursor:col-resize;
+    touch-action:none;
+  }
+  .workspace-resize-handle::after{
+    content:'';
+    position:absolute;
+    left:5px;
+    top:0;
+    bottom:0;
+    width:2px;
+    background:transparent;
+    transition:background .15s,box-shadow .15s;
+  }
+  .workspace-resize-handle:hover::after,
+  .workspace-resize-handle:focus-visible::after,
+  .workspace-resize-handle.dragging::after{
+    background:#528bb5;
+    box-shadow:0 0 0 3px rgba(82,139,181,.16);
+  }
+  .workspace-resize-handle:focus-visible{outline:none}
+  body.workspace-resizing{cursor:col-resize;user-select:none}
+  body.workspace-resizing iframe{pointer-events:none}
+
+  .workspace.rubric-collapsed{--rubric-width:48px}
+  .workspace.assistant-collapsed{--assistant-width:48px}
+  .workspace.rubric-collapsed .rightbody,
+  .workspace.rubric-collapsed .right .reviewfoot,
+  .workspace.assistant-collapsed .left .map-switch,
+  .workspace.assistant-collapsed .left .finding-legend,
+  .workspace.assistant-collapsed .left .mindmap,
+  .workspace.assistant-collapsed .left .mapfoot{display:none!important}
+  .workspace.rubric-collapsed .right .colhead>div:first-child,
+  .workspace.rubric-collapsed .right .criterion-counter,
+  .workspace.assistant-collapsed .left .colhead>div:first-child,
+  .workspace.assistant-collapsed .left .ai-label{display:none!important}
+  .workspace.rubric-collapsed .right .colhead,
+  .workspace.assistant-collapsed .left .colhead{padding:10px 7px;justify-content:center;height:100%}
+  .workspace.rubric-collapsed .right .panel-toggle,
+  .workspace.assistant-collapsed .left .panel-toggle{position:sticky;top:10px}
+  .workspace.rubric-collapsed .right .workspace-resize-handle,
+  .workspace.assistant-collapsed .left .workspace-resize-handle{display:none}
+}
+
+.colhead-actions{display:flex;align-items:center;gap:8px;min-width:0}
+.panel-toggle{
+  width:26px;
+  height:26px;
+  padding:0;
+  display:grid;
+  place-items:center;
+  flex:0 0 auto;
+  border:1px solid #d0d5dd;
+  border-radius:5px;
+  background:#fff;
+  color:#475467;
+  font-size:14px;
+  line-height:1;
+}
+.panel-toggle:hover{background:#f2f4f7;color:#245f8f}
+.panel-toggle:focus-visible{outline:2px solid #84b8df;outline-offset:2px}
+
+@media (max-width:900px){
+  .workspace-resize-handle,.panel-toggle{display:none}
+}

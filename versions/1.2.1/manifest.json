@@ -1,0 +1,27 @@
+{
+  "version": "1.2.1",
+  "recorded": "2026-10-24",
+  "team_and_calibration": false,
+  "scope": "UI source snapshot; shared backend and user data excluded",
+  "files_sha256": {
+    "index.html": "f09a741ba18a94083f4622fa70609d0c933ec201af060bb34c473e9f04a26b6a",
+    "assignment-editor.js": "fd55d3d78932ca43a7b0243765ce294177a2205ae83a665a47c7717d3f482f61",
+    "teacher-modules.js": "02b52f0d10786812c00d22de73cc48825df5d368674ccffdfa91368a69a741ee",
+    "teacher-live.js": "75352a7bbdf29e82f3a6a55415e74f86c3dae41973652977f4628738f8b22ac5",
+    "teacher-live.css": "30dedf02b09ee766013e68843604156b495efb0c5d98a0cec8cc7f7faf52751e",
+    "teacher-settings.css": "9597f1cc914741e9fd39350e5a492b6a95af6fb3e76c3629b3ea90b30c1c0087",
+    "teacher-modules.css": "2fcb194ee9100dc324c4d4d4a43cd1e03a2a21e6bcea6790ead0fbf46174ffbf",
+    "workspace-resize.js": "361dad31b804d6a79ec48c4d04051efd48a454fa2346c3c49254f2e1aac1b553",
+    "workspace-resize.css": "dbdf3a9af02a6109ddc27ae7fb5e03ae1884bfb6d64eb7d6d2c64787b871cbcf",
+    "document-viewer.css": "9a31e54492461a69c43f9333a29a97d152056acbaef8f594da0a6e02564847ad",
+    "turnitin-bridge.css": "d534c33cbb930e2d1beeb42a8b4b14d8ca0efa1f3e63364a4a016b4aaa44c289",
+    "original-reader.html": "ff4e5d0efa12722a875eee50ad26b73d581ea0b261f0803d94361d9ac9c66a19",
+    "original-reader.mjs": "d6bf7be9be9142e619a311efd3e1dc914f98afde3e1f3ab42337032d3f162906",
+    "document_preview.py": "c0c5c5cb41f7e02813a257d3af64f8514d18722ad9b591e57ece362810b1d47f",
+    "word-reader.html": "f5c07974fe0f8eaa3daaa495791302c64351d494f3e15575a0114da2498a6b04",
+    "word-reader.js": "f461a029677f7b410a674b655d9182acf93e1d21671ccfda323a2daf5515c178",
+    "word-reader.css": "2a82ae32adf6555883e32a17cf6e697d9840ae3f8e69106e8dff580d315da9b6"
+  },
+  "implementation": "Word-only automatic multimodal review; source paragraph anchors; locked decisions; continuous grading; original/commented Word and score export",
+  "updated": "2026-10-25"
+}

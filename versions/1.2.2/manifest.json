@@ -1,0 +1,22 @@
+{
+  "version": "1.2.2",
+  "recorded": "2026-10-24",
+  "team_and_calibration": true,
+  "scope": "UI source snapshot; shared backend and user data excluded",
+  "files_sha256": {
+    "index.html": "07bf9dec1a79bfde50cdd1d45988b862c51164e2e70cb398330dd80f8ea87ed7",
+    "assignment-editor.js": "128a3d3852defca5c923b2bb7b4dacff0c7103a5952ef30a37c0727c86e400eb",
+    "teacher-shell.js": "2fb74df7c594392adc053d197335666d92d236bf4fb27ed8ed860cd278c84c4b",
+    "teacher-modules.js": "7ba70261ae2f602c47b4f02efbbeb72837ae6c1a8dad594fd6030de2737ef1fc",
+    "teacher-settings.css": "9597f1cc914741e9fd39350e5a492b6a95af6fb3e76c3629b3ea90b30c1c0087",
+    "teacher-modules.css": "2fcb194ee9100dc324c4d4d4a43cd1e03a2a21e6bcea6790ead0fbf46174ffbf",
+    "workspace-resize.js": "361dad31b804d6a79ec48c4d04051efd48a454fa2346c3c49254f2e1aac1b553",
+    "workspace-resize.css": "dbdf3a9af02a6109ddc27ae7fb5e03ae1884bfb6d64eb7d6d2c64787b871cbcf",
+    "review-links.js": "59e0e4dbe6793802eeb2e134730f4e820d4b5b87d396fa6d3b77b2090caacf8c",
+    "citation-verification.js": "dfe85ac06c2705723ec9f6c5e9fc08c9f676e9634544de8a3c02a99308480b96",
+    "turnitin-bridge.js": "98b6095297331daedaa2266ef0a0934c6792d363b947765f4fe5672ccc24c2a3",
+    "turnitin-bridge.css": "d534c33cbb930e2d1beeb42a8b4b14d8ca0efa1f3e63364a4a016b4aaa44c289",
+    "lab_report_rubric.default.json": "9da8dbd133401b3874b67463170e5748a22e168eb503ef4f6b76bf05f70ff068",
+    "custom_rubric.template.json": "25940e454d296e1fbb3dd4f58136f193bfe87bbef7c62a72da8b07c415f9335c"
+  }
+}

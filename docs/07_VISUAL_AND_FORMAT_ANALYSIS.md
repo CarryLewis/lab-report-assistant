@@ -1,5 +1,21 @@
 # Visual, Scientific Figure, and Format Analysis
 
+> 自动发现图表及其后续审核开发，须遵循[图表自动发现与科学审核模块开发纲领](VISUAL_RECOGNITION_CHARTER.md)。该纲领补充本文的目标设计，明确分期、坐标契约、人工修订和验收边界；下文的目标架构不等于现有功能已全部实现。
+
+## Implemented demo scope (2026-10-24)
+
+The demo now supports manual visual review directly on the original PDF pages. In the reader choose **框选图表** or **审核整页**, include the caption and axes, optionally enter the related claim and raw CSV, then choose **发送并审核图表**. Capturing the selection is local; submission sends the screenshot, page text, assignment/rubric and supplied claim/CSV to DeepSeek. DOCX uses the same path after a stable PDF conversion; the readable HTML compatibility view requires exporting a PDF first.
+
+The backend sends actual PNG image content to `deepseek-flash`, not just extracted PDF text. Raster images, vector plots and tables are covered because the original rendered page is captured. Pages without extractable text remain available for visual review. Results contain a Chinese explanation, visible observations and five candidate checks: axes/units, legend/caption, statistics, readability, and claim consistency. No raw data means precise numerical verification is unavailable; no related claim means consistency remains uncertain.
+
+CSV validation and column counts, missing values, mean, range and sample SD run locally. Mixed text/numeric columns do not receive silently filtered statistics. Full supplied CSV accompanies its summaries for point-by-point candidate comparison. Rows are not automatically treated as experimental replicates; this version performs no significance tests or exact chart digitisation.
+
+`POST /api/pilot/reports/{id}/visual-review` checks report revision and original-file SHA-256 before processing. It stores the PNG, its SHA-256, original-file SHA-256, page, normalized bounding box, supplied CSV, local statistics, model, timestamp and teacher decision. `GET /api/pilot/reports/{id}/visual-image/{reviewId}` retrieves the stored evidence. Review cards jump back to the original-page selection. Teacher acceptance explicitly appends candidate feedback; scores are not changed automatically. Pending visual decisions block final confirmation. Failed requests preserve existing text analysis and return a retryable error.
+
+The sections below describe the broader target architecture. Automatic figure inventory, caption/cross-reference linking, OCR, assignment-specific format profiles, precise digitisation and statistical-design inference are not implemented yet.
+
+Verification uses `tests/test_visual_review.py` (mocked model contract, persistence, source-version binding, teacher confirmation, CSV validation and image-only PDF import) plus the fictional three-page `examples/visual-audit-test.pdf` and its CSV. Mocked tests establish workflow behavior; only a successful real model response establishes live vision connectivity. See the [DeepSeek vision API](https://api-docs.deepseek.com/guides/vision/) for the image request contract.
+
 ## Purpose
 
 This module identifies images, plots, diagrams, tables, equations, captions, in-text callouts, and references in a lab report. It separates three kinds of output:
