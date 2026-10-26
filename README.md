@@ -1,100 +1,164 @@
-# Lab Report AI-Assisted Feedback Tool
+# Labwise · 实验报告智能辅助评阅工作台
 
-## Current UI: Version 1.2.1
+**中文** | [English](README.en.md)
 
-The active five-module interface now uses real saved data and editable review
-operations. See [1.2.1 editable demo](docs/14_VERSION_1_2_1_EDITABLE_DEMO.md).
-Configure a DeepSeek key in Settings to run the live connection/analysis tests.
-These implementation notes supersede earlier fixed-sample descriptions below.
+让高校教师更快读懂英文实验报告，让每条反馈都能回到原文证据，让最终判断始终由教师掌握。
 
+Labwise 是一个面向高校教师的实验报告理解、评阅与反馈项目。它从中国高校非英语母语教师批改英文 Lab Report 的需求出发，关注英国大学体系下的报告写作与 Rubric（评分细则）对照，逐步探索可以融入日常教学的教师工作台。
 
-The active interface is the accepted teacher pilot with Team and Calibration
-removed (five modules). Version 1.2.2 retains all six modules. Both source
-snapshots are recorded in [UI version records](versions/README.md).
-See [Labwise 1.2 UI outline](docs/UI_VERSION_1_2.md).
-This baseline takes precedence over the later editable-product descriptions below.
+本项目由 [CarryLewis](https://github.com/CarryLewis) 发起，目前处于本地教师试点与持续开发阶段。当前活动界面版本为 **1.2.1**；界面版本、历史快照与未来规划不代表相同的实现状态。
 
-A project to help university instructors understand and review English lab reports. The pilot focuses on one course, one report type, and DOCX files. It helps instructors inspect report structure, locate source evidence, review rubric-aligned suggestions, and prepare feedback.
+## 为什么做这个项目
 
-## Project Documentation
+批改英文实验报告需要同时完成语言理解、实验论证重建、课程要求对照、证据查找、引用与图表检查，以及反馈撰写。这些工作往往分散在 Word、PDF 阅读器、评分表、文献网站和教学平台之间。
 
-- [引用验证模块开发纲领](docs/CITATION_VERIFICATION_CHARTER.md): governing design for all subsequent citation-verification development.
-- [图表自动发现与科学审核模块开发纲领](docs/VISUAL_RECOGNITION_CHARTER.md)：后续图表识别、原页目录、图注关联和批量审核开发的执行依据。
+Labwise 希望把这些步骤组织到同一个可审核界面中：先帮助教师理解报告，再把可能的优点、问题和缺失项与本次作业联系起来，最后由教师完成评分与反馈。中文解释用于降低理解成本，英文原文和短引文用于保留判断依据。
 
-- [Project plan and design brief](PROJECT_BRIEF.md): product scope, three-column review workspace, report map types, pilot data analysis, model-use constraints, privacy principles, and rollout plan.
-- [Historical writing baseline](corpus/historical/BASELINE_ANALYSIS.md): de-identified writing samples, teacher feedback patterns, confirmed scoring rules, and the reusable analysis template.
-- [Citation verification plan](docs/06_CITATION_VERIFICATION.md): reference matching, citation-style checks, scholarly-search integration, claim support review, safeguards, and rollout phases.
+项目追求减少查找证据与切换页面的时间、减少 Rubric 对照中的遗漏，并让评阅理由更清楚。这些是需要通过试点评估的目标，目前没有经过验证的效率提升百分比或自动评分准确率承诺。
 
-## Core Workflow
+## 设计理念
 
-Upload a DOCX → parse the document and assign paragraph IDs → generate a report outline and argument map → produce evidence-linked candidate suggestions against the current assignment rubric → instructor review, editing, and confirmation → export feedback.
+1. **先理解，再评阅。** 章节树、概览和论点导航帮助教师掌握文章主线；它们本身不是分数。
+2. **原文是判断的出发点。** 建议应关联真实段落、准确引文或图表对象。无法定位的证据应提示核实，不能猜测位置。
+3. **作业与 Rubric 决定评阅范围。** 教师维护要求和分值。每份报告保留适用的标准快照，后续修改不应静默改变既有判断的依据。
+4. **AI 提供候选意见，教师负责决定。** 教师可以采纳、编辑、拒绝或重新打开建议，并确认最终分数与反馈。AI 分析完成与教师批改完成是两个状态。
+5. **保留不确定性与来源。** 原文事实、模型解释、规则检查和教师意见应可区分。文献元数据命中不等于引用支持论点，图表图像也不等于原始实验数据。
+6. **先跑通小范围闭环，再扩大。** 从单个教师、一门课程、一类报告开始，用证据错误、教师修改原因和实际使用体验指导迭代。
 
-## Design Boundaries
+## 教师如何使用
 
-AI provides reviewable drafts and candidate feedback only. Report maps are not grading decisions. Suggestions without source evidence require instructor verification. Instructors control final scores, feedback, and any student-facing communication. Results from Turnitin or similar services are shown as separate reference material and do not automatically establish academic misconduct.
+1. 创建作业题、填写要求，导入或粘贴自己的评分细则，并核对项目与分值。
+2. 单份或批量导入学生 DOCX 报告，归入对应作业。
+3. 后台解析并排队自动分析，在工作台查看等待、分析中、就绪或失败等状态。
+4. 打开报告，同时查看文档导航、原文和教师评阅区，点击建议回到来源证据。
+5. 逐条处理候选反馈，录入分项分数，保存草稿或确认后继续评阅下一份。
+6. 导出教师确认的反馈包，供现有教学流程使用。
 
-The project is currently in the pilot planning and interactive prototyping stage. A fixed-host Crossref metadata-search prototype is available for citation review; DOCX parsing, automated citation extraction, full-text evidence analysis, formal grading, and feedback delivery have not been implemented.
-
-## Local preview
-
-The scholarly search endpoint now queries Crossref, PubMed and Europe PMC concurrently. Results are merged by DOI, PMID or PMCID, with source provenance retained and partial results returned when a provider is unavailable. PubMed requests are throttled across local threads. Set optional `NCBI_API_KEY` on the server for the higher NCBI request allowance; never place it in browser code. `LABWISE_CONTACT_EMAIL` identifies NCBI requests. Full-text retrieval and automated claim-support analysis remain future work.
-
-```bash
-python3 -m pip install -r requirements.txt
-python3 server.py
+```mermaid
+flowchart LR
+    A[作业要求与评分细则] --> C[文档解析与来源锚点]
+    B[学生 DOCX 报告] --> C
+    C --> D[后台 AI 候选分析]
+    D --> E[原文、证据与教师评阅]
+    E --> F[教师评分与确认]
+    F --> G[反馈包导出]
+    E --> H[草稿与版本记录]
+    H --> E
 ```
 
-Open `http://127.0.0.1:8000/#workspace` and select **引用核验**. For responsible Crossref production use, set `LABWISE_CONTACT_EMAIL` to an operational contact address; use `LABWISE_PORT` to override the local port.
+### 工作台与核心体验
 
+活动界面包括五个入口：**工作台、课程与作业、评分标准、数据分析、设置与审计**。工作台按作业题组织报告和批改进度；数据分析目前以保存记录的状态统计为主，不能等同于教学效果研究。
 
-## Teacher Pilot Interface
+核心评阅体验围绕三个相互联动的区域：
 
-The canonical entry now loads real saved reports and editable review operations.
-See [Editable teacher product](docs/13_EDITABLE_TEACHER_PRODUCT.md) for the current
-implementation. This supersedes older descriptions of a fixed sample workspace
-below. Campus deployment and live Turnitin synchronization remain future work.
+- **报告导航：** 根据实际章节形成树状目录，配合概览和已有论点定位内容。
+- **文档阅读：** 查看报告正文、表格与图像，核对建议中的具体证据。
+- **教师评阅：** 对照 Rubric 审核优点和问题，修改反馈、录入分数并确认结果。
 
-Run `python3 server.py` and open <http://127.0.0.1:8000/>.
-On macOS, `start.command` starts the same interface at port 8001.
-The teacher dashboard is the single product entry: task summaries and review
-assignments lead to the original three-column review workspace. Assignment and
-rubric import/editing is integrated into this dashboard. The former `/pilot.html`
-entry now redirects to `/`.
+可调整的工作区、持续评阅进度和保存后的版本记录，服务于教师多次返回同一作业的实际节奏。
 
-The review workspace currently retains its interactive sample content. Assignment
-settings support local Word/PDF text extraction and pasted grading criteria,
-with readable previews and persisted edits. Existing report rubric snapshots are
-preserved when assignment settings change.
+## 当前实现与能力边界
 
-The six sidebar modules and their target entities are documented in
-[Navigation and domain model](docs/09_NAVIGATION_AND_DOMAIN_MODEL.md).
+仓库包含本地可运行的教师工作流：作业与标准维护、报告导入、SQLite 草稿和修订、后台 AI 分析、证据关联建议、教师确认，以及 Word 批改包和结构化成绩导出。功能仍在演进，接口存在或局部验证通过不代表复杂文档、模型请求和所有批量场景均已验收。
 
-Future school sign-in, LMS entry and Turnitin authorization are planned in
-[Identity and institutional access](docs/10_IDENTITY_AND_INSTITUTIONAL_ACCESS.md).
+### 文档与来源结构
 
-### Original document preview
+新学生报告采用 **DOCX 优先且仅接收 DOCX** 的流程。解析层读取 Word 正文、表格、常见内嵌图片和可用图表缓存，保留文件摘要、来源段落和对象标识。结构识别的总体设计遵循显式语义优先、规则先于 AI、推断可追溯，完整规范化能力仍按纲领逐步建设。
 
-The main demo opens uploaded PDFs in the browser PDF viewer, retaining their original pages. DOCX files are converted locally to PDF using LibreOffice (`soffice` or `libreoffice` on PATH). Docker includes LibreOffice Writer and Noto CJK fonts. For exact Word pagination, export to PDF from Word before uploading; missing fonts and complex objects can affect conversion. Uploaded previews disable the sample review panels because their evidence is not linked to the uploaded document. PDFs remain in browser memory; DOCX conversion uses temporary local files that are removed after conversion. Preview does not save the report or generate grading results.
+Word 阅读视图侧重可定位的文本、表格和常见图片，并非 Microsoft Word 的排版引擎。复杂公式、原生图表、OLE 对象和字体可能影响显示或分析覆盖。分页渲染路径依赖本机 LibreOffice；历史 PDF 记录使用内置 PDF.js 阅读器。原始文件保留，转换外观需要教师核对。
 
-### Saved-report original viewer
+### AI 辅助分析
 
-Saved report review now defaults to original-page rendering using locally bundled Mozilla PDF.js 5.6.205 (license in `vendor/pdfjs/LICENSE`), without depending on a browser PDF plugin or remote CDN. The reader supports page navigation, selectable text, fit width/fit page and zoom. Word uses the existing local DOCX-to-PDF conversion. The review surface is exclusively the original file. Navigation and analysis suggestions highlight their quoted evidence inside the original PDF text layer; a missing match requires manual review and never opens a reformatted text view. Teachers can select text on a page, add a comment, and save page/quote/comment anchors with the review draft. Comments enter student feedback only when the teacher chooses to add them. The AI service still analyzes extracted document text; this UI change does not add image or layout reasoning. Missing source files show an explicit error and a retry option. The reader and worker resources are included in the Docker image.
+后端组织本次作业要求、Rubric 和当前报告的必要内容，再调用配置的 DeepSeek 服务。Word 分析路径可以组织正文、表格及受支持图像输入；超过资源限额、缺少渲染或不支持的对象应显示覆盖不足。
 
-### AI analysis verification (2026-10-24)
+模型返回内容经过字段、Rubric 维度、段落和引文等验证，再作为候选意见进入界面。网络错误、缺少密钥或无效输出需要保留可恢复状态。仓库已有虚构样本的实时分析记录，最新 Word 多模态链路及代表性复杂作业仍需进一步验收。
 
-The live DeepSeek Flash endpoint was tested with a fictional DOCX report, fictional assignment and rubric. It returned a saved overview and four evidence-linked findings; the browser successfully highlighted a finding in the original document viewer. The review page now defaults to AI analysis, labels structure-only mode explicitly, and presents the AI overview separately from the editable teacher overview. Failure messages leave the controls ready to retry.
+### 引用、图表与科学判断
 
-Regression commands: `python3 -m unittest discover -s tests -q`, `node tests/test_ai_workflow.js`, `node tests/test_original_preview.js`. Tests cover API request format, rejected fabricated evidence, incomplete responses, missing credentials, network failure/retry, preserved teacher comments/scores, and persisted analysis. The old tests now create their own assignment fixtures instead of relying on an automatically seeded sample course.
+- **引用核验：** 已有正文引文/参考条目检查代码，以及 Crossref、PubMed、Europe PMC 多源检索与标识符合并。完整的“论点—引用—外部来源—内容支持”链路仍是分阶段建设目标。
+- **图表能力：** 仓库保留本地图表候选发现、页面覆盖、原页目录和教师修订模块。活动 Word 流程已转向上传后自动分析，早期手动框选分析入口已退出主流程。完整语义分类、图注关联和批量科学审核仍需建设与验证。
+- **统计边界：** 图像观察和简单数据汇总不能证明实验重复、显著性、因果关系或科学结论正确。
 
-The fictional live-test output is in `dist/ai-analysis-test-result.json`; its document is `examples/ai-analysis-test.docx`. No student report was sent in this verification. API parameters were checked against https://api-docs.deepseek.com/api/create-chat-completion/.
+### 输出与开发状态
 
-### Article outline navigation
+教师确认后的 Word 批改包设计包含原文件、带原生 Word 批注的副本、反馈摘要和成绩数据。私人评阅笔记不进入学生反馈；当前批注主要按来源段落锚定，反馈保留实际引文。
 
-The review sidebar now presents a Notion-style document tree: source headings establish the section/subsection hierarchy, and existing AI claims appear under their most specific common parent section. Review findings remain in the teacher review panel. Nested headings can be expanded, collapsed, searched or renamed; each node locates its evidence in the original document. Markdown export includes a preview and a downloadable `.md` file with argument bullets under the correct owning heading. Missing article sections are not invented from the assignment rubric.
+**本地后续开发：** 单份及合并评阅 PDF 的预览和导出已有本地改动，独立于此次介绍更新，尚未随其发布到远端。请以检出的具体提交为准。
 
-Validation includes the source hierarchy/common-parent/Markdown regression suite (`node tests/test_document_outline.js`), browser search and collapse checks, direct navigation to a third-level heading on PDF page two, and an actual Markdown download.
+最近已推送的开发快照执行了 42 项 Python 测试，34 项通过、8 项错误；旧 JavaScript 工作流测试也有失败。因此当前版本应视为开发试点，尚未完成全面回归验收。检查入口见下方。
 
+## 系统结构
 
-### Word-first review (1.2.1, 25 October 2026)
+前端采用 HTML、CSS 和原生 JavaScript；Python 提供本地 HTTP/API 服务；SQLite 保存作业、报告、草稿、修订和评阅状态；AI 请求从后端发出。Docker 配置用于本地打包试验，学校部署还需要身份、权限和运维建设。
 
-New student and rubric file uploads accept DOCX only. Word paragraphs, tables and embedded images enter automatic DeepSeek analysis; suggestion decisions are explicitly confirmed/reopened. Completed assignments export original Word files, commented copies and score data. See [workflow and implementation limits](docs/19_WORD_FIRST_REVIEW_WORKFLOW.md). The reading view may differ from Word layout. Native charts require a local layout converter for visual inspection; configure `LABWISE_SOFFICE` when needed. Historical PDF records remain readable and must be archived or replaced before a Word-only assignment package export.
+```text
+lab-report-assistant/
+├── index.html / teacher-*.js / teacher-*.css  教师入口与评阅交互
+├── assignment-editor.js / rubric_import.py   作业与评分细则
+├── server.py / pilot_backend.py             HTTP/API 与业务数据
+├── auto_analysis.py                         后台分析队列与恢复
+├── word_source.py / word-reader.*            Word 提取与来源定位
+├── document_preview.py / original-reader.*   分页预览与历史 PDF
+├── citation_core.py / citation-verification.js 引用检查与检索界面
+├── visual_discovery.py / visual_review.py    图表发现与审核模块
+├── review_progress.py / word_export.py       连续评阅与 Word 反馈包
+├── vendor/pdfjs/                            本地 PDF.js 及许可证
+├── docs/                                   产品设计、实施记录与纲领
+├── examples/ / tests/                       虚构示例与回归测试
+├── versions/ / archive/                     界面版本与历史原型
+└── .labwise/                                本地运行数据，不纳入 Git
+```
+
+概念上，课程包含作业，作业有要求和版本化 Rubric；每份报告关联原文件及标准快照，候选分析关联来源证据，教师决定、修订和导出建立在这些记录之上。当前个人本地试点不代表完整多租户课程权限体系已经实现。
+
+## 数据与责任
+
+配置服务并开启自动分析后，报告内容、图像和评分细则可能发送给外部 AI 服务。实际使用前需要确认学校授权、处理范围、保存要求和服务条件。本地存储不等于全部处理离线。API 密钥由后端管理，不应提交到 Git 或放进前端源码。
+
+历史学生报告、教师原评与评分资料用于经授权的本地分析或评测，不作为公开演示，也不应静默进入其他学生的分析上下文。`corpus/historical/`、本地数据库、临时文件和作业渲染件已排除在 Git 之外；公开示例使用虚构测试材料。
+
+教师保留最终评分与反馈决定权。Turnitin、相似度或 AI 检测结果只能作为独立参考，不能自动判定学术不端。目前未实现学校单点登录、正式成绩回写、实时 Turnitin 同步或学生端自动投递。
+
+## 路线与质量目标
+
+近期重点是稳定个人教师闭环：解析、证据定位、分析失败恢复、逐条审核、确认和导出，并用固定虚构测试与经授权的代表性报告完善回归。
+
+后续按引用、结构和图表纲领增强证据链、复杂文档覆盖与科学检查。学校身份、课程权限、LMS/Turnitin 对接、多人校准和扩大部署属于后续规划，需要真实需求、授权与基础设施支持。
+
+评价重点包括证据准确性、无依据建议比例、Rubric 匹配、教师重大修改和拒绝原因、理解/定位所需时间，以及反馈可用性。采纳率只是行为信号。建立稳定标注和评测集后，再评估检索增强或专门模型；目前没有训练完成的自动评分模型。
+
+## 本地运行
+
+需要 Python 3 和项目依赖；Word 分页转换另需 LibreOffice 及适当字体。从仓库根目录执行：
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+python server.py
+```
+
+打开 <http://127.0.0.1:8000/>。macOS 也可使用 `start.command`，默认端口为 8001。`/pilot.html` 是保留的重定向入口。
+
+在设置中配置 AI 服务后再运行实际分析。`LABWISE_PORT` 控制端口，`LABWISE_DATA_DIR` 控制数据目录，`LABWISE_SOFFICE` 指定 LibreOffice。`LABWISE_CONTACT_EMAIL` 与可选的 `NCBI_API_KEY` 用于文献请求。原型以本机个人使用为目标，公开访问前需要部署级访问控制。
+
+```bash
+python -m unittest discover -s tests -v
+node tests/test_document_outline.js
+node tests/test_ai_workflow.js
+node tests/test_original_preview.js
+```
+
+以上是检查入口，不表示当前全部通过。历史验证与新版实施说明可能采用不同流程，应结合对应提交阅读。
+
+## 深入阅读
+
+- [完整项目构想与 AI 约束](PROJECT_BRIEF.md)
+- [产品体验](docs/01_PRODUCT_AND_EXPERIENCE.md) · [教师工作流](docs/02_WORKFLOW_AND_OPERATIONS.md) · [数据与 AI](docs/03_DATA_AND_AI_ANALYSIS.md) · [试点评估](docs/04_PILOT_AND_VALIDATION.md)
+- [平台接入](docs/05_PLATFORM_INTEGRATION.md) · [身份与学校访问](docs/10_IDENTITY_AND_INSTITUTIONAL_ACCESS.md)
+- [引用核验纲领](docs/CITATION_VERIFICATION_CHARTER.md) · [结构识别纲领](docs/DOCUMENT_STRUCTURE_RECOGNITION_CHARTER.md) · [图表识别纲领](docs/VISUAL_RECOGNITION_CHARTER.md)
+- [Word 优先工作流](docs/19_WORD_FIRST_REVIEW_WORKFLOW.md) · [连续评阅](docs/18_CONTINUOUS_REVIEW.md) · [版本记录](versions/README.md)
+- [文档索引](docs/README.md) · [开发记录](docs/DEVELOPMENT_LOG.md)
+
+欢迎通过 [GitHub Issues](https://github.com/CarryLewis/lab-report-assistant/issues) 讨论教学场景、产品设计或可复现问题；请使用去标识化或虚构材料描述案例。
