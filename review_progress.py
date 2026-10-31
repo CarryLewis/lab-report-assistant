@@ -22,6 +22,13 @@ def grading_state(report, progress=None):
     return 'in_progress' if progress or any(report.get(key) for key in fields) else 'not_started'
 
 
+def assignment_scope(report):
+    """Keep incomplete historical snapshots readable without merging courses."""
+    saved = report.get('assignment') or {}
+    return {**saved, 'id': saved.get('id') or 'legacy-' + report['id'],
+            'title': saved.get('title') or '历史作业'}
+
+
 def checkpoint(c, report, saved=False):
     if report.get('archived'):
         raise ValueError('此报告已归档，请先恢复后再批改。')
@@ -30,13 +37,13 @@ def checkpoint(c, report, saved=False):
         c.execute('INSERT INTO review_progress VALUES (?,?,?,?) ON CONFLICT(report_id) DO UPDATE SET last_opened=excluded.last_opened, last_saved=COALESCE(excluded.last_saved,review_progress.last_saved)',
                   (report['id'], stamp, stamp, stamp if saved else None))
         c.execute('INSERT INTO review_sessions VALUES (?,?,?) ON CONFLICT(assignment_id) DO UPDATE SET report_id=excluded.report_id, updated=excluded.updated',
-                  (report['assignment']['id'], report['id'], stamp))
+                  (assignment_scope(report)['id'], report['id'], stamp))
     return annotate(c, report)
 
 
 def annotate(c, report):
     progress = c.execute('SELECT * FROM review_progress WHERE report_id=?', (report['id'],)).fetchone()
-    return {**report, 'grading_state': grading_state(report, progress), 'review_progress': dict(progress) if progress else None}
+    return {**report, 'assignment': assignment_scope(report), 'grading_state': grading_state(report, progress), 'review_progress': dict(progress) if progress else None}
 
 
 def summaries(c):
@@ -47,7 +54,7 @@ def summaries(c):
         if report.get('archived') or report.get('sample'):
             continue
         result.append({**{key: report.get(key) for key in ('id', 'filename', 'status', 'updated')},
-                       'assignment_title': report['assignment']['title'], 'assignment_id': report['assignment']['id'],
+                       'assignment_title': assignment_scope(report)['title'], 'assignment_id': assignment_scope(report)['id'],
                        'sample': False, 'confirmed': report.get('confirmed', False), 'student_alias': report.get('student_alias', ''),
                        'auto_analysis': report.get('auto_analysis'), 'has_ai_result': (report.get('analysis') or {}).get('mode') == 'deepseek',
                        'grading_state': grading_state(report, progress.get(report['id'])),

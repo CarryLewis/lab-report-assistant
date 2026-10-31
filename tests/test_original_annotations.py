@@ -6,6 +6,23 @@ import pilot_backend as p
 
 
 class OriginalAnnotationTests(unittest.TestCase):
+    def test_missing_historical_scope_does_not_break_workbench_or_merge_reports(self):
+        with tempfile.TemporaryDirectory() as folder, patch.object(p, 'DATA', Path(folder)):
+            p.init()
+            snapshot = {'rubric': {'criteria': [{'id': 'c1', 'maximum_points': 100}]}}
+            with p.db() as con:
+                for ident in ('old-a', 'old-b'):
+                    p.persist(con, {'id':ident,'revision':1,'filename':ident+'.pdf',
+                                    'assignment':snapshot,'paragraphs':[],'status':'parsed','analysis':None})
+            rows = p.dispatch('GET', '/api/pilot/bootstrap', {}, None)['reports']
+            self.assertEqual(len({row['assignment_id'] for row in rows}), 2)
+            opened = p.dispatch('POST', '/api/pilot/reports/old-a/start-review', {}, None)
+            self.assertEqual(opened['assignment']['title'], '历史作业')
+            self.assertEqual(opened['assignment']['rubric'], snapshot['rubric'])
+            saved = p.dispatch('POST', '/api/pilot/reports/old-a/save', {'revision':1,'notes':'Retained note'}, None)
+            self.assertEqual(saved['notes'], 'Retained note')
+            self.assertEqual(p.dispatch('GET', '/api/pilot/reports/old-a', {}, None)['assignment'], snapshot)
+
     def test_annotations_reject_invalid_anchor_and_duplicate_ids(self):
         good = {'id': 'a1', 'page': 2, 'quote': 'original evidence', 'note': 'Review this'}
         self.assertEqual(p.validate_annotations([good]), [good])

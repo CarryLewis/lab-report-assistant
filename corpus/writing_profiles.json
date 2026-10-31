@@ -1,0 +1,1412 @@
+{
+  "schema_version": "writing-profiles.v1",
+  "status": "editable_original_seed",
+  "note": "原创试用模板；示例权重并非学校官方标准。教师须核对。示例仅作措辞参考，不能成为学生事实或评分依据。",
+  "profiles": [
+    {
+      "id": "lab_report",
+      "name": "实验报告",
+      "aliases": [
+        "Lab Report"
+      ],
+      "version": "1",
+      "description": "依据实验目的、方法、数据与解释评阅实验写作。",
+      "instructions": "说明实验任务、学习目标、数据要求与允许的方法；按课程要求判断是否需要重复、图表及引用。",
+      "focus": [
+        "实验目的与科学背景",
+        "方法可复核性",
+        "结果与解释的区分",
+        "证据和局限"
+      ],
+      "cautions": [
+        "仅在作业要求适用时检查实验结构、对照、重复和统计检验。",
+        "不得从图像推断未提供的原始数据或实验事实。"
+      ],
+      "criteria": [
+        {
+          "id": "criterion_1",
+          "name": "目的与背景",
+          "maximum_points": 15,
+          "descriptor": "解释研究目的及其与背景的联系。"
+        },
+        {
+          "id": "criterion_2",
+          "name": "方法与可复核性",
+          "maximum_points": 20,
+          "descriptor": "说明实际方法及影响理解的条件；按任务核对细节。"
+        },
+        {
+          "id": "criterion_3",
+          "name": "结果与证据呈现",
+          "maximum_points": 25,
+          "descriptor": "准确组织已提供的数据、表格与图像，区分观察与推断。"
+        },
+        {
+          "id": "criterion_4",
+          "name": "讨论与局限",
+          "maximum_points": 25,
+          "descriptor": "以结果支持解释，讨论适用范围及替代解释。"
+        },
+        {
+          "id": "criterion_5",
+          "name": "组织、语言与引用",
+          "maximum_points": 15,
+          "descriptor": "结构清楚、表达准确；按本次要求核对引用。"
+        }
+      ],
+      "feedback_examples": [
+        {
+          "id": "lab_report.1.strength",
+          "criterion_name": "目的与背景",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The stated aim is connected to the scientific background.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "lab_report",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "lab_report.1.improvement",
+          "criterion_name": "目的与背景",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Clarify how the background leads to the experimental aim.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "lab_report",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "lab_report.2.strength",
+          "criterion_name": "方法与可复核性",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The method identifies the conditions needed to understand the procedure.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "lab_report",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "lab_report.2.improvement",
+          "criterion_name": "方法与可复核性",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Specify the conditions needed to interpret the procedure.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "lab_report",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "lab_report.3.strength",
+          "criterion_name": "结果与证据呈现",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The results connect the stated observations to the supporting data.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "lab_report",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "lab_report.3.improvement",
+          "criterion_name": "结果与证据呈现",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Connect the stated result to the relevant data or figure.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "lab_report",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "lab_report.4.strength",
+          "criterion_name": "讨论与局限",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The discussion considers an alternative explanation for the result.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "lab_report",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "lab_report.4.improvement",
+          "criterion_name": "讨论与局限",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Explain how the evidence supports this interpretation and acknowledge its limits.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "lab_report",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "lab_report.5.strength",
+          "criterion_name": "组织、语言与引用",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The section order makes the reasoning easy to follow.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "lab_report",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "lab_report.5.improvement",
+          "criterion_name": "组织、语言与引用",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Clarify the link between these sections and identify the source of borrowed claims.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "lab_report",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        }
+      ]
+    },
+    {
+      "id": "academic_essay",
+      "name": "学术议论文／课程论文",
+      "aliases": [
+        "课程论文",
+        "学术论文",
+        "学术写作",
+        "议论文",
+        "Academic Essay"
+      ],
+      "version": "1",
+      "description": "评阅论点、论证、证据、批判性思考与学术表达。",
+      "instructions": "写明论题、目标读者、篇幅、需要回应的问题及引用要求；以清晰立场和有依据的论证回应题目。",
+      "focus": [
+        "中心论点及题目回应",
+        "段落推理与论点递进",
+        "证据与反方观点",
+        "学术表达"
+      ],
+      "cautions": [
+        "不要求实验方法、结果章节或原始实验数据。",
+        "不将某一种论文结构或固定段落数量作为通用要求。"
+      ],
+      "criteria": [
+        {
+          "id": "criterion_1",
+          "name": "题目回应与中心论点",
+          "maximum_points": 25,
+          "descriptor": "论点明确、有范围，直接回应本次题目。"
+        },
+        {
+          "id": "criterion_2",
+          "name": "论证与批判性思考",
+          "maximum_points": 30,
+          "descriptor": "解释推理，考虑反例、异议及立场的适用范围。"
+        },
+        {
+          "id": "criterion_3",
+          "name": "证据运用",
+          "maximum_points": 20,
+          "descriptor": "选择相关证据，解释证据与主张的联系，区分引述与作者判断。"
+        },
+        {
+          "id": "criterion_4",
+          "name": "结构与衔接",
+          "maximum_points": 15,
+          "descriptor": "段落围绕明确任务展开，前后衔接并形成递进。"
+        },
+        {
+          "id": "criterion_5",
+          "name": "语言与学术规范",
+          "maximum_points": 10,
+          "descriptor": "表达准确清晰；按题目要求处理引述与参考文献。"
+        }
+      ],
+      "feedback_examples": [
+        {
+          "id": "academic_essay.1.strength",
+          "criterion_name": "题目回应与中心论点",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The thesis takes a clear position on the question.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "academic_essay",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "academic_essay.1.improvement",
+          "criterion_name": "题目回应与中心论点",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "State a focused thesis that directly answers the question.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "academic_essay",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "academic_essay.2.strength",
+          "criterion_name": "论证与批判性思考",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The paragraph considers an objection before qualifying its claim.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "academic_essay",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "academic_essay.2.improvement",
+          "criterion_name": "论证与批判性思考",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Explain why this reasoning supports the claim and consider a plausible objection.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "academic_essay",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "academic_essay.3.strength",
+          "criterion_name": "证据运用",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The evidence is explicitly connected to the paragraph’s claim.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "academic_essay",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "academic_essay.3.improvement",
+          "criterion_name": "证据运用",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Explain how this evidence supports the specific claim being made.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "academic_essay",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "academic_essay.4.strength",
+          "criterion_name": "结构与衔接",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The transition shows how the next point develops the argument.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "academic_essay",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "academic_essay.4.improvement",
+          "criterion_name": "结构与衔接",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Make the relationship between these points explicit.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "academic_essay",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "academic_essay.5.strength",
+          "criterion_name": "语言与学术规范",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The wording distinguishes the author’s position from the cited view.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "academic_essay",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "academic_essay.5.improvement",
+          "criterion_name": "语言与学术规范",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Clarify whose position is being described and revise ambiguous wording.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "academic_essay",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        }
+      ]
+    },
+    {
+      "id": "literature_review",
+      "name": "文献综述",
+      "aliases": [
+        "Literature Review"
+      ],
+      "version": "1",
+      "description": "评阅文献覆盖、主题综合、批判性比较及研究空白。",
+      "instructions": "界定综述问题与范围，说明文献选取依据，围绕主题比较研究，依据所提供文献讨论空白与局限。",
+      "focus": [
+        "综述范围",
+        "跨研究综合",
+        "方法与结论的比较",
+        "空白的证据依据"
+      ],
+      "cautions": [
+        "叙述性综述不默认必须满足系统综述的检索协议。",
+        "没有核对原始文献时，不声称文献不存在或引用内容已经验证。"
+      ],
+      "criteria": [
+        {
+          "id": "criterion_1",
+          "name": "问题与范围",
+          "maximum_points": 15,
+          "descriptor": "清晰界定综述问题、范围及文献选取依据。"
+        },
+        {
+          "id": "criterion_2",
+          "name": "文献相关性与来源透明",
+          "maximum_points": 20,
+          "descriptor": "说明来源相关性与选择依据；不只依赖文献数量。"
+        },
+        {
+          "id": "criterion_3",
+          "name": "主题综合与批判性比较",
+          "maximum_points": 35,
+          "descriptor": "围绕主题联系研究，比较方法、证据及不同结论。"
+        },
+        {
+          "id": "criterion_4",
+          "name": "研究空白与局限",
+          "maximum_points": 20,
+          "descriptor": "使空白判断源于综述证据，限制推论范围。"
+        },
+        {
+          "id": "criterion_5",
+          "name": "结构、语言与引用",
+          "maximum_points": 10,
+          "descriptor": "主题组织清楚，区分来源，引用可追踪。"
+        }
+      ],
+      "feedback_examples": [
+        {
+          "id": "literature_review.1.strength",
+          "criterion_name": "问题与范围",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The review defines a manageable question and scope.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "literature_review",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "literature_review.1.improvement",
+          "criterion_name": "问题与范围",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Specify the review question and the boundaries of the literature considered.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "literature_review",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "literature_review.2.strength",
+          "criterion_name": "文献相关性与来源透明",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The review explains why the selected sources are relevant.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "literature_review",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "literature_review.2.improvement",
+          "criterion_name": "文献相关性与来源透明",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Explain why these sources are relevant to the review question.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "literature_review",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "literature_review.3.strength",
+          "criterion_name": "主题综合与批判性比较",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The comparison links differences in findings to differences in methods.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "literature_review",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "literature_review.3.improvement",
+          "criterion_name": "主题综合与批判性比较",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Compare the studies directly instead of summarising each one in isolation.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "literature_review",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "literature_review.4.strength",
+          "criterion_name": "研究空白与局限",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The stated gap follows from the limitations discussed in the review.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "literature_review",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "literature_review.4.improvement",
+          "criterion_name": "研究空白与局限",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Show how the reviewed evidence supports this gap and qualify its scope.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "literature_review",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "literature_review.5.strength",
+          "criterion_name": "结构、语言与引用",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The thematic structure helps the reader compare the studies.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "literature_review",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "literature_review.5.improvement",
+          "criterion_name": "结构、语言与引用",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Organise the discussion around themes and make each source attribution clear.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "literature_review",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        }
+      ]
+    },
+    {
+      "id": "research_proposal",
+      "name": "研究计划",
+      "aliases": [
+        "研究提案",
+        "开题报告",
+        "Research Proposal"
+      ],
+      "version": "1",
+      "description": "评阅研究问题、设计合理性、可行性与伦理考虑。",
+      "instructions": "明确拟研究的问题、已有依据、拟采用的方法、分析计划、资源与时间限制，并说明相关伦理考虑。",
+      "focus": [
+        "问题与依据",
+        "研究设计和分析计划",
+        "可行性",
+        "适用的伦理考虑"
+      ],
+      "cautions": [
+        "拟开展的研究不需要已经产生实验结果。",
+        "不把预期结果当作已验证事实；伦理要求按具体任务判断。"
+      ],
+      "criteria": [
+        {
+          "id": "criterion_1",
+          "name": "研究问题与依据",
+          "maximum_points": 25,
+          "descriptor": "问题明确，研究必要性有依据并限定范围。"
+        },
+        {
+          "id": "criterion_2",
+          "name": "设计与分析计划",
+          "maximum_points": 30,
+          "descriptor": "方法与问题匹配，说明资料获取、分析与可能局限。"
+        },
+        {
+          "id": "criterion_3",
+          "name": "可行性与进度",
+          "maximum_points": 20,
+          "descriptor": "资源、样本获取及阶段安排合理，识别实施风险。"
+        },
+        {
+          "id": "criterion_4",
+          "name": "伦理与风险考虑",
+          "maximum_points": 15,
+          "descriptor": "识别本研究适用的参与者、数据或实施风险及处理办法。"
+        },
+        {
+          "id": "criterion_5",
+          "name": "组织与学术表达",
+          "maximum_points": 10,
+          "descriptor": "逻辑清楚，区分计划、假设与事实，规范引用。"
+        }
+      ],
+      "feedback_examples": [
+        {
+          "id": "research_proposal.1.strength",
+          "criterion_name": "研究问题与依据",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The proposal links a focused question to a stated limitation in prior work.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "research_proposal",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "research_proposal.1.improvement",
+          "criterion_name": "研究问题与依据",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Narrow the question and explain why it warrants investigation.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "research_proposal",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "research_proposal.2.strength",
+          "criterion_name": "设计与分析计划",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The proposed analysis is aligned with the research question.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "research_proposal",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "research_proposal.2.improvement",
+          "criterion_name": "设计与分析计划",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Explain how the proposed data and analysis will answer the question.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "research_proposal",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "research_proposal.3.strength",
+          "criterion_name": "可行性与进度",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The timetable identifies practical dependencies between stages.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "research_proposal",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "research_proposal.3.improvement",
+          "criterion_name": "可行性与进度",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Specify the resources and dependencies that could affect the timetable.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "research_proposal",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "research_proposal.4.strength",
+          "criterion_name": "伦理与风险考虑",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The proposal identifies a relevant data-handling risk and a mitigation.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "research_proposal",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "research_proposal.4.improvement",
+          "criterion_name": "伦理与风险考虑",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Identify the risks relevant to this design and explain how they will be managed.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "research_proposal",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "research_proposal.5.strength",
+          "criterion_name": "组织与学术表达",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The wording clearly distinguishes planned work from established evidence.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "research_proposal",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "research_proposal.5.improvement",
+          "criterion_name": "组织与学术表达",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Distinguish the proposed work from claims already supported by evidence.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "research_proposal",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        }
+      ]
+    },
+    {
+      "id": "research_report",
+      "name": "研究报告",
+      "aliases": [
+        "Research Report"
+      ],
+      "version": "1",
+      "description": "支持调查、实证或资料研究，按实际研究方式判断。",
+      "instructions": "说明研究问题、资料或数据来源、分析方式与报告要求；区分研究发现、解释和建议。",
+      "focus": [
+        "研究问题",
+        "资料与方法透明",
+        "发现与推理",
+        "局限与结论"
+      ],
+      "cautions": [
+        "不假定所有研究都是实验研究。",
+        "不将相关关系、访谈观点或单个案例直接解释为因果结论。"
+      ],
+      "criteria": [
+        {
+          "id": "criterion_1",
+          "name": "研究问题与背景",
+          "maximum_points": 15,
+          "descriptor": "问题与范围明确，说明背景与研究意义。"
+        },
+        {
+          "id": "criterion_2",
+          "name": "资料来源与方法",
+          "maximum_points": 25,
+          "descriptor": "说明来源、选择及分析办法，讨论适用局限。"
+        },
+        {
+          "id": "criterion_3",
+          "name": "发现与分析",
+          "maximum_points": 30,
+          "descriptor": "发现可回到资料，解释推理并讨论不同证据。"
+        },
+        {
+          "id": "criterion_4",
+          "name": "结论与局限",
+          "maximum_points": 20,
+          "descriptor": "回答问题，限制推论，避免超出资料的建议。"
+        },
+        {
+          "id": "criterion_5",
+          "name": "结构、表达与引用",
+          "maximum_points": 10,
+          "descriptor": "组织清楚，引用与图表说明适合本次任务。"
+        }
+      ],
+      "feedback_examples": [
+        {
+          "id": "research_report.1.strength",
+          "criterion_name": "研究问题与背景",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The report defines the question and the context needed to interpret it.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "research_report",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "research_report.1.improvement",
+          "criterion_name": "研究问题与背景",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Clarify the research question and limit its scope.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "research_report",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "research_report.2.strength",
+          "criterion_name": "资料来源与方法",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The method explains how the material was selected and analysed.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "research_report",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "research_report.2.improvement",
+          "criterion_name": "资料来源与方法",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Explain how the material was selected and how the analysis was conducted.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "research_report",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "research_report.3.strength",
+          "criterion_name": "发现与分析",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The analysis connects the reported finding to the source material.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "research_report",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "research_report.3.improvement",
+          "criterion_name": "发现与分析",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Show how the source material supports this finding and consider alternatives.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "research_report",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "research_report.4.strength",
+          "criterion_name": "结论与局限",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The conclusion stays within the scope of the evidence presented.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "research_report",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "research_report.4.improvement",
+          "criterion_name": "结论与局限",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Qualify the conclusion to reflect the limits of the material analysed.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "research_report",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "research_report.5.strength",
+          "criterion_name": "结构、表达与引用",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The report separates findings from recommendations clearly.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "research_report",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "research_report.5.improvement",
+          "criterion_name": "结构、表达与引用",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Separate the evidence, interpretation and recommendation more clearly.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "research_report",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        }
+      ]
+    },
+    {
+      "id": "case_analysis",
+      "name": "案例分析",
+      "aliases": [
+        "案例研究",
+        "Case Analysis"
+      ],
+      "version": "1",
+      "description": "评阅问题诊断、理论应用、方案比较及建议依据。",
+      "instructions": "说明案例情境与分析任务，选用适当理论或框架，比较可行方案并提出有依据的建议。",
+      "focus": [
+        "情境与问题诊断",
+        "理论应用",
+        "方案权衡",
+        "建议与案例证据"
+      ],
+      "cautions": [
+        "不编造案例未提供的经营数据、人物动机或结果。",
+        "不因没有实验章节而扣分。"
+      ],
+      "criteria": [
+        {
+          "id": "criterion_1",
+          "name": "情境理解与问题诊断",
+          "maximum_points": 20,
+          "descriptor": "区分事实与假设，识别核心问题及约束。"
+        },
+        {
+          "id": "criterion_2",
+          "name": "理论与框架应用",
+          "maximum_points": 25,
+          "descriptor": "解释所用理论为何适用，并联系案例细节。"
+        },
+        {
+          "id": "criterion_3",
+          "name": "证据与方案比较",
+          "maximum_points": 30,
+          "descriptor": "基于案例信息比较方案，说明利益与代价。"
+        },
+        {
+          "id": "criterion_4",
+          "name": "建议与实施考虑",
+          "maximum_points": 15,
+          "descriptor": "建议回应诊断，说明优先级、风险及实施条件。"
+        },
+        {
+          "id": "criterion_5",
+          "name": "组织与表达",
+          "maximum_points": 10,
+          "descriptor": "表达清楚，来源可追踪，避免无依据断言。"
+        }
+      ],
+      "feedback_examples": [
+        {
+          "id": "case_analysis.1.strength",
+          "criterion_name": "情境理解与问题诊断",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The diagnosis distinguishes the main problem from its symptoms.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "case_analysis",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "case_analysis.1.improvement",
+          "criterion_name": "情境理解与问题诊断",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Identify the core problem and distinguish case facts from assumptions.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "case_analysis",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "case_analysis.2.strength",
+          "criterion_name": "理论与框架应用",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The framework is applied to specific details in the case.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "case_analysis",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "case_analysis.2.improvement",
+          "criterion_name": "理论与框架应用",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Explain why this framework is suitable and apply it to the case evidence.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "case_analysis",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "case_analysis.3.strength",
+          "criterion_name": "证据与方案比较",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The comparison weighs the options against the stated constraints.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "case_analysis",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "case_analysis.3.improvement",
+          "criterion_name": "证据与方案比较",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Compare the options using explicit criteria and the available case evidence.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "case_analysis",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "case_analysis.4.strength",
+          "criterion_name": "建议与实施考虑",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The recommendation follows from the diagnosis and acknowledges an implementation risk.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "case_analysis",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "case_analysis.4.improvement",
+          "criterion_name": "建议与实施考虑",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Connect the recommendation to the diagnosis and specify its implementation conditions.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "case_analysis",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "case_analysis.5.strength",
+          "criterion_name": "组织与表达",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The structure makes the decision process easy to follow.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "case_analysis",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "case_analysis.5.improvement",
+          "criterion_name": "组织与表达",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Make the reasoning from evidence to recommendation explicit.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "case_analysis",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        }
+      ]
+    },
+    {
+      "id": "reflective_writing",
+      "name": "反思写作",
+      "aliases": [
+        "反思日志",
+        "学习反思",
+        "Reflective Writing"
+      ],
+      "version": "1",
+      "description": "评阅具体经历、反思深度、理论联系与行动计划。",
+      "instructions": "选取相关经历，分析自己的理解如何变化，联系适用的课程概念，并提出具体的后续行动；无需披露私人经历。",
+      "focus": [
+        "经历与分析的区分",
+        "对自身假设的反思",
+        "理论联系",
+        "具体行动计划"
+      ],
+      "cautions": [
+        "允许第一人称；不把非客观口吻本身当成错误。",
+        "不要求披露敏感经历，不评价人格、情绪是否正确或经历真实性。"
+      ],
+      "criteria": [
+        {
+          "id": "criterion_1",
+          "name": "经历与任务联系",
+          "maximum_points": 15,
+          "descriptor": "提供足以理解分析的情境，选择与任务相关的经历。"
+        },
+        {
+          "id": "criterion_2",
+          "name": "反思与自我审视",
+          "maximum_points": 35,
+          "descriptor": "超越经历描述，检查假设、选择及理解变化。"
+        },
+        {
+          "id": "criterion_3",
+          "name": "理论与多角度联系",
+          "maximum_points": 20,
+          "descriptor": "用相关概念理解经历，考虑其他解释或视角。"
+        },
+        {
+          "id": "criterion_4",
+          "name": "学习与行动计划",
+          "maximum_points": 20,
+          "descriptor": "说明学到什么，提出具体、可检验的改进步骤。"
+        },
+        {
+          "id": "criterion_5",
+          "name": "组织与表达",
+          "maximum_points": 10,
+          "descriptor": "叙述与分析清楚，按要求引用，尊重隐私边界。"
+        }
+      ],
+      "feedback_examples": [
+        {
+          "id": "reflective_writing.1.strength",
+          "criterion_name": "经历与任务联系",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The selected episode provides a clear context for the reflection.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "reflective_writing",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "reflective_writing.1.improvement",
+          "criterion_name": "经历与任务联系",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Provide the context needed to understand why this episode is relevant.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "reflective_writing",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "reflective_writing.2.strength",
+          "criterion_name": "反思与自我审视",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The reflection identifies an assumption that changed after the experience.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "reflective_writing",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "reflective_writing.2.improvement",
+          "criterion_name": "反思与自我审视",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Move beyond describing events to examine the assumption behind your response.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "reflective_writing",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "reflective_writing.3.strength",
+          "criterion_name": "理论与多角度联系",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The concept helps explain the experience rather than merely naming it.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "reflective_writing",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "reflective_writing.3.improvement",
+          "criterion_name": "理论与多角度联系",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Explain how the concept changes your interpretation and consider another perspective.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "reflective_writing",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "reflective_writing.4.strength",
+          "criterion_name": "学习与行动计划",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The action plan follows directly from the learning identified.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "reflective_writing",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "reflective_writing.4.improvement",
+          "criterion_name": "学习与行动计划",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Turn the learning into a specific next action and explain how you will review it.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "reflective_writing",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "reflective_writing.5.strength",
+          "criterion_name": "组织与表达",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The organisation clearly separates the event, interpretation and next action.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "reflective_writing",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "reflective_writing.5.improvement",
+          "criterion_name": "组织与表达",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Clarify the transition from describing the event to analysing its meaning.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "reflective_writing",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        }
+      ]
+    },
+    {
+      "id": "general_writing",
+      "name": "通用写作批改",
+      "aliases": [
+        "其他",
+        "一般写作",
+        "常规批改",
+        "通用写作",
+        "General Writing"
+      ],
+      "version": "1",
+      "description": "适用于短文、读书回应、说明文及日常文字作业。",
+      "instructions": "说明文本用途、目标读者、需要完成的任务及语言；按任务判断是否需要引用或证据，重点改善内容、组织和表达。",
+      "focus": [
+        "目的与读者",
+        "内容完整和相关",
+        "组织衔接",
+        "语言准确与表达效果"
+      ],
+      "cautions": [
+        "不强制学术论文结构、参考文献或实验数据。",
+        "仅在明确的任务要求适用时检查学术引用；保留作者意图与合适的个人风格。"
+      ],
+      "criteria": [
+        {
+          "id": "criterion_1",
+          "name": "任务完成与读者适配",
+          "maximum_points": 30,
+          "descriptor": "回应写作目的，提供目标读者所需的信息。"
+        },
+        {
+          "id": "criterion_2",
+          "name": "内容与展开",
+          "maximum_points": 25,
+          "descriptor": "内容相关，解释充分；事实主张按任务提供支持。"
+        },
+        {
+          "id": "criterion_3",
+          "name": "结构与连贯",
+          "maximum_points": 20,
+          "descriptor": "顺序合理，段落集中，关系清楚。"
+        },
+        {
+          "id": "criterion_4",
+          "name": "语言准确与清晰",
+          "maximum_points": 15,
+          "descriptor": "语法、词语和句式支持准确理解；不随意改变原意。"
+        },
+        {
+          "id": "criterion_5",
+          "name": "语气与呈现",
+          "maximum_points": 10,
+          "descriptor": "语气、格式和表达方式符合用途；仅核对要求中的引用。"
+        }
+      ],
+      "feedback_examples": [
+        {
+          "id": "general_writing.1.strength",
+          "criterion_name": "任务完成与读者适配",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The opening makes the purpose clear for the intended reader.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "general_writing",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "general_writing.1.improvement",
+          "criterion_name": "任务完成与读者适配",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Clarify the purpose and add the information this reader needs.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "general_writing",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "general_writing.2.strength",
+          "criterion_name": "内容与展开",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The example develops the main point with relevant detail.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "general_writing",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "general_writing.2.improvement",
+          "criterion_name": "内容与展开",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Develop this point with an explanation or example suited to the task.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "general_writing",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "general_writing.3.strength",
+          "criterion_name": "结构与连贯",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The sequence guides the reader through the explanation.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "general_writing",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "general_writing.3.improvement",
+          "criterion_name": "结构与连贯",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Reorder these ideas and make the connection between them explicit.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "general_writing",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "general_writing.4.strength",
+          "criterion_name": "语言准确与清晰",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The sentence communicates the intended meaning clearly.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "general_writing",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "general_writing.4.improvement",
+          "criterion_name": "语言准确与清晰",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Revise this wording to make the intended meaning unambiguous.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "general_writing",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "general_writing.5.strength",
+          "criterion_name": "语气与呈现",
+          "purpose": "strength",
+          "language": "en",
+          "text": "The tone is appropriate for the intended audience.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "general_writing",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        },
+        {
+          "id": "general_writing.5.improvement",
+          "criterion_name": "语气与呈现",
+          "purpose": "improvement",
+          "language": "en",
+          "text": "Adjust the tone and presentation to suit the audience and purpose.",
+          "source": "original_seed",
+          "status": "draft",
+          "scope": "general_writing",
+          "requires_current_text_evidence": true,
+          "reviewed_by": null
+        }
+      ]
+    }
+  ]
+}

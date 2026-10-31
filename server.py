@@ -6,6 +6,7 @@ claim is supported by a paper.
 """
 import html
 import json
+import logging
 import os
 import re
 import ssl
@@ -13,12 +14,14 @@ from concurrent.futures import ThreadPoolExecutor
 from threading import Lock
 import time
 import xml.etree.ElementTree as ET
+import uuid
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.parse import parse_qs, quote, urlencode, urlparse
 from urllib.request import Request, urlopen
 import pilot_backend
+from app_paths import version
 
 try:
     import certifi
@@ -135,6 +138,16 @@ def _normalise_work(item):
 
 
 class Handler(SimpleHTTPRequestHandler):
+    def end_headers(self):
+        # A desktop upgrade can reuse the same loopback URL. Never combine
+        # cached HTML/JavaScript from different installed versions.
+        self.send_header('Cache-Control', 'no-store')
+        super().end_headers()
+
+    def log_message(self, format, *args):
+        # Windowed macOS bundles have no stderr; HTTP logging must not break responses.
+        logging.getLogger('labwise.http').info(format, *args)
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=str(ROOT), **kwargs)
 
@@ -143,7 +156,6 @@ class Handler(SimpleHTTPRequestHandler):
         self.send_response(status)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(body)))
-        self.send_header("Cache-Control", "no-store")
         self.end_headers()
         self.wfile.write(body)
 
@@ -151,10 +163,13 @@ class Handler(SimpleHTTPRequestHandler):
         parsed = urlparse(self.path)
         if not self._local_request():
             return self._json(403, {'error': 'Local access only.'})
+        if parsed.path == '/api/pilot/health':
+            return self._json(200, {'application':'Labwise', 'version':version(),
+                                    'instance_id':getattr(self.server,'instance_id',None), 'status':'ready'})
         if parsed.path.startswith('/api/pilot/'):
             return self._pilot('GET', parsed.path)
         # Serve explicit public assets only. Never expose SQLite, keys or samples.
-        public = {'/word-reader.html','/word-reader.js','/word-reader.css','/visual-inventory.js', '/original-reader.html', '/original-reader.mjs', '/teacher-live.js', '/teacher-live.css', '/document-viewer.js', '/document-viewer.css', '/turnitin-bridge.js', '/turnitin-bridge.css', '/', '/index.html', '/pilot.html', '/pilot.css', '/pilot-export.css', '/pilot.js', '/assignment-editor.js', '/teacher-shell.js', '/teacher-settings.css', '/teacher-modules.js', '/teacher-modules.css', '/workspace-resize.js', '/workspace-resize.css',
+        public = {'/i18n.js','/i18n-en.js','/i18n-init.js','/i18n.css','/user-support.js','/user-support.css','/pdf-export.js','/pdf-export.css','/word-reader.html','/word-reader.js','/word-reader.css','/visual-inventory.js', '/original-reader.html', '/original-reader.mjs', '/teacher-live.js', '/teacher-live.css', '/document-viewer.js', '/document-viewer.css', '/turnitin-bridge.js', '/turnitin-bridge.css', '/', '/index.html', '/pilot.html', '/pilot.css', '/pilot-export.css', '/pilot.js', '/assignment-editor.js', '/teacher-shell.js', '/teacher-settings.css', '/teacher-modules.js', '/teacher-modules.css', '/workspace-resize.js', '/workspace-resize.css',
                   '/review-links.js', '/citation-verification.js', '/pilot-citations.js',
                   '/lab_report_rubric.default.json', '/custom_rubric.template.json',
                   '/examples/pilot-rubric.json'}
@@ -187,8 +202,9 @@ class Handler(SimpleHTTPRequestHandler):
             body = {}
             if method == 'POST':
                 size = int(self.headers.get('Content-Length', '0'))
-                if size <= 0 or size > 15 * 1024 * 1024:
-                    raise ValueError('请求为空或超过 15 MB。')
+                limit = 90 * 1024 * 1024 if path == '/api/pilot/restore-backup' else 15 * 1024 * 1024
+                if size <= 0 or size > limit:
+                    raise ValueError('请求为空或超过本次操作的大小限额。')
                 if not self.headers.get('Content-Type', '').startswith('application/json'):
                     raise ValueError('请使用 JSON 请求。')
                 body = json.loads(self.rfile.read(size))
@@ -264,11 +280,30 @@ class Handler(SimpleHTTPRequestHandler):
             return self._json(502, {"error": "Scholarly search is temporarily unavailable.", "detail": type(exc).__name__})
 
 
+def create_server(host='127.0.0.1', port=8000):
+    # Reserve the port before opening/migrating a teacher's data directory.
+    httpd = ThreadingHTTPServer((host, port), Handler)
+    httpd.instance_id = uuid.uuid4().hex
+    try:
+        pilot_backend.init()
+        import auto_analysis
+        auto_analysis.start(TLS_CONTEXT)
+    except Exception:
+        httpd.server_close()
+        raise
+    return httpd
+
+
 if __name__ == "__main__":
-    pilot_backend.init()
-    import auto_analysis
     address = (os.environ.get('LABWISE_HOST', '127.0.0.1'), int(os.environ.get("LABWISE_PORT", "8000")))
-    print(f"Labwise local preview: http://{address[0]}:{address[1]}")
-    httpd = ThreadingHTTPServer(address, Handler)
-    auto_analysis.start(TLS_CONTEXT)
-    httpd.serve_forever()
+    try:
+        httpd = create_server(*address)
+    except OSError as error:
+        raise SystemExit('本机服务未启动：端口可能已被占用，或资料目录无法读写。可使用 start.command 自动选择备用端口。') from error
+    print(f"Labwise local preview: http://{address[0]}:{httpd.server_address[1]}")
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        httpd.server_close()

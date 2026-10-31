@@ -14,6 +14,12 @@ def analysis_output():
     return {'summary': 'A fictional report with insufficient replication.',
             'outline': [{'title': 'Methods', 'paragraph_ids': ['p1', 'p2']}],
             'claims': [{'title': 'Growth increased', 'paragraph_ids': ['p4']}],
+            'score_suggestions': [
+                {'criterion_id': cid, 'base_score': score, 'score': score,
+                 'rationale': 'Provisional assessment against the supplied dimension.',
+                 'evidence': [{'paragraph_id': 'p2', 'quote': 'Each measurement was performed once'}],
+                 'uncertainty': 'Detailed performance bands were not provided.', 'adjustments': []}
+                for cid, score in [('methods', 18), ('results', 24), ('discussion', 28)]],
             'findings': [
                 {'title': 'Replication', 'paragraph_ids': ['p2'], 'criterion_id': 'methods',
                  'kind': 'issue', 'quote': 'Each measurement was performed once',

@@ -4,3 +4,8 @@ __pycache__
 .env*
 corpus/historical
 *.sqlite3*
+.venv
+output
+tmp
+docx_render
+.DS_Store

@@ -5,6 +5,7 @@ __pycache__/
 .env.*
 !.env.example
 node_modules/
+.venv/
 corpus/historical/
 .labwise/
 *.sqlite3
@@ -12,3 +13,5 @@ corpus/historical/
 *.sqlite3-wal
 tmp/
 docx_render/
+# Generated builds, local backups, logs and previews may contain private data.
+output/

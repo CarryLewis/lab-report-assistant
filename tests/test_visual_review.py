@@ -56,18 +56,30 @@ class VisualReviewTests(unittest.TestCase):
             (Path(folder)/'sources').mkdir();(Path(folder)/'sources'/(r['id']+'.bin')).write_bytes(raw)
             with p.db() as c:r.update(source_sha256=digest,source_filename='fixture.pdf');p.persist(c,r)
             path='/api/pilot/reports/'+r['id'];request={'revision':r['revision'],'source_sha256':digest,'page':1,'bbox':[0,0,1,1],'image':base64.b64encode(png()).decode(),'raw_data':'x\n1\n2'}
+            # The former write endpoint remains disabled. Exercise historical
+            # image persistence/confirmation with a stored, validated fixture.
+            with self.assertRaisesRegex(ValueError,'停用'):
+                p.dispatch('POST',path+'/visual-review',request,None)
+            region=v.prepare(request)
             with patch.object(v,'urlopen',return_value=io.BytesIO(json.dumps({'choices':[{'finish_reason':'stop','message':{'content':json.dumps(output())}}]}).encode())) as upstream:
-                result=p.dispatch('POST',path+'/visual-review',request,None)
+                review=v.analyze(region,r['assignment'],'test-key','deepseek-flash',None)
             sent=json.loads(upstream.call_args.args[0].data)
             self.assertEqual(sent['messages'][1]['content'][1]['type'],'image_url')
             self.assertEqual(json.loads(sent['messages'][1]['content'][0]['text'])['raw_csv'],'x\n1\n2')
-            self.assertEqual(result['status'],'parsed');self.assertEqual(len(result['visual_reviews']),1)
-            review=result['visual_reviews'][0];self.assertEqual(review['decision'],'pending')
-            self.assertEqual(review['raw_data'],'x\n1\n2')
+            review.update(id='historical-review',decision='pending',page=1,bbox=region['bbox'],raw_data=region['raw_data'],source_sha256=digest,image_sha256=region['image_sha256'])
+            images=Path(folder)/'visuals'/r['id'];images.mkdir(parents=True)
+            target=images/(review['id']+'.png');target.write_bytes(region['image'])
+            with p.db() as c:
+                r.update(visual_reviews=[review],revision=r['revision']+1)
+                p.persist(c,r)
+            result=p.dispatch('GET',path,{},None)
+            self.assertEqual(result['visual_reviews'][0]['source_sha256'],digest)
             image=p.dispatch('GET',path+'/visual-image/'+review['id'],{},None)
             self.assertEqual(base64.b64decode(image['image']),png())
-            request['revision']=result['revision'];request['source_sha256']='stale'
-            with self.assertRaisesRegex(ValueError,'版本不一致'):p.dispatch('POST',path+'/visual-review',request,None)
+            target.write_bytes(b'changed image')
+            with self.assertRaisesRegex(ValueError,'校验失败'):
+                p.dispatch('GET',path+'/visual-image/'+review['id'],{},None)
+            target.write_bytes(region['image'])
             confirmation={'revision':result['revision'],'feedback':'Teacher feedback','scores':{'methods':30,'results':30,'discussion':40}}
             with self.assertRaisesRegex(ValueError,'图表'):p.dispatch('POST',path+'/confirm',confirmation,None)
             confirmation['visual_decisions']={review['id']:'accepted'}

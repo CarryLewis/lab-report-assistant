@@ -4,7 +4,7 @@ import re
 from pathlib import Path
 
 # Accept explicit criterion maxima; grade ranges are not interpreted as maxima.
-SCORED = re.compile(r'^(.+?)\s*(?:[（(]\s*(\d+(?:\.\d+)?)\s*(分|marks?|points?|%)\s*[）)]|[:：|]\s*(\d+(?:\.\d+)?)\s*(分|marks?|points?|%)?|\s+(\d+(?:\.\d+)?)\s*(分|marks?|points?|%))\s*(?:[-—:：，,;；]\s*(.*))?$', re.I)
+SCORED = re.compile(r'^(.+?)\s*(?:[（(]\s*(\d+(?:\.\d+)?)\s*(分|marks?|points?|%)\s*[）)]|[:：|]\s*(\d+(?:\.\d+)?)\s*(分|marks?|points?|%)?|(?:\s+|(?<=[\u3400-\u9fff]))(\d+(?:\.\d+)?)\s*(分|marks?|points?|%))\s*(?:[-—:：，,;；]\s*(.*))?$', re.I)
 TOTAL = re.compile(r'^(总分|合计|满分|total(?:\s+(?:marks|points|score))?)(?:\s|[:：（(]|$)', re.I)
 
 
@@ -85,10 +85,10 @@ def parse_source(source):
         c['descriptor']=c['descriptor'].strip()
         if len(c['descriptor'])>4000:
             errors.append('单项评分描述过长，请精简后保存。')
-    return {'source_text':source,'criteria':criteria,'total':total,'ready':bool(criteria) and not errors,'messages':errors,'percentage':'%' in units}
+    return {'processing_mode':'code','processor_version':'regex-v1','source_text':source,'criteria':criteria,'total':total,'ready':bool(criteria) and not errors,'messages':errors,'percentage':'%' in units}
 
 
-def extract(body):
+def extract(body, parse=True):
     source=body.get('source_text','')
     filename=''
     if body.get('file'):
@@ -108,6 +108,10 @@ def extract(body):
         else:
             raise ValueError('请选择 Word（.docx）或 PDF 文件；旧版 .doc 请先另存为 .docx。')
         source='\n'.join(p['text'] for p in paragraphs)
-    result=parse_source(source)
+    if parse:
+        result=parse_source(source)
+    else:
+        from pilot_backend import text
+        result={'source_text':text(source,50000)}
     result['filename']=filename
     return result

@@ -1,7 +1,9 @@
 'use strict';
+/* Localize application copy only; imported content is passed through unchanged. */
+var uiT=globalThis.LabwiseI18n?.t||((text,...values)=>typeof text==='string'?text:text.reduce((s,part,i)=>s+part+(i<values.length?values[i]:''),''));
 const id=new URLSearchParams(location.search).get('report');let selection=null,model=null;
 const $=id=>document.getElementById(id);
-async function api(path){const response=await fetch('/api/pilot/'+path);const data=await response.json();if(!response.ok)throw Error(data.error||'读取失败');return data;}
+async function api(path){const response=await fetch('/api/pilot/'+path);const data=await response.json();if(!response.ok)throw Error(data.error||uiT('读取失败'));return data;}
 function notify(type,data={}){parent.postMessage({type,...data},location.origin);}
 function paint(findings,reviews){
  document.querySelectorAll('.source-badges').forEach(n=>n.remove());document.querySelectorAll('.has-issue,.has-strength').forEach(n=>n.classList.remove('has-issue','has-strength'));
@@ -30,9 +32,9 @@ function locate(data){
     if(start&&end){const range=document.createRange();range.setStart(...start);range.setEnd(...end);CSS.highlights.set('source-evidence',new Highlight(range));exact=true;}
    }
   }
-  target.scrollIntoView({block:'center',behavior:'smooth'});notify('labwise:locate-result',{found:true,message:exact?'已定位并标出 Word 原文证据句段。':'已定位到 Word 原文段落。'});
+  target.scrollIntoView({block:'center',behavior:'smooth'});notify('labwise:locate-result',{found:true,message:exact?uiT('已定位并标出 Word 原文证据句段。'):uiT('已定位到 Word 原文段落。')});
  }
- else notify('labwise:locate-result',{found:false,message:'此处无法唯一定位，请核对原 Word；未使用相似文字替代。'});
+ else notify('labwise:locate-result',{found:false,message:uiT('此处无法唯一定位，请核对原 Word；未使用相似文字替代。')});
 }
 window.addEventListener('message',e=>{if(e.origin!==location.origin||e.source!==parent)return;if(e.data?.type==='labwise:locate')locate(e.data);if(e.data?.type==='labwise:review-marks')paint(e.data.findings||[],e.data.reviews||{});});
 document.addEventListener('selectionchange',()=>{
@@ -44,7 +46,7 @@ $('addComment').onclick=()=>{if(selection)notify('labwise:add-annotation',select
 $('downloadWord').onclick=async()=>{try{const source=await api('reports/'+id+'/source');const bytes=Uint8Array.from(atob(source.file),c=>c.charCodeAt(0));const url=URL.createObjectURL(new Blob([bytes],{type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'}));const a=document.createElement('a');a.href=url;a.download=source.filename;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}catch(e){$('status').textContent=e.message;}};
 (async()=>{try{
  model=await api('reports/'+encodeURIComponent(id)+'/word-view');const doc=new DOMParser().parseFromString(model.html,'text/html');const page=doc.querySelector('.page');$('document').append(document.adoptNode(page));
- for(const obj of model.objects){if(obj.kind!=='chart')continue;const target=document.querySelector('[data-word-index="'+obj.paragraph_index+'"]');if(target){const label=document.createElement('div');label.className='object-note';label.textContent='Word 原生图表 '+obj.id.replace(/^v/,'')+' · 数据缓存：'+(obj.chart_text||'无法读取')+'。完整图表版式请在原 Word 核对。';target.append(label);}}
- const limit=document.createElement('p');limit.className='word-limit';limit.textContent='Word 阅读视图保留原文与表格、图片定位；分页和复杂版式可能与 Word 有差异。原 Word 文件保持不变。';$('document').prepend(limit);
- paint(model.findings||[],model.reviews||{});$('status').textContent='点击建议定位原段落';notify('labwise:reader-ready');
-}catch(e){$('status').textContent=e.message;}})();
+ for(const obj of model.objects){if(obj.kind!=='chart')continue;const target=document.querySelector('[data-word-index="'+obj.paragraph_index+'"]');if(target){const label=document.createElement('div');label.className='object-note';label.textContent=uiT('Word 原生图表 ')+obj.id.replace(/^v/,'')+uiT(' · 数据缓存：')+(obj.chart_text||uiT('无法读取'))+uiT('。完整图表版式请在原 Word 核对。');target.append(label);}}
+ const limit=document.createElement('p');limit.className='word-limit';limit.textContent=uiT('Word 阅读视图保留原文与表格、图片定位；分页和复杂版式可能与 Word 有差异。原 Word 文件保持不变。');$('document').prepend(limit);
+ paint(model.findings||[],model.reviews||{});$('status').textContent=uiT('点击建议定位原段落');notify('labwise:reader-ready');
+}catch(e){$('status').textContent=e.message;notify('labwise:reader-error',{message:e.message});}})();

@@ -1,0 +1,8 @@
+.ui-language{display:flex;align-items:center;gap:5px;font-size:11px;color:#506058;white-space:nowrap}
+.ui-language select{font:inherit;border:1px solid #d0d5dd;border-radius:6px;padding:6px;background:#fff;color:#344054}
+html[lang="en"] .topbar{height:auto;min-height:58px;gap:8px;flex-wrap:wrap;padding-top:8px;padding-bottom:8px}
+html[lang="en"] .top-actions{flex-wrap:wrap;align-items:center}
+html[lang="en"] .nav-item{height:auto;min-height:42px}
+html[lang="en"] .review-actions{flex-wrap:wrap}
+html[lang="en"] button{white-space:normal}
+@media(max-width:640px){.ui-language{font-size:10px}.ui-language select{padding:5px}.ui-language{max-width:170px}html[lang="en"] .pilot-badge{display:none}.topbar{gap:6px;flex-wrap:wrap;height:auto;min-height:58px;padding:8px 12px}.top-actions{flex-wrap:wrap}}

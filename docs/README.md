@@ -1,5 +1,11 @@
 # 项目支持文档
 
+- [macOS 安装交付与验证](23_MACOS_INSTALLATION_AND_RELEASE.md)：本机试用 DMG／ZIP、启动与资料位置、保留数据的程序替换、验收结果及签名公证边界。
+
+**当前交付决策（2026-10-27）：** 教师下载应用并在自己电脑上独立使用，资料与批改进度本机保存。请优先阅读[本机应用交付纲领](21_LOCAL_APP_DELIVERY.md)。Turnitin 同步、平台登录、LMS 和中央多人部署暂缓；旧接入文档仅作历史参考。
+
+- [APP 用户流程、使用指引与开发者反馈方案](22_APP_USER_WORKFLOW_GUIDANCE_AND_FEEDBACK_PLAN.md)：第 11、12 节记录两轮实施及最新验证结果。
+
 - [图表自动发现：第一期实现与验证](16_VISUAL_DISCOVERY_IMPLEMENTATION.md)：本地扫描、原页目录、人工修订、暂停续扫、已实现接口与后续边界。
 
 - [图表自动发现与科学审核模块开发纲领](VISUAL_RECOGNITION_CHARTER.md)：后续图表识别开发须遵循的流程、原页坐标、图注关联、人工纠错、分期与验收约定。
@@ -52,3 +58,7 @@ Added per-assignment start/resume actions, persistent unfinished-report checkpoi
 ## 2026-10-25 — Word-first automatic review (1.2.1)
 
 Adopted DOCX-only submissions, automatic text/table/image inputs with source anchors, explicit immutable suggestion decisions, continuous grading and original/annotated Word plus score-package export. Manual crop-and-send image analysis is retired from the active UI. See [complete workflow and limits](19_WORD_FIRST_REVIEW_WORKFLOW.md).
+
+- [多文体写作批改（1.3.0）](24_MULTI_GENRE_WRITING.md)：文体模板、原创语料、版本快照及试用范围。
+
+- [Dual rubric processing: code and AI versions](25_DUAL_RUBRIC_PROCESSING.md)

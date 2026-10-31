@@ -1,5 +1,7 @@
 # Identity and Institutional Access Plan
 
+> Deferred as of 27 October 2026. School identity, institutional accounts and LMS/Turnitin access are future research only. The current release is an individual teacher application running locally; school sign-in and centralized user accounts are not prerequisites. See [local delivery charter](21_LOCAL_APP_DELIVERY.md), which supersedes the product decision below for current work.
+
 Status: proposed design; reviewed 23 October 2026. This document supplements
 [platform integration](05_PLATFORM_INTEGRATION.md) and the
 [navigation and domain model](09_NAVIGATION_AND_DOMAIN_MODEL.md).

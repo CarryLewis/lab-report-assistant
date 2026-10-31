@@ -40,7 +40,7 @@ def enqueue(connection, report, retry=False):
     if current and current['state']!='done' and not (retry and current['state'] in ('failed','blocked')):
         return False
     state='queued' if backend.KEY else 'blocked'
-    reason=None if state=='queued' else '尚未配置 AI 密钥；在设置中连接后会自动继续。'
+    reason=None if state=='queued' else '尚未配置访问密钥，请在设置中连接服务。'
     stamp=backend.now();run_id=uuid.uuid4().hex
     if current:
         connection.execute('UPDATE analysis_jobs SET state=?,run_id=?,updated=?,error=? WHERE report_id=?',(state,run_id,stamp,reason,report['id']))
@@ -72,7 +72,7 @@ def recover(connection):
         if is_live_job(connection,row['report_id']):
             continue
         report=backend.get_report(connection,row['report_id'])
-        reason='服务重启中断了 AI 分析，可在文件列表中重试。'
+        reason='处理被服务重启中断，可在文件列表中重试。'
         report.update(status='failed',error=reason)
         report['auto_analysis']={'state':'failed','run_id':row['run_id'],'updated':backend.now(),'error':reason}
         backend.persist(connection,report)
@@ -102,7 +102,7 @@ def run_one(tls):
         if report.get('status')=='analyzing':
             return False  # A separate visual or legacy analysis owns this report.
         if not backend.KEY:
-            reason='尚未配置 AI 密钥；在设置中连接后会自动继续。'
+            reason='尚未配置访问密钥，请在设置中连接服务。'
             report.update(status='waiting_key',error=reason)
             report['auto_analysis']={'state':'blocked','run_id':row['run_id'],'updated':backend.now(),'error':reason}
             backend.persist(connection,report)
@@ -120,7 +120,7 @@ def run_one(tls):
         failure=None
     except Exception as error:
         output=None
-        failure=str(error) if isinstance(error,ValueError) else 'AI 分析暂未完成，请在文件列表中重试。'
+        failure=str(error) if isinstance(error,ValueError) else '报告处理未完成，请在文件列表中重试。'
     with backend.db() as connection:
         connection.execute('BEGIN IMMEDIATE')
         current=connection.execute('SELECT * FROM analysis_jobs WHERE report_id=?',(report['id'],)).fetchone()

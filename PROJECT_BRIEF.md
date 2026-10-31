@@ -1,4 +1,18 @@
+## 2026-10-28 scope extension — multi-genre writing review
+
+Labwise now extends the original lab-report workflow to academic essays, literature reviews, research proposals, research reports, case analyses, reflective writing and general writing. A writing profile supplies advisory focus, genre cautions and original wording references; the instructor’s actual assignment and rubric remain the grading authority. Preserve the profile and rubric snapshot on import. Do not require experiments, references or a fixed structure across all genres. Feedback follows the submitted language, with Chinese explanations. Existing evidence, instructor confirmation and export boundaries remain in force.
+
+The lab-report-specific sections below describe the founding use case, not requirements for every writing genre. See docs/24_MULTI_GENRE_WRITING.md for the implemented scope.
+
 # Lab Report AI-Assisted Feedback Tool
+
+## Current Delivery Direction — 27 October 2026
+
+The near-term product is a downloadable application for individual teachers to run on their own computers. Each installation keeps its reports, rubric snapshots, analysis results, drafts, revisions and exports locally. Teachers import DOCX files and manually use exported feedback in their existing teaching workflow.
+
+Turnitin synchronization, Turnitin sign-in, LMS launch, school SSO, central multi-user hosting, cross-device synchronization and automatic grade/feedback delivery are deferred. They are not release requirements or the default next development phase. Reconsider them only after an explicit product decision. Older institutional-integration designs remain historical references and do not override this direction.
+
+Local operation does not imply offline AI: configured external AI APIs still require an internet connection and may receive necessary report content. Keep API credentials in the local backend, outside frontend code and distributed packages. Prioritize simple installation and startup, dependency checks, durable local saving, backup/restore, safe updates that preserve user data, and clear recovery from analysis or export failures. These are delivery requirements, not claims that packaging and recovery are already complete. See [local application delivery charter](docs/21_LOCAL_APP_DELIVERY.md).
 
 ## Project Definition
 
@@ -61,7 +75,7 @@ Instructors decide whether suggestions are valid, edit the feedback, and determi
 2. **Assignment and rubric assembly:** The server provides versioned snapshots of the current assignment instructions and rubric from course configuration. The model must not invent rubric dimensions, point values, course policy, or experimental facts that were not provided.
 3. **Report-outline generation:** Output ordered sections, heading provenance, paragraph IDs, and brief summaries only. Distinguish headings that appear in the document from inferred sections; label inferences and never present them as source headings.
 4. **Argument-map generation:** Each node includes a claim or issue type, supporting paragraph IDs, and a confidence/review state. Mark relationships or issues without direct evidence as requiring instructor verification. Do not interpret missing information as proof of student error.
-5. **Rubric candidate suggestions:** Evaluate one rubric dimension at a time. Each suggestion must include the dimension ID, criterion, candidate performance description, source paragraph IDs, rationale, suggested feedback, and a verification flag. Do not state a definitive conclusion without valid evidence and rubric mapping. Only the instructor enters or confirms scores.
+5. **Rubric candidate suggestions:** Evaluate one rubric dimension at a time. Each suggestion must include the dimension ID, criterion, candidate performance description, source paragraph IDs, rationale, suggested feedback, and a verification flag. Do not state a definitive conclusion without valid evidence and rubric mapping. The AI-analysis version may propose evidence-linked draft scores under the teacher-reviewed rubric; the instructor edits or confirms final scores. The retained code version continues the prior feedback/manual-score workflow.
 6. **Feedback-example retrieval and generation:** Retrieve only authorized, de-identified instructor examples that match the current course and rubric scope. Use them as wording references, not as sources of facts. Ground the generated feedback in the current report, never copy facts, scores, or conclusions about another student, and retain retrieved example IDs for traceability.
 7. **Instructor review and export:** Mark all suggestions as drafts initially. The instructor performs acceptance, editing, rejection, scoring, and final feedback confirmation. Export is allowed only after explicit instructor confirmation. Any future student-facing delivery requires a separate confirmation action.
 

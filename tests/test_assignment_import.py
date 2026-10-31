@@ -22,6 +22,13 @@ class RubricImportTests(unittest.TestCase):
         self.assertFalse(r['ready'])  # mixed scales must be clarified
         self.assertTrue(parse_source('Methods: 30 points\nResults: 70 points')['ready'])
 
+    def test_chinese_adjacent_points_are_explicit_not_missing_scores(self):
+        result=parse_source('试验方法30分\n文献引用10分\n结论10分')
+        self.assertTrue(result['ready'])
+        self.assertEqual(result['total'],50)
+        self.assertEqual([c['name'] for c in result['criteria']],['试验方法','文献引用','结论'])
+        self.assertFalse(parse_source('试验方法0分')['ready'])
+
     def test_missing_and_conflicting_scores_not_invented(self):
         self.assertFalse(parse_source('Clear methods and critical discussion')['ready'])
         self.assertFalse(parse_source(SOURCE+'\n总分：80')['ready'])

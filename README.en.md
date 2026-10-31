@@ -23,7 +23,17 @@ Help university instructors understand English lab reports faster, trace feedbac
 
 Labwise is a project for understanding, reviewing and providing feedback on university lab reports. It began with the needs of instructors in China who review English reports as non-native English speakers, focusing initially on report writing and rubric-based assessment in the British university context. Its longer-term aim is a workspace that fits everyday teaching practice.
 
-Initiated by [CarryLewis](https://github.com/CarryLewis), the project is currently a local teacher pilot under active development. The active interface is **1.2.1**; interface versions, archived variants and future plans describe different implementation states.
+Initiated by [CarryLewis](https://github.com/CarryLewis), the project is currently a local teacher pilot under active development. The current development version is **1.3.4**; interface versions, archived variants and future plans describe different implementation states.
+
+## Latest development (1.3.4)
+
+- Eight writing genres, 80 original draft feedback examples and eight fictional text fixtures; assignment and rubric snapshots remain authoritative.
+- A choice of code-based rubric parsing or AI interpretation, with an editable preview and evidence-linked draft scores in AI mode. Instructors confirm final judgments.
+- Chinese and English UI, startup checks, import recovery, full local backups and restoration into an independent copy.
+- Individual and assignment-merged review PDFs with previews, source highlights, numbered margin comments and complete feedback. PDF conversion requires local LibreOffice.
+- macOS trial-app build and smoke-check scripts. Generated installers, local backups and private data are excluded from source control.
+
+See [multi-genre writing](docs/24_MULTI_GENRE_WRITING.md), [dual rubric modes](docs/25_DUAL_RUBRIC_PROCESSING.md), [PDF export](docs/20_PDF_REVIEW_EXPORT.md) and [local delivery](docs/21_LOCAL_APP_DELIVERY.md).
 
 ## Why this project exists
 
@@ -101,9 +111,9 @@ Outputs pass field, rubric-dimension, paragraph and quotation checks before beco
 
 Instructor-confirmed Word packages are designed to include originals, copies with native Word comments, feedback summaries and score data. Private review notes are excluded from student feedback. Comments currently anchor primarily to source paragraphs and retain actual supporting quotations.
 
-**Subsequent local development:** Individual and merged review-PDF previews and exports have local implementation changes. They are separate from this documentation update and have not been published with it. Check the exact revision you have checked out.
+Individual and merged review-PDF previews and exports are included in this source snapshot. Only instructor-confirmed student feedback is exported; private review notes and unaccepted AI suggestions are excluded. Exact source matching is required for highlights; uncertain locations are flagged for checking.
 
-The most recent pushed development checkpoint ran 42 Python tests: 34 passed and 8 errored. Legacy JavaScript workflow tests also had failures. Treat this as a development pilot that has not completed full regression acceptance. Check entry points appear below.
+**Current validation (1.3.4, 2026-10-31):** All 100 Python tests and nine JavaScript test scripts passed before synchronization. These checks cover local runtime, backup/restore, import recovery, writing profiles, rubric modes, UI language and PDF export. They do not establish acceptance of live external AI, complex documents, every operating system or packaged installers.
 
 ## System structure
 
@@ -141,9 +151,15 @@ Instructors retain responsibility for scores and feedback. Turnitin, similarity 
 
 The immediate focus is a dependable individual-teacher workflow: parsing, evidence location, analysis recovery, item-by-item review, confirmation and export. Fixed fictional tests and authorized representative reports should strengthen regression coverage.
 
-Citation, document-structure and figure charters guide later work on evidence chains, complex documents and scientific checks. Institutional identity, course permissions, LMS/Turnitin connections, multi-reviewer calibration and larger deployments are future work dependent on demonstrated needs, authorization and infrastructure.
+The near-term delivery target is a downloadable application for individual teachers, with durable local storage, startup checks, backups and updates that preserve data. Citation, document-structure and figure charters guide later work on evidence chains, complex documents and scientific checks. Institutional identity, course permissions, LMS/Turnitin connections, cross-device synchronization and multi-reviewer calibration are deferred pending an explicit product decision.
 
 Evaluation should cover evidence accuracy, unsupported suggestions, rubric alignment, reasons for major edits or rejections, comprehension and evidence-search time, and feedback usefulness. Acceptance rate is only a behavioral signal. Retrieval augmentation or specialized models should be evaluated after stable annotations and evaluation sets exist; the project has no completed trained automatic-grading model.
+
+## macOS trial application
+
+Local Apple Silicon trial builds have been produced using the scripts in `packaging/`. Generated DMG/ZIP files live in `output/installers/` on the build machine and are not published as GitHub Releases. The app bundles Python; installed data is stored separately under the user application-support directory. Source-mode data is not moved automatically.
+
+Trial builds have no Developer ID signature or Apple notarization. Intel Macs and other operating systems have not been accepted. The 1.2.1 installation smoke checks are historical and do not certify a 1.3.4 installer. See [macOS installation and release notes](docs/23_MACOS_INSTALLATION_AND_RELEASE.md).
 
 ## Run locally
 
@@ -179,3 +195,7 @@ These are check entry points, not a claim that every check passes. Historical va
 - [Documentation index](docs/README.md) · [Development log](docs/DEVELOPMENT_LOG.md)
 
 Discuss teaching needs, design ideas or reproducible issues through [GitHub Issues](https://github.com/CarryLewis/lab-report-assistant/issues). Use de-identified or fictional material to describe a case.
+
+## Interface language
+
+Use **语言 / Language** in the top bar to choose **中文** or **English**. The browser remembers your choice. Navigation, actions, statuses, help, export options and source readers support English. Switching reloads the page and checks for unsaved review or assignment edits first. Student documents, teacher input, rubric snapshots, built-in template content and existing AI output retain their original language. The interface setting does not change the language of generated analysis or exported report content.

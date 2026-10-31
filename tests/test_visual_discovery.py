@@ -1,6 +1,8 @@
+"""Historical PDF scanner library coverage; new PDF uploads stay disabled."""
 import base64
 import hashlib
 import io
+import hashlib
 import tempfile
 import unittest
 from pathlib import Path
@@ -19,20 +21,35 @@ class DiscoveryTests(unittest.TestCase):
         self.temp=tempfile.TemporaryDirectory();self.root=Path(self.temp.name)
         self.data_patch=patch.object(p,'DATA',self.root);self.data_patch.start();p.init()
         aid=create_assignment()
-        self.report=p.dispatch('POST','/api/pilot/reports',{'assignment_id':aid,'filename':'visuals.pdf','file':base64.b64encode(FIXTURE.read_bytes()).decode()},None)
+        self.report=p.dispatch('POST','/api/pilot/reports',{'assignment_id':aid,'sample':True},None)
+        raw=FIXTURE.read_bytes();sources=self.root/'sources';sources.mkdir()
+        (sources/(self.report['id']+'.bin')).write_bytes(raw)
+        self.report.update(sample=False,filename='visuals.pdf',source_filename='visuals.pdf',source_sha256=hashlib.sha256(raw).hexdigest(),paragraphs=p.paragraphs_pdf(raw))
+        with p.db() as c:p.persist(c,self.report)
         self.path='/api/pilot/reports/'+self.report['id']
 
     def tearDown(self):
         self.data_patch.stop();self.temp.cleanup()
 
     def call(self,action,**body):
-        self.report=p.dispatch('POST',self.path+'/'+action,{'revision':self.report['revision'],**body},None)
+        with p.db() as connection:
+            self.report=p.get_report(connection,self.report['id'])
+            v.mutate(action,body,self.report,self.root)
+            self.report['revision']+=1
+            p.persist(connection,self.report)
         return self.report
 
     def scan(self):
         self.call('visual-scan')
         while self.report['visual_scan']['status']=='running':self.call('visual-scan-next',scan_id=self.report['visual_scan']['id'])
         return self.report
+
+    def test_retired_pdf_upload_and_manual_scan_stay_disabled(self):
+        with self.assertRaisesRegex(ValueError,'仅接收 Word'):
+            p.dispatch('POST','/api/pilot/reports',{'assignment_id':self.report['assignment']['id'],'filename':'new.pdf','file':base64.b64encode(FIXTURE.read_bytes()).decode()},None)
+        for action in ('visual-scan','visual-scan-next','visual-object'):
+            with self.assertRaisesRegex(ValueError,'停用'):
+                p.dispatch('POST',self.path+'/'+action,{'revision':self.report['revision']},None)
 
     def test_detection_coverage_dedup_and_persistence(self):
         r=self.scan();self.assertEqual(r['visual_scan']['processed'],3)

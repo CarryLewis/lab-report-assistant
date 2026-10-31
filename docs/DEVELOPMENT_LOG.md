@@ -1,5 +1,9 @@
 # Development Decisions and Backlog
 
+## 2026-10-26 — Simplify release interface copy
+
+Removed AI helper explanations from the active dashboard, upload forms, review sidebar, outline footer and help dialog. Review headings now use 报告概览 and 评阅建议; queue and processing labels use neutral, concise statuses. Removed repeated teacher-decision disclaimers and model names from report result metadata. Service settings retain functional model/key controls and connection states. Automatic processing, source data, grading decisions and exports are unchanged; historical snapshots and development documentation remain intact. JavaScript/Python syntax and active dashboard/review/settings rendering were checked with the isolated fictional fixture.
+
 ## 2026-10-25 — Implement local visual discovery and original-page inventory
 
 Added resumable local page scans for embedded images, vector groups and tables,
@@ -125,3 +129,27 @@ Added per-assignment start/resume actions, persistent unfinished-report checkpoi
 ## 2026-10-25 — Word-first automatic review (1.2.1)
 
 Adopted DOCX-only submissions, automatic text/table/image inputs with source anchors, explicit immutable suggestion decisions, continuous grading and original/annotated Word plus score-package export. Manual crop-and-send image analysis is retired from the active UI. See [complete workflow and limits](19_WORD_FIRST_REVIEW_WORKFLOW.md).
+## 2026-10-27 — Local downloadable application direction
+
+Current delivery is an individual teacher application downloaded and run on the teacher's own computer. Prioritize durable local review, installation/startup, backup/restore and data-preserving updates. Turnitin sync/sign-in, LMS/SSO and central multi-user deployment are deferred. Added the local delivery charter and marked older institutional integration plans as historical. Documentation change only; no runtime, packaging or synchronization code changed.
+
+## 2026-10-28 — Multi-genre writing review (1.3.0)
+
+Added eight editable genre profiles, 80 original draft wording examples, eight fictional text fixtures, template preview/application and the standards-library entries. Analysis now uses the submitted genre/language and only matching wording references; assignment imports freeze the writing profile alongside the rubric. Custom types fall back to general writing guidance. See [implementation and validation](24_MULTI_GENRE_WRITING.md).
+
+## 2026-10-29 — Preserve code parsing and add AI rubric understanding/scoring
+
+Added an explicit code/AI method selector. Code mode retains local rubric parsing and the prior feedback/manual-score workflow; AI mode interprets natural rubric text and produces evidence-linked candidate scores. Separate drafts, method metadata and report snapshots preserve both workflows. Added validation for weights, source quotes, score coverage, uncertain scores and special-rule arithmetic/caps. See [implementation and verification](25_DUAL_RUBRIC_PROCESSING.md).
+
+## 2026-10-29 — Preview rubric imports beside the editor
+
+Word imports and pasted rubric text now automatically use the selected code/AI method and open an editable preview beside the source. The preview appears before the saved-assignment library and shows reading, processing, source-changed and recoverable failure states. Manual AI text edits retain an explicit Update preview action. Preview edits preserve original AI source text. Added regression coverage for both methods and verified paste/edit behavior in an isolated browser fixture using simulated AI responses. Existing packaged-app data was left untouched.
+
+
+## 2026-10-31 — Synchronize the 1.3.4 development snapshot
+
+Published the accumulated local development source: multi-genre writing profiles, code/AI rubric processing and editable previews, Chinese/English UI, desktop runtime and backup/restore, import recovery, and review-PDF export with numbered margin comments. The source version is 1.3.4; the macOS installation notes retain their original build-specific dates and acceptance results. No installer or GitHub Release is published by this source synchronization.
+
+Before synchronization, all 100 Python tests (`.venv/bin/python -m unittest discover -s tests -p 'test_*.py'`) and all nine `tests/test_*.js` scripts passed. No live AI benchmark or new packaged-app acceptance run was performed. Updated both READMEs to reflect this source snapshot.
+
+Excluded the entire generated `output/` directory, as well as historical corpus, local databases, rendered student documents and credentials. Added missing rubric/profile modules and the public writing-profile catalog to the Docker resource list; the Docker image was not rebuilt in this synchronization.

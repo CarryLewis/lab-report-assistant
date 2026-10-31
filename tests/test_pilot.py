@@ -86,9 +86,11 @@ class PilotWorkflowTests(unittest.TestCase):
             z.writestr('word/document.xml','<w:document xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main"><w:body><w:p><w:r><w:t>Results</w:t></w:r></w:p><w:p><w:r><w:t>Actual report text</w:t></w:r></w:p></w:body></w:document>')
         r=self.call('reports',{'assignment_id':self.assignment_id,'filename':'real.docx','file':base64.b64encode(out.getvalue()).decode()})
         self.assertEqual(r['paragraphs'][1]['text'],'Actual report text')
-        r=self.call('reports/'+r['id']+'/analyze',{'revision':r['revision'],'mode':'example'})
-        self.assertEqual(r['analysis']['mode'],'structure')
-        self.assertEqual(r['analysis']['findings'],[])
+        with self.assertRaisesRegex(ValueError,'自动分析'):
+            self.call('reports/'+r['id']+'/analyze',{'revision':r['revision'],'mode':'example'})
+        outline=p.structural(r)  # Local structure utility remains independently testable.
+        self.assertEqual(outline['mode'],'structure')
+        self.assertEqual(outline['findings'],[])
         with self.assertRaises(ValueError):
             p.paragraphs_docx(b'not a zip')
 

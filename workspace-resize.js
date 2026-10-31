@@ -1,10 +1,12 @@
+/* Localize application copy only; imported content is passed through unchanged. */
+var uiT=globalThis.LabwiseI18n?.t||((text,...values)=>typeof text==='string'?text:text.reduce((s,part,i)=>s+part+(i<values.length?values[i]:''),''));
 (function(){
   const workspace=document.getElementById('workspacePage');
   if(!workspace)return;
   const desktop=window.matchMedia('(min-width:901px)');
   const settings={
-    rubric:{column:workspace.querySelector('.right'),variable:'--rubric-width',defaultWidth:340,min:260,max:520,collapsedClass:'rubric-collapsed',label:'评分细则'},
-    assistant:{column:workspace.querySelector('.left'),variable:'--assistant-width',defaultWidth:300,min:220,max:460,collapsedClass:'assistant-collapsed',label:'报告理解与导航'}
+    rubric:{column:workspace.querySelector('.right'),variable:'--rubric-width',defaultWidth:340,min:260,max:520,collapsedClass:'rubric-collapsed',label:uiT('评分细则')},
+    assistant:{column:workspace.querySelector('.left'),variable:'--assistant-width',defaultWidth:300,min:220,max:460,collapsedClass:'assistant-collapsed',label:uiT('报告理解与导航')}
   };
   const storageKey='labwise.workspace.layout.v1';
   let saved={};
@@ -34,8 +36,8 @@
     else applyWidth(key,saved[key].width||item.defaultWidth,true);
     item.toggle.textContent=collapsed?'‹':'›';
     item.toggle.setAttribute('aria-expanded',String(!collapsed));
-    item.toggle.setAttribute('aria-label',(collapsed?'展开':'收起')+item.label);
-    item.toggle.title=(collapsed?'展开':'收起')+item.label;
+    item.toggle.setAttribute('aria-label',(collapsed?uiT('展开'):uiT('收起'))+item.label);
+    item.toggle.title=(collapsed?uiT('展开'):uiT('收起'))+item.label;
     persist();
   }
   function resetWidth(key){
@@ -43,7 +45,7 @@
     saved[key]={...(saved[key]||{}),collapsed:false,width:settings[key].defaultWidth};
     applyWidth(key,settings[key].defaultWidth,true);
     setCollapsed(key,false);
-    showToast(settings[key].label+'已恢复默认宽度');
+    showToast(settings[key].label+uiT('已恢复默认宽度'));
   }
   Object.entries(settings).forEach(([key,item])=>{
     const actions=document.createElement('div');
@@ -55,7 +57,7 @@
     toggle.onclick=()=>setCollapsed(key,!workspace.classList.contains(item.collapsedClass));
 
     const handle=document.createElement('div');
-    handle.className='workspace-resize-handle';handle.tabIndex=0;handle.setAttribute('role','separator');handle.setAttribute('aria-orientation','vertical');handle.setAttribute('aria-label','调整'+item.label+'宽度');handle.setAttribute('aria-valuemin',String(item.min));handle.setAttribute('aria-valuemax',String(item.max));handle.title='拖动调整宽度；双击恢复默认';item.column.prepend(handle);item.handle=handle;
+    handle.className='workspace-resize-handle';handle.tabIndex=0;handle.setAttribute('role','separator');handle.setAttribute('aria-orientation','vertical');handle.setAttribute('aria-label',uiT('调整')+item.label+uiT('宽度'));handle.setAttribute('aria-valuemin',String(item.min));handle.setAttribute('aria-valuemax',String(item.max));handle.title=uiT('拖动调整宽度；双击恢复默认');item.column.prepend(handle);item.handle=handle;
     let startX=0,startWidth=0;
     handle.addEventListener('pointerdown',event=>{
       if(!desktop.matches)return;

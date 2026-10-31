@@ -278,7 +278,22 @@ def readable_preview(files, paragraph_ids=None):
     return '''<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; img-src data:; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'"><style>body{margin:0;padding:24px;background:#525659;color:#202830;font:15px/1.8 Georgia,'Times New Roman',serif}.page{max-width:800px;margin:auto;background:white;padding:48px;box-sizing:border-box;overflow-wrap:anywhere}p{white-space:pre-wrap;min-height:1em}table{border-collapse:collapse;width:100%;margin:16px 0}td{border:1px solid #cfd6df;padding:8px;vertical-align:top}img{max-width:100%;height:auto}.missing{color:#8b6d45;font:12px system-ui}h1,h2,h3{line-height:1.4}@media(max-width:600px){body{padding:10px}.page{padding:24px}}</style></head><body><article class="page">'''+content+'</article></body></html>'
 
 
-def preview(body):
+def converter_path():
+    configured = os.environ.get('LABWISE_SOFFICE')
+    if configured:
+        path = shutil.which(configured) or configured
+        return path if Path(path).is_file() and os.access(path, os.X_OK) else None
+    located = shutil.which('libreoffice') or shutil.which('soffice')
+    if located:
+        return located
+    for path in ('/Applications/LibreOffice.app/Contents/MacOS/soffice',
+                 str(Path.home() / 'Applications/LibreOffice.app/Contents/MacOS/soffice')):
+        if Path(path).is_file() and os.access(path, os.X_OK):
+            return path
+    return None
+
+
+def preview(body, *, require_paged=False):
     if not str(body.get('filename','')).lower().endswith('.docx'):
         raise ValueError('Word 预览支持 DOCX 文件；旧版 DOC 请先另存为 DOCX 或 PDF。')
     try:
@@ -288,8 +303,10 @@ def preview(body):
     if not raw or len(raw)>10*1024*1024:
         raise ValueError('文档必须在 10 MB 以内。')
     prepared,files,warnings=prepare_copy(raw)
-    converter=os.environ.get('LABWISE_SOFFICE') or shutil.which('libreoffice') or shutil.which('soffice')
+    converter=converter_path()
     failure='本机未找到分页转换组件'
+    if require_paged and not converter:
+        raise ValueError('PDF 导出需要 Word 分页转换组件 LibreOffice。请从 https://www.libreoffice.org/download/ 安装到应用程序目录后重试；自定义安装位置请将 LABWISE_SOFFICE 指向可执行的 soffice 文件。')
     if converter:
         with tempfile.TemporaryDirectory(prefix='labwise-preview-') as temp:
             folder=Path(temp);source=folder/'report.docx';source.write_bytes(prepared)
@@ -302,10 +319,12 @@ def preview(body):
                     pdf=output.read_bytes()
                     if pdf.startswith(b'%PDF-'):
                         return {'file':base64.b64encode(pdf).decode('ascii'),'content_type':'application/pdf','preview_mode':'paged','warnings':warnings}
-                failure='此文档的分页转换未完成'
+                failure='LibreOffice 未能将此文档转换为 PDF；请检查原文件能否正常打开，以及字体或复杂对象是否兼容'
             except subprocess.TimeoutExpired:
-                failure='分页转换超时'
+                failure='LibreOffice 分页转换超时（60 秒）；请减少文档大小或复杂对象后重试'
             except OSError:
-                failure='分页转换组件暂不可用'
+                failure='LibreOffice 分页转换组件无法启动；请检查安装是否完整及 LABWISE_SOFFICE 是否指向可执行文件'
+    if require_paged:
+        raise ValueError(failure + '。')
     return {'content_type':'text/html','html':readable_preview(files),'preview_mode':'readable',
             'warnings':warnings+[failure+'，已切换为兼容阅读视图；文本、表格和常见图片可阅读，但分页、图表及复杂排版可能不完整。']}
