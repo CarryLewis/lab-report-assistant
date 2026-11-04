@@ -5,8 +5,8 @@ var uiT=globalThis.LabwiseI18n?.t||((text,...values)=>typeof text==='string'?tex
   if(!workspace)return;
   const desktop=window.matchMedia('(min-width:901px)');
   const settings={
-    rubric:{column:workspace.querySelector('.right'),variable:'--rubric-width',defaultWidth:340,min:260,max:520,collapsedClass:'rubric-collapsed',label:uiT('评分细则')},
-    assistant:{column:workspace.querySelector('.left'),variable:'--assistant-width',defaultWidth:300,min:220,max:460,collapsedClass:'assistant-collapsed',label:uiT('报告理解与导航')}
+    rubric:{column:workspace.querySelector('.right'),variable:'--rubric-width',defaultWidth:380,min:280,max:520,collapsedClass:'rubric-collapsed',label:uiT('评分细则')},
+    assistant:{column:workspace.querySelector('.left'),variable:'--assistant-width',defaultWidth:240,min:200,max:360,collapsedClass:'assistant-collapsed',label:uiT('报告理解与导航')}
   };
   const storageKey='labwise.workspace.layout.v1';
   let saved={};
@@ -17,7 +17,7 @@ var uiT=globalThis.LabwiseI18n?.t||((text,...values)=>typeof text==='string'?tex
     if(!desktop.matches)return settings[key].max;
     const otherWidth=workspace.classList.contains(settings[other].collapsedClass)?48:(saved[other]?.width||settings[other].defaultWidth);
     const canvasWidth=workspace.clientWidth||window.innerWidth;
-    return Math.max(settings[key].min,Math.min(settings[key].max,canvasWidth-440-otherWidth));
+    return Math.max(settings[key].min,Math.min(settings[key].max,canvasWidth-360-otherWidth-2));
   };
   function persist(){try{localStorage.setItem(storageKey,JSON.stringify(saved));}catch(_){}}
   function applyWidth(key,value,announce=false){
@@ -34,7 +34,7 @@ var uiT=globalThis.LabwiseI18n?.t||((text,...values)=>typeof text==='string'?tex
     saved[key]={...(saved[key]||{}),collapsed};
     if(collapsed)workspace.style.setProperty(item.variable,'48px');
     else applyWidth(key,saved[key].width||item.defaultWidth,true);
-    item.toggle.textContent=collapsed?'‹':'›';
+    item.toggle.textContent=key==='assistant'?(collapsed?'›':'‹'):(collapsed?'‹':'›');
     item.toggle.setAttribute('aria-expanded',String(!collapsed));
     item.toggle.setAttribute('aria-label',(collapsed?uiT('展开'):uiT('收起'))+item.label);
     item.toggle.title=(collapsed?uiT('展开'):uiT('收起'))+item.label;
@@ -50,8 +50,8 @@ var uiT=globalThis.LabwiseI18n?.t||((text,...values)=>typeof text==='string'?tex
   Object.entries(settings).forEach(([key,item])=>{
     const actions=document.createElement('div');
     actions.className='colhead-actions';
-    const existing=item.column.querySelector('.colhead>:last-child');
-    existing.replaceWith(actions);actions.append(existing);
+    const heading=item.column.querySelector(key==='assistant'?'.outline-heading-row':'.colhead');
+    heading.append(actions);
     const toggle=document.createElement('button');
     toggle.type='button';toggle.className='panel-toggle';actions.append(toggle);item.toggle=toggle;
     toggle.onclick=()=>setCollapsed(key,!workspace.classList.contains(item.collapsedClass));
@@ -66,7 +66,7 @@ var uiT=globalThis.LabwiseI18n?.t||((text,...values)=>typeof text==='string'?tex
     });
     handle.addEventListener('pointermove',event=>{
       if(!handle.hasPointerCapture(event.pointerId))return;
-      applyWidth(key,startWidth-(event.clientX-startX),true);
+      applyWidth(key,startWidth+(key==='assistant'?1:-1)*(event.clientX-startX),true);
     });
     const finish=event=>{
       if(handle.hasPointerCapture(event.pointerId))handle.releasePointerCapture(event.pointerId);
@@ -78,12 +78,12 @@ var uiT=globalThis.LabwiseI18n?.t||((text,...values)=>typeof text==='string'?tex
       event.preventDefault();
       if(event.key==='Home'){resetWidth(key);return;}
       const current=item.column.getBoundingClientRect().width;
-      applyWidth(key,current+(event.key==='ArrowLeft'?16:-16),true);persist();
+      applyWidth(key,current+(event.key==='ArrowLeft'?-16:16)*(key==='assistant'?1:-1),true);persist();
     });
   });
   Object.entries(settings).forEach(([key,item])=>{
     applyWidth(key,saved[key]?.width||item.defaultWidth,true);
-    setCollapsed(key,Boolean(saved[key]?.collapsed));
+    setCollapsed(key,saved[key]?.collapsed??(key==='assistant'&&window.innerWidth<1180));
   });
   window.addEventListener('resize',()=>{if(desktop.matches)Object.entries(settings).forEach(([key,item])=>applyWidth(key,saved[key]?.width||item.defaultWidth,true));});
 })();

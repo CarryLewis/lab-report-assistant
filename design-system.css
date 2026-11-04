@@ -1,0 +1,126 @@
+/* Shared Labwise UI foundations. Source document typography remains independent. */
+:root {
+  --font-ui: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", sans-serif;
+  --text-caption: 12px;
+  --text-control: 13px;
+  --text-body: 14px;
+  --text-section: 16px;
+  --text-page: 28px;
+  --ink: #243648;
+  --muted: #617386;
+  --line: #dce4ec;
+  --green: #245f8f;
+  --mint: #edf4fa;
+  --bg: #f5f7fa;
+  --focus: #6e9fc4;
+  --radius-control: 6px;
+  --radius-panel: 10px;
+  --icon-home:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20class%3D%22ui-icon%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%221.75%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%3E%3Crect%20x%3D%223%22%20y%3D%223%22%20width%3D%227%22%20height%3D%227%22%20rx%3D%221.5%22%2F%3E%3Crect%20x%3D%2214%22%20y%3D%223%22%20width%3D%227%22%20height%3D%227%22%20rx%3D%221.5%22%2F%3E%3Crect%20x%3D%223%22%20y%3D%2214%22%20width%3D%227%22%20height%3D%227%22%20rx%3D%221.5%22%2F%3E%3Crect%20x%3D%2214%22%20y%3D%2214%22%20width%3D%227%22%20height%3D%227%22%20rx%3D%221.5%22%2F%3E%3C%2Fsvg%3E");
+  --icon-assignments:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20class%3D%22ui-icon%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%221.75%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%3E%3Cpath%20d%3D%22M3%207a2%202%200%200%201%202-2h5l2%203h7a2%202%200%200%201%202%202v9a2%202%200%200%201-2%202H5a2%202%200%200%201-2-2Z%22%2F%3E%3C%2Fsvg%3E");
+  --icon-standards:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20class%3D%22ui-icon%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%221.75%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%3E%3Crect%20x%3D%225%22%20y%3D%225%22%20width%3D%2214%22%20height%3D%2216%22%20rx%3D%222%22%2F%3E%3Crect%20x%3D%229%22%20y%3D%223%22%20width%3D%226%22%20height%3D%224%22%20rx%3D%221%22%2F%3E%3Cpath%20d%3D%22m8%2012%201%201%202-2m2%201h3m-8%205h8%22%2F%3E%3C%2Fsvg%3E");
+  --icon-analytics:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20class%3D%22ui-icon%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%221.75%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%3E%3Cpath%20d%3D%22M4%203v17h17M9%2015v-4m5%204V6m5%209v-6%22%2F%3E%3C%2Fsvg%3E");
+  --icon-settings:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20class%3D%22ui-icon%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%221.75%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%3E%3Cpath%20d%3D%22M4%206h16M4%2012h16M4%2018h16%22%2F%3E%3Ccircle%20cx%3D%229%22%20cy%3D%226%22%20r%3D%222%22%2F%3E%3Ccircle%20cx%3D%2215%22%20cy%3D%2212%22%20r%3D%222%22%2F%3E%3Ccircle%20cx%3D%229%22%20cy%3D%2218%22%20r%3D%222%22%2F%3E%3C%2Fsvg%3E");
+  --icon-plus:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20class%3D%22ui-icon%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%221.75%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%3E%3Cpath%20d%3D%22M12%205v14M5%2012h14%22%2F%3E%3C%2Fsvg%3E");
+  --icon-help:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20class%3D%22ui-icon%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%221.75%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%3E%3Ccircle%20cx%3D%2212%22%20cy%3D%2212%22%20r%3D%229%22%2F%3E%3Cpath%20d%3D%22M9.5%209a2.5%202.5%200%200%201%205%20.5c0%201.5-2.5%201.5-2.5%203M12%2017h.01%22%2F%3E%3C%2Fsvg%3E");
+  --icon-back:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20class%3D%22ui-icon%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%221.75%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%3E%3Cpath%20d%3D%22m10%205-7%207%207%207M3%2012h18%22%2F%3E%3C%2Fsvg%3E");
+  --icon-upload:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20class%3D%22ui-icon%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%221.75%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%3E%3Cpath%20d%3D%22M12%2016V3m-5%205%205-5%205%205M4%2015v4a2%202%200%200%200%202%202h12a2%202%200%200%200%202-2v-4%22%2F%3E%3C%2Fsvg%3E");
+  --icon-refresh:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20class%3D%22ui-icon%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%221.75%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%3E%3Cpath%20d%3D%22M20%207v5h-5M4%2017v-5h5M6%206a8%208%200%200%201%2014%206M4%2012a8%208%200%200%200%2014%206%22%2F%3E%3C%2Fsvg%3E");
+  --icon-menu:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20class%3D%22ui-icon%22%20viewBox%3D%220%200%2024%2024%22%20fill%3D%22none%22%20stroke%3D%22currentColor%22%20stroke-width%3D%221.75%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%20aria-hidden%3D%22true%22%20focusable%3D%22false%22%3E%3Cpath%20d%3D%22M4%206h16M4%2012h16M4%2018h16%22%2F%3E%3C%2Fsvg%3E");
+}
+body {font-family:var(--font-ui);font-size:var(--text-body);line-height:1.65;-webkit-font-smoothing:antialiased}
+button,input,select,textarea {font-family:var(--font-ui);font-size:var(--text-control);line-height:1.5}
+button {font-weight:500}
+:where(button) {border:1px solid var(--line);border-radius:var(--radius-control);background:#fff;color:var(--ink);padding:7px 12px;cursor:pointer}
+:where(button:hover:not(:disabled)) {background:#edf4fa}
+#refresh,#batchImportEntry {font:var(--text-control)/1.5 var(--font-ui);border:1px solid var(--line);border-radius:var(--radius-control);background:#fff;color:var(--green);padding:7px 12px;min-height:34px}
+input,select,textarea {color:var(--ink)}
+::placeholder {color:#758495;opacity:1}
+:focus-visible {outline:2px solid var(--focus);outline-offset:3px}
+.ui-icon {width:18px;height:18px;flex:none;vertical-align:middle}
+.nav-mark {display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;flex:none}
+.nav-mark .ui-icon {width:19px;height:19px}
+.nav-item {gap:12px;font-size:var(--text-body);font-weight:500;min-height:44px;line-height:1.5;padding:11px 12px;border-radius:var(--radius-control)}
+.nav-context strong {font-size:var(--text-body);font-weight:600}
+.nav-context small,.nav-footer {font-size:var(--text-caption);line-height:1.7}
+.dashboard-heading h1,.module-heading h1,#assignmentSettings h1 {font-size:var(--text-page);font-weight:600;line-height:1.3;letter-spacing:-.02em;margin:0 0 10px}
+.dashboard-heading p,.module-heading p,#assignmentSettings .page-heading p {font-size:var(--text-body);line-height:1.75;color:var(--muted)}
+.panel-head h2,.upload-panel h2,.module-panel h2,.editor-heading h2 {font-size:var(--text-section);line-height:1.5;font-weight:600}
+.module-panel h3,.writing-template-panel h3,.colhead strong {font-size:var(--text-body);line-height:1.5;font-weight:600}
+.panel,.module-panel,#assignmentSettings .panel {border-color:var(--line);border-radius:var(--radius-panel)}
+.module-panel,.assignment-editor {padding:24px}
+.module-kicker,#assignmentSettings .page-heading small {font-size:var(--text-caption);font-weight:600;letter-spacing:.08em;display:block;margin-bottom:8px}
+.summary-item b,.module-metric b {font-size:28px;line-height:1.25;font-weight:600;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+.summary-item span,.module-metric span,.module-help,.muted {font-size:var(--text-caption);line-height:1.75}
+.summary-item {padding:20px 24px}
+.top-actions {gap:8px}
+.top-actions button,.softbtn,.task-action,.module-button,#assignmentSettings button,dialog button,.review-actions button,.doccontrols button {font-family:var(--font-ui);font-size:var(--text-control);line-height:1.5;border-radius:var(--radius-control);min-height:34px}
+.top-actions button,.softbtn,.task-action,.module-button,dialog button {padding:7px 12px}
+.top-actions .avatar {min-height:32px;padding:0;flex:none}
+.primary,.module-button.primary,#assignmentSettings button.primary {background:var(--green);color:#fff;border-color:var(--green);font-weight:600;border-radius:var(--radius-control)}
+.teacher-module input,.teacher-module textarea,.teacher-module select,#assignmentSettings input,#assignmentSettings textarea,#assignmentSettings select,.editable,.task-filter input,.task-filter select {font-family:var(--font-ui);font-size:var(--text-body);line-height:1.65;border-radius:var(--radius-control);padding:9px 12px}
+.teacher-module label,#assignmentSettings label,.upload-panel label {font-size:var(--text-control);line-height:1.6;font-weight:600}
+.task-filter {gap:10px;flex-wrap:wrap}
+.task-filter input {min-width:0;flex:1 1 180px}
+.task-filter select {max-width:100%}
+.upload-panel>p,.drop small,.drop .muted,.quick-note,.module-notice {font-size:var(--text-caption);line-height:1.75}
+.drop {gap:12px;padding:20px 16px;border-radius:var(--radius-panel)}
+.drop input[type=file] {max-width:100%;min-width:0;font-size:var(--text-caption)}
+input[type=file]::file-selector-button {font:inherit;color:var(--green);background:#edf4fa;border:1px solid #c9d9e6;border-radius:var(--radius-control);padding:7px 10px;margin-right:8px;cursor:pointer}
+dialog {font-family:var(--font-ui);border-color:var(--line);border-radius:12px;padding:28px}
+dialog h2 {font-size:20px;line-height:1.4;font-weight:600}
+dialog p {line-height:1.75}
+.colhead {gap:10px;flex-wrap:wrap;height:auto;min-height:64px}
+.colhead-actions {flex-wrap:wrap}
+.worktabs,.map-switch {gap:6px;flex-wrap:wrap}
+.worktabs button,.map-switch button {font-size:var(--text-control);line-height:1.5}
+.rubric-top b,.standard-item b,.report-open {font-size:var(--text-body);line-height:1.6}
+.rubric p,.citation-card p,.finding-card p,.confirmed-feedback {font-size:var(--text-control);line-height:1.75}
+.evidence-link {font-family:var(--font-ui);font-size:var(--text-control)!important;line-height:1.75}
+.finding-number {font-family:var(--font-ui);font-variant-numeric:tabular-nums}
+.paper {font-family:Georgia,"Noto Serif CJK SC","Songti SC",serif;font-size:15px;line-height:1.9}
+.paper .paper-label,.paper .byline,.pagehint {font-family:var(--font-ui)}
+/* A mask keeps all action icons at the same stroke weight without changing labels. */
+:is(#newAssignmentEntry,#openStandards,#refresh,#upload,#usageHelp,#homeNav,.assignment-entry,.sidebar-toggle)::before {
+  content:"";display:inline-block;width:16px;height:16px;flex:none;background:currentColor;
+  mask:var(--action-icon) center / contain no-repeat;-webkit-mask:var(--action-icon) center / contain no-repeat;
+  vertical-align:-3px;margin-right:7px;
+}
+#newAssignmentEntry {--action-icon:var(--icon-plus)}
+#openStandards {--action-icon:var(--icon-standards)}
+#refresh {--action-icon:var(--icon-refresh)}
+#upload {--action-icon:var(--icon-upload)}
+#usageHelp {--action-icon:var(--icon-help)}
+#homeNav {--action-icon:var(--icon-back)}
+.assignment-entry {--action-icon:var(--icon-assignments)}
+.sidebar-toggle {--action-icon:var(--icon-menu)}
+/* Reader chrome shares UI typography; imported Word/PDF content keeps its formatting. */
+.reader-ui header,.reader-ui #tools {font:var(--text-control)/1.6 var(--font-ui);gap:8px}
+.reader-ui header button,.reader-ui #tools button,.reader-ui #tools select,.reader-ui #tools input {font:var(--text-control)/1.5 var(--font-ui);border-radius:var(--radius-control);padding:6px 9px;min-height:32px}
+.reader-ui #status,.reader-ui #readerState {font:var(--text-caption)/1.6 var(--font-ui)}
+@media(max-width:1100px) {
+ .dashboard-content {padding:28px 24px}
+ .dashboard-grid,.module-two-column,.assignment-layout {grid-template-columns:minmax(0,1fr)}
+ .topbar {height:auto;min-height:64px;flex-wrap:wrap;gap:10px;padding-top:10px;padding-bottom:10px}
+ .top-actions {flex-wrap:wrap}
+}
+@media(max-width:640px) {
+ :root {--text-page:24px}
+ .dashboard-content {padding:24px 16px}
+ .module-panel,.assignment-editor {padding:18px}
+ .summary-item {padding:16px 12px}
+ .summary-item b {font-size:24px}
+ .brand {flex-wrap:wrap}
+ .pilot-badge {display:none}
+ .top-actions button {padding:6px 9px}
+ .dashboard-heading,.module-heading {align-items:flex-start;flex-wrap:wrap}
+ .module-toolbar {flex-wrap:wrap}
+ .ui-language {font-size:var(--text-caption)}
+}
+@media(max-width:640px) {
+ .top-actions {width:100%;max-width:100%;min-width:0;flex:1 1 100%;justify-content:flex-start;flex-wrap:wrap;white-space:normal}
+ .top-actions button {flex-shrink:0}
+ .top-actions .ui-language {max-width:none;flex-wrap:wrap}
+ .dashboard-content,.assignment-editor,.module-panel {min-width:0}
+ #assignmentSettings select {max-width:100%;min-width:0;width:100%}
+ .editor-heading,.import-footer {flex-wrap:wrap}
+}

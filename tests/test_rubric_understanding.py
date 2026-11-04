@@ -222,7 +222,7 @@ class DualProcessingTests(RubricTestCase):
             result=backend.analyze(report,'deepseek',{'model':'deepseek-flash'},None)
         self.assertNotIn('score_suggestions',result)
         self.assertNotIn('score_suggestions',json.loads(request.call_args.args[0].data)['messages'][0]['content'])
-        self.assertEqual(result['prompt_version'],'writing-review-v2')
+        self.assertEqual(result['prompt_version'],'writing-review-v3')
         with self.assertRaisesRegex(ValueError,'代码版本'):
             self.call('reports/'+report['id']+'/score',{'revision':report['revision']})
 

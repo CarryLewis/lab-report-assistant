@@ -153,3 +153,10 @@ Published the accumulated local development source: multi-genre writing profiles
 Before synchronization, all 100 Python tests (`.venv/bin/python -m unittest discover -s tests -p 'test_*.py'`) and all nine `tests/test_*.js` scripts passed. No live AI benchmark or new packaged-app acceptance run was performed. Updated both READMEs to reflect this source snapshot.
 
 Excluded the entire generated `output/` directory, as well as historical corpus, local databases, rendered student documents and credentials. Added missing rubric/profile modules and the public writing-profile catalog to the Docker resource list; the Docker image was not rebuilt in this synchronization.
+
+
+## 2026-11-04 — Synchronize the 1.3.6 development snapshot
+
+Consolidated changes since 1.3.4: shared typography and controls, compact three-pane review layout, embedded reader adjustments, and eight independently selected AI evaluation languages. Text review, scoring and visual explanations share the language contract while source quotes stay verbatim. Updated runtime/packaging resources and filled missing Docker resources.
+
+All 103 Python tests and ten JavaScript test scripts passed before synchronization. No new live-model, browser visual, Docker-build or packaged-app acceptance run was performed. See [1.3.6 progress and validation](26_RELEASE_1_3_6.md). Private historical corpus, runtime data, credentials and generated output remain excluded.

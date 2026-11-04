@@ -3,11 +3,11 @@
 PROMPT = '''
 Also assess EVERY rubric criterion and return score_suggestions, one per criterion:
 [{"criterion_id":"existing id","base_score":0,"score":0,
-  "rationale":"Chinese explanation tying performance to the supplied criterion/levels",
+  "rationale":"explanation in the selected evaluation language tying performance to the supplied criterion/levels",
   "evidence":[{"paragraph_id":"existing id","quote":"exact nonempty substring"}],
   "uncertainty":"empty if none, otherwise specific limitations",
   "adjustments":[{"rule_id":"existing special rule id","points":-2,
-                   "reason":"Chinese explanation of trigger, amount and scope"}]}].
+                   "reason":"explanation in the selected evaluation language of trigger, amount and scope"}]}].
 Use the teacher-reviewed rubric understanding AND original source_text, including
 levels, weights, caps and exceptions. Never invent stricter requirements or grade
 from wording examples. When a rubric only names a dimension and its maximum,

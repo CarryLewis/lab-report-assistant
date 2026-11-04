@@ -1,5 +1,17 @@
 /* English interface catalogue. Keys are application-authored Chinese UI copy. */
 globalThis.LabwiseEnglish = {
+  "AI 评价语言": "AI evaluation language",
+  "LLM 输出的评价语言": "Language for LLM evaluations",
+  "保存评价语言": "Save evaluation language",
+  "评价语言已保存，对后续分析生效。": "Evaluation language saved. It applies to future analyses.",
+  "评价语言已更改，请保存。": "Evaluation language changed. Please save.",
+  "请选择支持的 AI 评价语言。": "Choose a supported AI evaluation language.",
+  "独立于界面和原文语言，统一用于 AI 概览、建议、反馈、评分理由和图表说明；原文引句保持原样。保存后对后续分析生效，已有结果不自动翻译。": "Independent of the interface and source language. Applies to AI summaries, suggestions, feedback, scoring reasons and visual explanations; source quotations stay verbatim. Saving applies to future analyses. Existing results are not translated automatically.",
+
+  "填写评阅概览": "Write review overview",
+  "阅读说明": "Reading notes",
+  "更多报告操作": "More report actions",
+  "更多": "More",
   "更新预览": "Update preview",
   "原文已更新，点击“更新预览”重新理解。": "Source text changed. Select Update preview to interpret it again.",
   "导入 Word 或粘贴细则后，这里会自动显示可编辑的评分项目。": "Import a Word rubric or paste text to automatically preview editable criteria here.",
@@ -204,6 +216,7 @@ globalThis.LabwiseEnglish = {
   " 已返回可解析、证据引用有效的分析结果。": " returned a valid analysis with verified evidence references.",
   "测试失败：": "Test failed: ",
   "☰ 导航": "☰ Menu",
+  "导航": "Menu",
   "关闭侧边导航": "Close sidebar",
   "正在载入原文件，请稍候…": "Loading the original file…",
   "Word 原文与批注": "Word source and annotations",

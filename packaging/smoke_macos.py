@@ -75,9 +75,17 @@ def main():
             assert record['port']!=occupied.getsockname()[1]
             assert request(record,'api/pilot/health')['instance_id']==record['instance_id']
             checks.append('packaged-runtime-and-port-fallback')
-            for path in ('','user-support.js','teacher-live.js','word-reader.html','vendor/pdfjs/pdf.mjs'):
+            for path in ('','review-layout.css','design-system.css','user-support.js','teacher-live.js','word-reader.html','vendor/pdfjs/pdf.mjs'):
                 assert request(record,path,raw=True)
             checks.append('bundled-assets-without-source-environment')
+            stylesheet=request(record,'design-system.css',raw=True)
+            assert b'--font-ui:' in stylesheet and b'--icon-menu:' in stylesheet
+            assert b'/design-system.css?v=1.3.6' in request(record,'',raw=True)
+            for reader in ('word-reader.html','original-reader.html'):
+                assert b'/design-system.css?v=1.3.6' in request(record,reader,raw=True)
+            assert b'/review-layout.css?v=1.3.6' in request(record,'',raw=True)
+            assert b'height:100dvh' in request(record,'review-layout.css',raw=True)
+            checks.append('shared-typography-icons-and-compact-review-layout')
             profiles=request(record,'api/pilot/writing-profiles')['profiles']
             assert len(profiles)==8
             essay=next(p for p in profiles if p['id']=='academic_essay')

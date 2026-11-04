@@ -2,6 +2,7 @@
 /* Localize application copy only; imported content is passed through unchanged. */
 var uiT=globalThis.LabwiseI18n?.t||((text,...values)=>typeof text==='string'?text:text.reduce((s,part,i)=>s+part+(i<values.length?values[i]:''),''));
 const id=new URLSearchParams(location.search).get('report');let selection=null,model=null;
+if(new URLSearchParams(location.search).get('embed')==='1')document.body.classList.add('embedded-reader');
 const $=id=>document.getElementById(id);
 async function api(path){const response=await fetch('/api/pilot/'+path);const data=await response.json();if(!response.ok)throw Error(data.error||uiT('读取失败'));return data;}
 function notify(type,data={}){parent.postMessage({type,...data},location.origin);}
@@ -47,6 +48,6 @@ $('downloadWord').onclick=async()=>{try{const source=await api('reports/'+id+'/s
 (async()=>{try{
  model=await api('reports/'+encodeURIComponent(id)+'/word-view');const doc=new DOMParser().parseFromString(model.html,'text/html');const page=doc.querySelector('.page');$('document').append(document.adoptNode(page));
  for(const obj of model.objects){if(obj.kind!=='chart')continue;const target=document.querySelector('[data-word-index="'+obj.paragraph_index+'"]');if(target){const label=document.createElement('div');label.className='object-note';label.textContent=uiT('Word 原生图表 ')+obj.id.replace(/^v/,'')+uiT(' · 数据缓存：')+(obj.chart_text||uiT('无法读取'))+uiT('。完整图表版式请在原 Word 核对。');target.append(label);}}
- const limit=document.createElement('p');limit.className='word-limit';limit.textContent=uiT('Word 阅读视图保留原文与表格、图片定位；分页和复杂版式可能与 Word 有差异。原 Word 文件保持不变。');$('document').prepend(limit);
+ const limit=document.createElement('p');limit.className='word-limit';limit.textContent=uiT('Word 阅读视图保留原文与表格、图片定位；分页和复杂版式可能与 Word 有差异。原 Word 文件保持不变。');const info=document.createElement('details');info.className='reader-info';const caption=document.createElement('summary');caption.textContent=uiT('阅读说明');info.append(caption,limit);document.querySelector('header').append(info);
  paint(model.findings||[],model.reviews||{});$('status').textContent=uiT('点击建议定位原段落');notify('labwise:reader-ready');
 }catch(e){$('status').textContent=e.message;notify('labwise:reader-error',{message:e.message});}})();

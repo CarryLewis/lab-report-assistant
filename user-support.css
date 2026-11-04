@@ -1,11 +1,11 @@
 .support-start{margin:18px 0;padding:16px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.support-start h2{font-size:16px;margin:0 0 12px}.support-actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
+.support-start h2{font-size:var(--text-section);margin:0 0 12px}.support-actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}
 .support-actions button,.support-dialog button,#localDataPanel button{border:1px solid var(--line);padding:9px 12px;border-radius:6px;background:#fff;color:var(--ink)}
 .support-dialog{width:min(760px,94vw);max-height:85vh;overflow:auto;padding:22px;border:1px solid var(--line);border-radius:10px;color:var(--ink)}
 .support-dialog::backdrop{background:#17251f66}.support-heading{display:flex;align-items:center;justify-content:space-between;gap:12px}.support-heading h2{margin:0;font-size:20px}
 .support-dialog p,.support-dialog li{line-height:1.8}.support-dialog li{margin:9px 0}.support-dialog input,.support-dialog textarea,.support-dialog select{width:100%;padding:10px;border:1px solid var(--line);border-radius:5px;background:#fff;color:var(--ink);font:inherit}
 .support-dialog label{display:block;margin:14px 0}.support-topic{border-bottom:1px solid var(--line);padding:13px 0}.support-topic summary{cursor:pointer;font-weight:600}
-.support-preview{white-space:pre-wrap;overflow-wrap:anywhere;padding:14px;background:var(--bg);max-height:300px;overflow:auto;font-size:12px}
+.support-preview{white-space:pre-wrap;overflow-wrap:anywhere;padding:14px;background:var(--bg);max-height:300px;overflow:auto;font-size:var(--text-control)}
 .support-error{background:#fff7ed;color:#743f0e;padding:14px 24px;border-bottom:1px solid #dfc8ab}.support-error[hidden]{display:none}.support-error p{margin:8px 0;line-height:1.7}.support-error .support-actions{margin-bottom:0}
 .support-path{overflow-wrap:anywhere;user-select:text}.support-dialog button.primary{background:var(--green);color:white}.support-dialog button:disabled,#localDataPanel button:disabled{opacity:.5;cursor:wait}
 .support-dialog :focus-visible,.support-start :focus-visible,.support-error :focus-visible{outline:2px solid var(--green);outline-offset:3px}

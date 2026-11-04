@@ -23,9 +23,21 @@ Help university instructors understand English lab reports faster, trace feedbac
 
 Labwise is a project for understanding, reviewing and providing feedback on university lab reports. It began with the needs of instructors in China who review English reports as non-native English speakers, focusing initially on report writing and rubric-based assessment in the British university context. Its longer-term aim is a workspace that fits everyday teaching practice.
 
-Initiated by [CarryLewis](https://github.com/CarryLewis), the project is currently a local teacher pilot under active development. The current development version is **1.3.4**; interface versions, archived variants and future plans describe different implementation states.
+Initiated by [CarryLewis](https://github.com/CarryLewis), the project is currently a local teacher pilot under active development. The current development version is **1.3.6**; interface versions, archived variants and future plans describe different implementation states.
 
-## Latest development (1.3.4)
+## Latest development (1.3.6)
+
+Compact review toolbar with outline, source and feedback panes. Removed legacy minimum heights that caused nested scrolling and clipping. Reading notes and overviews expand on demand; errors, evidence navigation and drafts remain available.
+
+An independent AI evaluation setting supports eight languages for summaries, suggestions, feedback and scoring reasons while preserving verbatim source quotes. UI language and evaluation language are saved separately.
+
+Source synchronization date: 2026-11-04. See the [1.3.6 progress and validation record](docs/26_RELEASE_1_3_6.md).
+
+## Previous version (1.3.5)
+
+Unified Chinese and English UI typography, navigation and action icons, buttons and form styles. Fixed toolbar overflow on narrow screens. Desktop builds include the shared stylesheet.
+
+## Previous version (1.3.4)
 
 - Eight writing genres, 80 original draft feedback examples and eight fictional text fixtures; assignment and rubric snapshots remain authoritative.
 - A choice of code-based rubric parsing or AI interpretation, with an editable preview and evidence-linked draft scores in AI mode. Instructors confirm final judgments.
@@ -113,7 +125,7 @@ Instructor-confirmed Word packages are designed to include originals, copies wit
 
 Individual and merged review-PDF previews and exports are included in this source snapshot. Only instructor-confirmed student feedback is exported; private review notes and unaccepted AI suggestions are excluded. Exact source matching is required for highlights; uncertain locations are flagged for checking.
 
-**Current validation (1.3.4, 2026-10-31):** All 100 Python tests and nine JavaScript test scripts passed before synchronization. These checks cover local runtime, backup/restore, import recovery, writing profiles, rubric modes, UI language and PDF export. They do not establish acceptance of live external AI, complex documents, every operating system or packaged installers.
+**Current validation (1.3.6, 2026-11-04):** All 103 Python tests and ten JavaScript test scripts passed before synchronization. These checks cover local runtime, backup/restore, import recovery, writing profiles, rubric modes, UI language and PDF export. They do not establish acceptance of live external AI, complex documents, every operating system or packaged installers.
 
 ## System structure
 
@@ -159,7 +171,7 @@ Evaluation should cover evidence accuracy, unsupported suggestions, rubric align
 
 Local Apple Silicon trial builds have been produced using the scripts in `packaging/`. Generated DMG/ZIP files live in `output/installers/` on the build machine and are not published as GitHub Releases. The app bundles Python; installed data is stored separately under the user application-support directory. Source-mode data is not moved automatically.
 
-Trial builds have no Developer ID signature or Apple notarization. Intel Macs and other operating systems have not been accepted. The 1.2.1 installation smoke checks are historical and do not certify a 1.3.4 installer. See [macOS installation and release notes](docs/23_MACOS_INSTALLATION_AND_RELEASE.md).
+Trial builds have no Developer ID signature or Apple notarization. Intel Macs and other operating systems have not been accepted. The 1.2.1 installation smoke checks are historical and do not certify a 1.3.6 installer. See [macOS installation and release notes](docs/23_MACOS_INSTALLATION_AND_RELEASE.md).
 
 ## Run locally
 
@@ -199,3 +211,8 @@ Discuss teaching needs, design ideas or reproducible issues through [GitHub Issu
 ## Interface language
 
 Use **语言 / Language** in the top bar to choose **中文** or **English**. The browser remembers your choice. Navigation, actions, statuses, help, export options and source readers support English. Switching reloads the page and checks for unsaved review or assignment edits first. Student documents, teacher input, rubric snapshots, built-in template content and existing AI output retain their original language. The interface setting does not change the language of generated analysis or exported report content.
+
+
+## AI evaluation language
+
+Choose and save the language independently under **Settings → AI evaluation language**. Supported languages are Simplified Chinese (default), Traditional Chinese, English, Japanese, Korean, French, German and Spanish. Saving requires no API key. Future AI summaries, suggestions, editable feedback, scoring reasons and visual explanations use this setting regardless of interface or source language. Source quotes stay verbatim. Existing results and running analyses are not translated or restarted. See [LLM language rules](docs/25_EVALUATION_LANGUAGE.md).

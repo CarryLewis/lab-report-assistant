@@ -16,7 +16,7 @@ import webbrowser
 from app_paths import ROOT, data_directory, version
 
 REQUIRED_MODULES = ('certifi', 'pypdf', 'pdfplumber', 'PIL.Image', 'pypdfium2', 'reportlab', 'tkinter')
-REQUIRED_FILES = ('i18n.js', 'i18n-en.js', 'i18n-init.js', 'i18n.css', 'index.html', 'teacher-live.js', 'teacher-live.css', 'user-support.js',
+REQUIRED_FILES = ('review-layout.css','design-system.css', 'i18n.js', 'i18n-en.js', 'i18n-init.js', 'i18n.css', 'index.html', 'teacher-live.js', 'teacher-live.css', 'user-support.js',
                   'user-support.css', 'word-reader.html', 'word-reader.js',
                   'pdf-export.js', 'pdf-export.css', 'vendor/pdfjs/pdf.mjs', 'corpus/writing_profiles.json', 'VERSION')
 

@@ -97,6 +97,7 @@ async function refresh(){
   if(data.assignments.some(a=>a.id===selected))$('assignmentSelect').value=selected;
   assignmentInfo();$('upload').disabled=!data.assignments.length;
   $('model').value=data.settings.model;renderConnectionSettings(data.settings);
+  $('evaluationLanguage').value=data.settings.evaluation_language||'zh-CN';
   renderAssignmentLibrary(data.assignments);drawReportList();renderMetrics();applyPreferences();renderReviewSequence();window.LabwiseSupport?.renderStart();
 }
 // Keep branch expansion and keyboard focus stable during automatic status polling.
@@ -382,6 +383,19 @@ for(const id of ['notes','feedback','summary'])$(id).oninput=dirty;
 $('save').onclick=safeAction(()=>save('save'));$('confirm').onclick=()=>window.LabwiseSupport.openConfirmation();
 $('renameReport').onclick=safeAction(async()=>{if(state.busy)throw Error(uiT('请等待分析完成。'));if(state.dirty)await save('save');const alias=window.prompt(uiT('学生姓名或匿名编号（可留空）'),state.report.student_alias||'');if(alias===null)return;const name=window.prompt(uiT('报告显示名称'),state.report.filename);if(name===null)return;renderReport(await api('reports/'+state.report.id+'/metadata',{revision:state.report.revision,filename:name,student_alias:alias}));await refresh();message(uiT('报告信息已保存。'));});
 $('preferencesForm').onsubmit=async e=>{e.preventDefault();try{await api('preferences',{name:$('teacherName').value,course_name:$('courseLabel').value,term:$('termLabel').value,font_size:$('readingSize').value,line_height:$('readingSpace').value});await refresh();recordTeacherAction(uiT('更新课程与阅读设置'));message(uiT('个人偏好已保存。'));}catch(error){message(error.message,true);}};
+async function saveEvaluationLanguage(event){
+ event.preventDefault();
+ const button=$('saveEvaluationLanguage');if(button.disabled)return;
+ const language=$('evaluationLanguage').value;button.disabled=true;
+ try{
+  const result=await api('evaluation-language',{evaluation_language:language});
+  state.bootstrap.settings.evaluation_language=result.evaluation_language;
+  $('evaluationLanguageStatus').textContent=uiT('评价语言已保存，对后续分析生效。');
+ }catch(error){$('evaluationLanguageStatus').textContent=error.message;}
+ finally{button.disabled=false;}
+}
+$('evaluationLanguageForm').onsubmit=saveEvaluationLanguage;
+$('evaluationLanguage').onchange=()=>{$('evaluationLanguageStatus').textContent=uiT('评价语言已更改，请保存。');};
 $('settingsForm').onsubmit=async e=>{e.preventDefault();try{const editing=!$('apiKeyEditor').hidden,key=$('apiKey').value;if(editing&&!key)throw Error(uiT('请输入访问密钥。'));const result=await api('settings',{model:$('model').value,api_key:editing?key:''});await refresh();message(result.has_key?(editing?uiT('密钥已保存，请测试分析接口。'):uiT('模型设置已保存，请检查当前测试状态。')):uiT('尚未连接，请输入访问密钥。'),!result.has_key);}catch(error){message(error.message,true);}};
 $('model').onchange=()=>{if($('model').value!==state.bootstrap.settings.model){$('connectionBadge').textContent=uiT('待保存');$('keyState').textContent=uiT('模型已更改，请先保存再测试');$('testAnalysis').disabled=true;$('testConnection').disabled=true;}else renderConnectionSettings(state.bootstrap.settings);};
 $('replaceKey').onclick=()=>{$('apiKeyEditor').hidden=false;$('connectActions').hidden=false;$('connectedActions').hidden=true;$('cancelKeyChange').hidden=false;$('apiKey').required=true;$('apiKey').focus();};
@@ -416,7 +430,7 @@ document.querySelector('.assignment-entry').onclick=()=>openTeacherSection('assi
 $('usageHelp').onclick=()=>$('helpDialog').showModal();$('closeHelp').onclick=()=>$('helpDialog').close();
 $('testAnalysis').onclick=safeAction(async()=>{const button=$('testAnalysis');button.disabled=true;$('apiTestResult').textContent=uiT('正在发送不含学生资料的接口测试请求…');try{const result=await api('test-analysis',{});await refresh();$('apiTestResult').textContent=uiT('测试成功：')+result.model+uiT(' 已返回可解析、证据引用有效的分析结果。');}catch(e){await refresh().catch(()=>{});$('apiTestResult').textContent=uiT('测试失败：')+e.message;throw e;}finally{button.disabled=false;}});
 function closeTeacherNavigation(){document.querySelector('.dashboard-nav').classList.remove('mobile-open');document.body.classList.remove('nav-open');$('teacherNavBackdrop').hidden=true;$('teacherNavToggle').setAttribute('aria-expanded','false');}
-function initTeacherNavigation(){const nav=document.querySelector('.dashboard-nav');const toggle=node('button','sidebar-toggle',uiT('☰ 导航'));toggle.id='teacherNavToggle';toggle.setAttribute('aria-expanded','false');document.querySelector('.top-actions').prepend(toggle);const backdrop=node('button','nav-backdrop');backdrop.id='teacherNavBackdrop';backdrop.hidden=true;backdrop.setAttribute('aria-label',uiT('关闭侧边导航'));document.body.append(backdrop);backdrop.onclick=closeTeacherNavigation;toggle.onclick=()=>{if(toggle.getAttribute('aria-expanded')==='true'){closeTeacherNavigation();return;}nav.classList.add('mobile-open');document.body.classList.add('nav-open');backdrop.hidden=false;toggle.setAttribute('aria-expanded','true');};document.addEventListener('keydown',e=>{if(e.key==='Escape')closeTeacherNavigation();});}
+function initTeacherNavigation(){const nav=document.querySelector('.dashboard-nav');const toggle=node('button','sidebar-toggle',uiT('导航'));toggle.id='teacherNavToggle';toggle.setAttribute('aria-expanded','false');document.querySelector('.top-actions').prepend(toggle);const backdrop=node('button','nav-backdrop');backdrop.id='teacherNavBackdrop';backdrop.hidden=true;backdrop.setAttribute('aria-label',uiT('关闭侧边导航'));document.body.append(backdrop);backdrop.onclick=closeTeacherNavigation;toggle.onclick=()=>{if(toggle.getAttribute('aria-expanded')==='true'){closeTeacherNavigation();return;}nav.classList.add('mobile-open');document.body.classList.add('nav-open');backdrop.hidden=false;toggle.setAttribute('aria-expanded','true');};document.addEventListener('keydown',e=>{if(e.key==='Escape')closeTeacherNavigation();});}
 let originalURL=null,originalGeneration=0,readerReady=false,pendingAnchor=null,currentOriginalSelection=null;
 function clearOriginalPreview(){originalGeneration++;readerReady=false;pendingAnchor=null;currentOriginalSelection=null;if(originalURL)URL.revokeObjectURL(originalURL);originalURL=null;$('originalFrame')?.remove();$('originalNotice')?.remove();$('sourceScroll').classList.add('showing-original');}
 function sendAnchor(){const frame=$('originalFrame');if(readerReady&&frame&&pendingAnchor){frame.contentWindow.postMessage(pendingAnchor,location.origin);pendingAnchor=null;$('sourceScroll').scrollIntoView?.({block:'center',behavior:'smooth'});}}
@@ -429,12 +443,12 @@ async function showOriginal(){
  try{
   const data=await api('reports/'+reportID+'/source');if(generation!==originalGeneration)return;
   const encoded=data.file,isWord=data.filename.toLowerCase().endsWith('.docx');
-  if(isWord){const frame=node('iframe');frame.id='originalFrame';frame.title=uiT('Word 原文与批注');frame.dataset.readerMode='word';frame.src='/word-reader.html?report='+encodeURIComponent(reportID);notice.textContent=uiT('Word 原文定位视图：点击建议可定位对应段落，原稿保持不变。');$('sourceScroll').append(frame);return;}
+  if(isWord){const frame=node('iframe');frame.id='originalFrame';frame.title=uiT('Word 原文与批注');frame.dataset.readerMode='word';frame.src='/word-reader.html?embed=1&report='+encodeURIComponent(reportID);notice.hidden=true;$('sourceScroll').append(frame);return;}
   const bytes=Uint8Array.from(atob(encoded),c=>c.charCodeAt(0));originalURL=URL.createObjectURL(new Blob([bytes],{type:'application/pdf'}));
   const frame=node('iframe');frame.id='originalFrame';frame.title=uiT('原文件分页预览');frame.src='/original-reader.html?v=visual-1&file='+encodeURIComponent(originalURL);
   notice.replaceChildren(node('span',null,uiT('正在显示上传的原始 PDF，保留原文件分页和排版。')));
   const open=node('a',null,uiT('独立窗口打开'));open.href=originalURL;open.target='_blank';open.rel='noopener';notice.append(open);
-  $('sourceScroll').append(frame);
+  notice.hidden=true;$('sourceScroll').append(frame);
  }catch(e){if(generation!==originalGeneration)return;showOriginalError(e.message);}
 }
 function showOriginalError(detail){
@@ -477,3 +491,5 @@ function renderWordCoverage(){
 
 function downloadBase64Package(pack){const bytes=Uint8Array.from(atob(pack.content),c=>c.charCodeAt(0));download(bytes,pack.filename,pack.content_type);}
 $('reviewPackageExport').onclick=safeAction(async()=>{const pack=await api('reports/'+state.report.id+'/export-reviewed');downloadBase64Package(pack);message(uiT('已开始下载 Word 批改包，请查看浏览器下载记录。'));});
+
+document.querySelectorAll('.review-more button').forEach(button=>button.addEventListener('click',()=>{button.closest('details').open=false;}));

@@ -42,6 +42,6 @@ exe = EXE(pyz, a.scripts, [], exclude_binaries=True, name='Labwise', debug=False
 collection = COLLECT(exe, a.binaries, a.datas, strip=False, upx=False, name='Labwise')
 app = BUNDLE(collection, name='Labwise.app', icon=None, bundle_identifier='com.carrylewis.labwise',
              info_plist={'CFBundleShortVersionString':(root/'VERSION').read_text().strip(),
-                         'CFBundleVersion':'20261031.1', 'NSHighResolutionCapable':True,
+                         'CFBundleVersion':'20261102.2', 'NSHighResolutionCapable':True,
                          'LSMultipleInstancesProhibited':True,
                          'NSHumanReadableCopyright':'Labwise local trial. Third-party notices are included.'})

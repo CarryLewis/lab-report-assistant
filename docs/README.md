@@ -1,5 +1,7 @@
 # 项目支持文档
 
+当前开发版本：**1.3.6**。查看[本次开发进度与验证记录](26_RELEASE_1_3_6.md)及[AI 评价语言规则](25_EVALUATION_LANGUAGE.md)。
+
 - [macOS 安装交付与验证](23_MACOS_INSTALLATION_AND_RELEASE.md)：本机试用 DMG／ZIP、启动与资料位置、保留数据的程序替换、验收结果及签名公证边界。
 
 **当前交付决策（2026-10-27）：** 教师下载应用并在自己电脑上独立使用，资料与批改进度本机保存。请优先阅读[本机应用交付纲领](21_LOCAL_APP_DELIVERY.md)。Turnitin 同步、平台登录、LMS 和中央多人部署暂缓；旧接入文档仅作历史参考。
@@ -14,7 +16,7 @@
 
 - [1.2.1 Editable demo and API integration](14_VERSION_1_2_1_EDITABLE_DEMO.md): current real-data workflow, configuration, verified paths and remaining provider-key requirement.
 
-- **当前界面版本：[Labwise 1.2.1 UI 大纲](UI_VERSION_1_2.md)**：取消团队与校准；保留该模块的 1.2.2 已独立记录。
+- **历史界面基线：[Labwise 1.2.1 UI 大纲](UI_VERSION_1_2.md)**：取消团队与校准；保留该模块的 1.2.2 已独立记录。
 
 - [13 Editable teacher product](13_EDITABLE_TEACHER_PRODUCT.md): connected individual-use workflow, editable fields, persistence, outputs and verification limits.
 
