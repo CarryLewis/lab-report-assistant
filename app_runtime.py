@@ -43,6 +43,7 @@ def preflight():
             'runtime_ok': all(modules.values()) and tls_ready, 'tls_ready':tls_ready, 'modules': modules, 'missing_resources': missing,
             'data_outside_program': not data_directory().resolve().is_relative_to(ROOT.resolve()),
             'paged_word_export': bool(converter),
+            'word_converter': converter,
             'warnings': [] if converter else ['未找到 Word 分页转换组件。原文阅读、评分和 Word 批改包可用；评阅 PDF 需要安装 LibreOffice 后重新检查。']}
 
 

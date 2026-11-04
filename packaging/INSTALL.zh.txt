@@ -1,6 +1,6 @@
 Labwise macOS Apple Silicon 本机试用版
 
-本构建自带 Python 和所需程序库，不要求使用者安装 Python。
+本构建自带 Python、LibreOffice 转换组件和所需程序库，不要求使用者安装 Python。
 当前在本机 macOS 构建和验证；Intel Mac 与其他系统尚未提供安装包。
 
 安装
@@ -21,7 +21,7 @@ Labwise macOS Apple Silicon 本机试用版
 
 Word 与 PDF
 Word 原文阅读、教师评分及 Word 批改包可直接使用。
-Word 的分页转换与评阅 PDF 需要另行安装 LibreOffice；本包未捆绑 LibreOffice。可从官方页面获取适合本机的版本：https://www.libreoffice.org/download/download-libreoffice/ 。启动窗口会检测并说明缺失能力。检测到组件不等于复杂版式均已验收。
+Word 分页转换与评阅 PDF 使用随包提供的 LibreOffice，无需另行安装或设置路径。完整组件位于 Labwise.app/Contents/Helpers/LibreOffice.app，许可与源码获取说明位于 Contents/Resources/third-party-licenses/LibreOffice。复杂版式与缺失字体仍需在预览中核对。
 AI 分析需要联网与使用者获准的服务密钥；程序不内置共享密钥，安装包不含教师报告或数据库。
 
 分发状态

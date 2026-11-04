@@ -2,7 +2,17 @@
 
 **中文** | [English](README.en.md)
 
-## 下载完整项目
+## 下载安装包（macOS Apple Silicon）
+
+**[下载 Labwise 1.3.7 安装包（DMG，内置 LibreOffice）](https://github.com/CarryLewis/lab-report-assistant/releases/download/v1.3.7/Labwise-1.3.7-macOS-arm64-trial.dmg)**
+
+[ZIP 备用安装包](https://github.com/CarryLewis/lab-report-assistant/releases/download/v1.3.7/Labwise-1.3.7-macOS-arm64-trial.zip) · [版本说明与校验值](https://github.com/CarryLewis/lab-report-assistant/releases/tag/v1.3.7)
+
+安装包自带 Python 和完整 LibreOffice，安装 Labwise 后即可使用 Word 分页及 PDF 导出，无需另装转换组件。下载后将 `Labwise.app` 放入应用程序目录。当前为 Apple Silicon 本机试用版，尚未完成 Developer ID 签名和 Apple 公证；不适用于 Intel Mac 或 Windows。
+
+更新前保存并退出旧版，再替换应用。教师资料独立保存在用户应用支持目录；原有资料不会随程序替换而删除。旧的 `dist/labwise-pilot.zip` 原型包已由本版本的安装下载入口替代。
+
+## 下载完整项目源码
 
 **[下载完整项目 ZIP（main 最新源码）](https://github.com/CarryLewis/lab-report-assistant/archive/refs/heads/main.zip)**
 
@@ -23,9 +33,13 @@ cd lab-report-assistant
 
 Labwise 是一个面向高校教师的实验报告理解、评阅与反馈项目。它从中国高校非英语母语教师批改英文 Lab Report 的需求出发，关注英国大学体系下的报告写作与 Rubric（评分细则）对照，逐步探索可以融入日常教学的教师工作台。
 
-本项目由 [CarryLewis](https://github.com/CarryLewis) 发起，目前处于本地教师试点与持续开发阶段。当前开发版本为 **1.3.6**；界面版本、历史快照与未来规划不代表相同的实现状态。
+本项目由 [CarryLewis](https://github.com/CarryLewis) 发起，目前处于本地教师试点与持续开发阶段。当前开发版本为 **1.3.7**；界面版本、历史快照与未来规划不代表相同的实现状态。
 
-## 最新开发内容（1.3.6）
+## 最新开发内容（1.3.7）
+
+macOS 安装包内置完整 LibreOffice，并优先使用包内转换器。104 项 Python 测试、13 类安装流程检查及包内 DOCX 到 PDF 实际转换验证通过；本机已验证保留资料升级。详见[内置组件说明](docs/26_BUNDLED_LIBREOFFICE.md)。
+
+## 上一版本（1.3.6）
 
 批改页改为紧凑操作栏与目录、原文、评阅三栏，修复旧最小高度导致的嵌套滚动和遮挡。阅读说明及概览按需展开，保留错误提示、证据定位和草稿功能。
 
@@ -186,9 +200,9 @@ lab-report-assistant/
 
 ## macOS 本机试用安装
 
-当前工作区已生成 Apple Silicon 试用 DMG／ZIP，自带 Python 与运行依赖。把应用拖入应用程序目录后启动，安装版资料独立保存在用户应用支持目录，源码版原资料不自动搬迁。产物在 `output/installers/`，未上传为公开 Release。安装步骤、保留数据的更新方法和验证结果见[macOS 安装交付说明](docs/23_MACOS_INSTALLATION_AND_RELEASE.md)。
+当前工作区已生成 Apple Silicon 试用 DMG／ZIP，自带 Python 与运行依赖。把应用拖入应用程序目录后启动，安装版资料独立保存在用户应用支持目录，源码版原资料不自动搬迁。v1.3.7 安装文件已发布到 [GitHub Releases](https://github.com/CarryLewis/lab-report-assistant/releases/tag/v1.3.7)。安装步骤、保留数据的更新方法和验证结果见[macOS 安装交付说明](docs/23_MACOS_INSTALLATION_AND_RELEASE.md)。
 
-当前为临时本机代码签名，未完成 Developer ID 签名和 Apple 公证；Intel Mac 及其他系统版本尚未验收。Word 分页 PDF 仍需外部 LibreOffice。1.2.1 试用构建曾通过 9 类包内安装验收；该记录与当前源码的 103 项 Python、10 个 JavaScript 测试脚本属于不同版本的验证，不代表 1.3.6 安装包、真实 AI 或复杂作业已全面验收。
+当前为临时本机代码签名，未完成 Developer ID 签名和 Apple 公证；Intel Mac 及其他系统版本尚未验收。1.3.7 macOS 安装包内置完整 LibreOffice；源码运行仍需单独安装组件。1.2.1 试用构建曾通过 9 类包内安装验收；该记录与当前源码的 103 项 Python、10 个 JavaScript 测试脚本属于不同版本的验证，不代表 1.3.6 安装包、真实 AI 或复杂作业已全面验收。
 
 ## 本地运行
 

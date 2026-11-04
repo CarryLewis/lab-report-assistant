@@ -17,7 +17,7 @@ assets = {path.lstrip('/') for path in public if path != '/'} | {'VERSION'}
 datas = [(str(root / name), str(Path(name).parent)) for name in sorted(assets)]
 datas += [(str(root / 'corpus' / 'writing_profiles.json'), 'corpus'),
           (str(root / 'vendor'), 'vendor'),
-          (str(root / 'output' / 'build' / 'package-assets'), 'release-info')]
+          (os.environ.get('LABWISE_PACKAGE_ASSETS', str(root / 'output/build/package-assets')), 'release-info')]
 # This host's managed Python patches ssl to load this public certificate policy
 # resource beside ssl.py. Preserve that policy instead of disabling TLS checks.
 certificate_policy = Path(ssl.__file__).with_name('codex-rejected-cas.pem')
@@ -42,6 +42,6 @@ exe = EXE(pyz, a.scripts, [], exclude_binaries=True, name='Labwise', debug=False
 collection = COLLECT(exe, a.binaries, a.datas, strip=False, upx=False, name='Labwise')
 app = BUNDLE(collection, name='Labwise.app', icon=None, bundle_identifier='com.carrylewis.labwise',
              info_plist={'CFBundleShortVersionString':(root/'VERSION').read_text().strip(),
-                         'CFBundleVersion':'20261102.2', 'NSHighResolutionCapable':True,
+                         'CFBundleVersion':'20261104.1', 'NSHighResolutionCapable':True,
                          'LSMultipleInstancesProhibited':True,
                          'NSHumanReadableCopyright':'Labwise local trial. Third-party notices are included.'})

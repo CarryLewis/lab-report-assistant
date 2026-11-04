@@ -2,6 +2,14 @@
 
 [中文](README.md) | **English**
 
+## Download the macOS app (Apple Silicon)
+
+**[Download Labwise 1.3.7 (DMG, bundled LibreOffice)](https://github.com/CarryLewis/lab-report-assistant/releases/download/v1.3.7/Labwise-1.3.7-macOS-arm64-trial.dmg)**
+
+[Alternative ZIP](https://github.com/CarryLewis/lab-report-assistant/releases/download/v1.3.7/Labwise-1.3.7-macOS-arm64-trial.zip) · [Release notes and checksums](https://github.com/CarryLewis/lab-report-assistant/releases/tag/v1.3.7)
+
+Python and the complete LibreOffice conversion component are included. No separate converter installation or path configuration is required for Word pagination and PDF export. This is an Apple Silicon local trial build, without Developer ID signing or Apple notarization. Intel Mac and Windows installers are not included. Save your work and quit the previous version before replacing the app; teacher data is stored separately.
+
 ## Download the complete project
 
 **[Download the complete project ZIP (latest main source)](https://github.com/CarryLewis/lab-report-assistant/archive/refs/heads/main.zip)**
@@ -23,7 +31,7 @@ Help university instructors understand English lab reports faster, trace feedbac
 
 Labwise is a project for understanding, reviewing and providing feedback on university lab reports. It began with the needs of instructors in China who review English reports as non-native English speakers, focusing initially on report writing and rubric-based assessment in the British university context. Its longer-term aim is a workspace that fits everyday teaching practice.
 
-Initiated by [CarryLewis](https://github.com/CarryLewis), the project is currently a local teacher pilot under active development. The current development version is **1.3.6**; interface versions, archived variants and future plans describe different implementation states.
+Initiated by [CarryLewis](https://github.com/CarryLewis), the project is currently a local teacher pilot under active development. The current development version is **1.3.7**; interface versions, archived variants and future plans describe different implementation states.
 
 ## Latest development (1.3.6)
 
@@ -42,7 +50,7 @@ Unified Chinese and English UI typography, navigation and action icons, buttons 
 - Eight writing genres, 80 original draft feedback examples and eight fictional text fixtures; assignment and rubric snapshots remain authoritative.
 - A choice of code-based rubric parsing or AI interpretation, with an editable preview and evidence-linked draft scores in AI mode. Instructors confirm final judgments.
 - Chinese and English UI, startup checks, import recovery, full local backups and restoration into an independent copy.
-- Individual and assignment-merged review PDFs with previews, source highlights, numbered margin comments and complete feedback. PDF conversion requires local LibreOffice.
+- Individual and assignment-merged review PDFs with previews, source highlights, numbered margin comments and complete feedback. The 1.3.7 macOS installer includes LibreOffice for PDF conversion.
 - macOS trial-app build and smoke-check scripts. Generated installers, local backups and private data are excluded from source control.
 
 See [multi-genre writing](docs/24_MULTI_GENRE_WRITING.md), [dual rubric modes](docs/25_DUAL_RUBRIC_PROCESSING.md), [PDF export](docs/20_PDF_REVIEW_EXPORT.md) and [local delivery](docs/21_LOCAL_APP_DELIVERY.md).

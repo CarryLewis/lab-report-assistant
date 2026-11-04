@@ -28,10 +28,14 @@ def request(record, path, body=None, raw=False):
     return data if raw else json.loads(data)
 
 
-def start(binary, data, ready, port=0):
+def start(binary, data, ready, port=0, converter='/not-installed-for-this-smoke-test'):
     environment = {key:value for key,value in os.environ.items() if key not in
                    ('PYTHONPATH','PYTHONHOME','VIRTUAL_ENV','DEEPSEEK_API_KEY','LABWISE_DATA_DIR','LABWISE_PORT')}
-    environment['LABWISE_SOFFICE'] = '/not-installed-for-this-smoke-test'
+    if converter is None:
+        environment.pop('LABWISE_SOFFICE', None)
+        environment['PATH'] = '/usr/bin:/bin'
+    else:
+        environment['LABWISE_SOFFICE'] = converter
     process = subprocess.Popen([str(binary),'--serve','--no-browser','--data-dir',str(data),
                                 '--port',str(port),'--ready-file',str(ready)],cwd=ready.parent,env=environment,
                                stdout=subprocess.PIPE,stderr=subprocess.PIPE)
@@ -75,15 +79,15 @@ def main():
             assert record['port']!=occupied.getsockname()[1]
             assert request(record,'api/pilot/health')['instance_id']==record['instance_id']
             checks.append('packaged-runtime-and-port-fallback')
-            for path in ('','review-layout.css','design-system.css','user-support.js','teacher-live.js','word-reader.html','vendor/pdfjs/pdf.mjs'):
+            for path in ('','cloud-backup.js','cloud-backup.css','review-layout.css','design-system.css','user-support.js','teacher-live.js','word-reader.html','vendor/pdfjs/pdf.mjs'):
                 assert request(record,path,raw=True)
             checks.append('bundled-assets-without-source-environment')
             stylesheet=request(record,'design-system.css',raw=True)
             assert b'--font-ui:' in stylesheet and b'--icon-menu:' in stylesheet
-            assert b'/design-system.css?v=1.3.6' in request(record,'',raw=True)
+            assert ('/design-system.css?v=' + record['version']).encode() in request(record,'',raw=True)
             for reader in ('word-reader.html','original-reader.html'):
-                assert b'/design-system.css?v=1.3.6' in request(record,reader,raw=True)
-            assert b'/review-layout.css?v=1.3.6' in request(record,'',raw=True)
+                assert b'/design-system.css?v=' in request(record,reader,raw=True)
+            assert ('/review-layout.css?v=' + record['version']).encode() in request(record,'',raw=True)
             assert b'height:100dvh' in request(record,'review-layout.css',raw=True)
             checks.append('shared-typography-icons-and-compact-review-layout')
             profiles=request(record,'api/pilot/writing-profiles')['profiles']
@@ -145,6 +149,18 @@ def main():
             assert ' server.py' not in Path(restored['launcher']).read_text()
             assert Path(restored['directory'])!=data
             checks.append('packaged-backup-and-independent-restore')
+            drive=root/'fictional-drive'
+            drive.mkdir()
+            for provider in ('icloud','onedrive_folder'):
+                request(record,'api/pilot/cloud/configure',{'provider':provider,'folder':str(drive),'interval':0})
+                snapshot=request(record,'api/pilot/cloud/backup',{'provider':provider})
+                assert snapshot['state']=='local_written'
+                items=request(record,'api/pilot/cloud/history',{'provider':provider})['items']
+                assert snapshot['name'] in {item['name'] for item in items}
+                copy=request(record,'api/pilot/cloud/restore',{'provider':provider,'id':snapshot['name']})
+                assert copy['original_unchanged'] and Path(copy['directory'])!=data
+            assert not request(record,'api/pilot/cloud/status')['targets']['onedrive']['connected']
+            checks.append('packaged-cloud-folder-backup-history-and-independent-restore')
             second,duplicate=start(binary,data,root/'duplicate.json')
             second.wait(timeout=5)
             assert duplicate['instance_id']==record['instance_id'] and process.poll() is None

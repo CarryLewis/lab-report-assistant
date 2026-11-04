@@ -9,6 +9,7 @@ import re
 import shutil
 import struct
 import subprocess
+import sys
 import tempfile
 import zipfile
 import zlib
@@ -283,6 +284,10 @@ def converter_path():
     if configured:
         path = shutil.which(configured) or configured
         return path if Path(path).is_file() and os.access(path, os.X_OK) else None
+    if getattr(sys, 'frozen', False):
+        bundled = Path(sys.executable).resolve().parent.parent / 'Helpers/LibreOffice.app/Contents/MacOS/soffice'
+        if bundled.is_file() and os.access(bundled, os.X_OK):
+            return str(bundled)
     located = shutil.which('libreoffice') or shutil.which('soffice')
     if located:
         return located

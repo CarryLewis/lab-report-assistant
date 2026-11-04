@@ -1,14 +1,33 @@
 import base64
 import io
 import subprocess
+import os
+import tempfile
 import unittest
 import zipfile
 from pathlib import Path
 from unittest.mock import patch
-from document_preview import preview, prepare_copy
+from document_preview import preview, prepare_copy, converter_path
 
 
 class DocumentPreviewTests(unittest.TestCase):
+    def test_frozen_app_prefers_bundled_converter_over_system(self):
+        with tempfile.TemporaryDirectory() as folder:
+            contents = Path(folder).resolve() / 'Labwise 中文.app/Contents'
+            bundled = contents / 'Helpers/LibreOffice.app/Contents/MacOS/soffice'
+            bundled.parent.mkdir(parents=True)
+            bundled.write_text('#!/bin/sh\nexit 0\n')
+            bundled.chmod(0o755)
+            with patch.dict(os.environ, {'LABWISE_SOFFICE': ''}), patch('document_preview.sys.frozen', True, create=True), patch('document_preview.sys.executable', str(contents / 'MacOS/Labwise')), patch('document_preview.shutil.which', return_value='/system/soffice') as which:
+                self.assertEqual(converter_path(), str(bundled))
+                which.assert_not_called()
+                with patch.dict(os.environ, {'LABWISE_SOFFICE': '/missing/override'}):
+                    which.return_value = None
+                    self.assertIsNone(converter_path())
+                which.return_value = '/system/soffice'
+                bundled.unlink()
+                self.assertEqual(converter_path(), '/system/soffice')
+
     def test_rejects_wrong_type_and_invalid_file(self):
         for body in ({'filename': 'x.pdf'}, {'filename': 'x.docx', 'file': '!'},
                      {'filename': 'x.docx', 'file': base64.b64encode(b'not zip').decode()}):
