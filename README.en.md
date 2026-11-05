@@ -2,6 +2,12 @@
 
 [中文](README.md) | **English**
 
+## Two release lines
+
+**[1.3.7 remains the recommended stable release](https://github.com/CarryLewis/lab-report-assistant/releases/tag/v1.3.7).** Opt into [1.4.1 Beta](https://github.com/CarryLewis/lab-report-assistant/releases/tag/v1.4.1) for the weighted-scale fix and drive-folder snapshots.
+
+Maintain 1.3.x on `release/1.3` and test 1.4.x on `release/1.4`. 1.4.1 is a Pre-release, not Latest. See the [comparison and release policy](docs/RELEASE_CHANNELS.md).
+
 ## Download the macOS app (Apple Silicon)
 
 **[Download Labwise 1.3.7 (DMG, bundled LibreOffice)](https://github.com/CarryLewis/lab-report-assistant/releases/download/v1.3.7/Labwise-1.3.7-macOS-arm64-trial.dmg)**

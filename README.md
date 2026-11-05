@@ -2,6 +2,12 @@
 
 **中文** | [English](README.en.md)
 
+## 两条版本线
+
+**主流稳定版仍为 [1.3.7](https://github.com/CarryLewis/lab-report-assistant/releases/tag/v1.3.7)**。新增量表修复与网盘备份请主动选择 [1.4.1 Beta 测试版](https://github.com/CarryLewis/lab-report-assistant/releases/tag/v1.4.1)。
+
+后续 1.3.x 在 `release/1.3` 维护，1.4.x 在 `release/1.4` 测试；1.4.1 标记为 Pre-release，不取代 1.3.7 的 Latest。完整区别和资料隔离规则见 [双版本维护说明](docs/RELEASE_CHANNELS.md)。
+
 ## 下载安装包（macOS Apple Silicon）
 
 **[下载 Labwise 1.3.7 安装包（DMG，内置 LibreOffice）](https://github.com/CarryLewis/lab-report-assistant/releases/download/v1.3.7/Labwise-1.3.7-macOS-arm64-trial.dmg)**
