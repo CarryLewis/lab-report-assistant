@@ -1,0 +1,15 @@
+.cloud-backup { max-width: 100%; }
+.cloud-backup p { line-height: 1.7; }
+.cloud-backup form { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px 20px; }
+.cloud-backup label { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.cloud-backup input,.cloud-backup select { width: 100%; box-sizing: border-box; }
+.cloud-backup form>p,.cloud-actions { grid-column: 1 / -1; }
+.cloud-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+.cloud-account>button { margin: 0 8px 8px 0; }
+.cloud-history-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line,#ddd); }
+.cloud-history-row span { min-width: 0; overflow-wrap: anywhere; }
+.cloud-history-row button { flex-shrink: 0; }
+#cloudAuthStatus a { margin-left: 12px; }
+#cloudBackupStatus { white-space: pre-wrap; overflow-wrap: anywhere; }
+.cloud-backup [hidden] { display: none !important; }
+@media(max-width:700px) { .cloud-backup form { grid-template-columns: 1fr; } .cloud-history-row { align-items: flex-start; flex-direction: column; } }

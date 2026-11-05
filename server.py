@@ -21,7 +21,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import parse_qs, quote, urlencode, urlparse
 from urllib.request import Request, urlopen
 import pilot_backend
-from app_paths import version
+from app_paths import version, release_channel, stable_version
 
 try:
     import certifi
@@ -165,6 +165,7 @@ class Handler(SimpleHTTPRequestHandler):
             return self._json(403, {'error': 'Local access only.'})
         if parsed.path == '/api/pilot/health':
             return self._json(200, {'application':'Labwise', 'version':version(),
+                                    'release_channel':release_channel(), 'stable_version':stable_version(),
                                     'instance_id':getattr(self.server,'instance_id',None), 'status':'ready'})
         if parsed.path.startswith('/api/pilot/'):
             return self._pilot('GET', parsed.path)
@@ -172,7 +173,7 @@ class Handler(SimpleHTTPRequestHandler):
         public = {'/review-layout.css','/design-system.css','/i18n.js','/i18n-en.js','/i18n-init.js','/i18n.css','/user-support.js','/user-support.css','/pdf-export.js','/pdf-export.css','/word-reader.html','/word-reader.js','/word-reader.css','/visual-inventory.js', '/original-reader.html', '/original-reader.mjs', '/teacher-live.js', '/teacher-live.css', '/document-viewer.js', '/document-viewer.css', '/turnitin-bridge.js', '/turnitin-bridge.css', '/', '/index.html', '/pilot.html', '/pilot.css', '/pilot-export.css', '/pilot.js', '/assignment-editor.js', '/teacher-shell.js', '/teacher-settings.css', '/teacher-modules.js', '/teacher-modules.css', '/workspace-resize.js', '/workspace-resize.css',
                   '/review-links.js', '/citation-verification.js', '/pilot-citations.js',
                   '/lab_report_rubric.default.json', '/custom_rubric.template.json',
-                  '/examples/pilot-rubric.json'}
+                  '/examples/pilot-rubric.json', '/cloud-backup.js', '/cloud-backup.css'}
         if parsed.path == "/api/scholarly/search":
             return self._search_all(parse_qs(parsed.query))
         if parsed.path.startswith('/vendor/pdfjs/'):
@@ -280,14 +281,25 @@ class Handler(SimpleHTTPRequestHandler):
             return self._json(502, {"error": "Scholarly search is temporarily unavailable.", "detail": type(exc).__name__})
 
 
+class LocalServer(ThreadingHTTPServer):
+    def server_close(self):
+        stop = getattr(self, 'cloud_stop', None)
+        if stop:
+            stop.set()
+            stop.worker.join(timeout=1)
+        super().server_close()
+
+
 def create_server(host='127.0.0.1', port=8000):
     # Reserve the port before opening/migrating a teacher's data directory.
-    httpd = ThreadingHTTPServer((host, port), Handler)
+    httpd = LocalServer((host, port), Handler)
     httpd.instance_id = uuid.uuid4().hex
     try:
         pilot_backend.init()
         import auto_analysis
         auto_analysis.start(TLS_CONTEXT)
+        import cloud_backup
+        httpd.cloud_stop = cloud_backup.start()
     except Exception:
         httpd.server_close()
         raise

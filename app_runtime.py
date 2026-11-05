@@ -13,10 +13,10 @@ from urllib.request import ProxyHandler, build_opener
 import uuid
 import webbrowser
 
-from app_paths import ROOT, data_directory, version
+from app_paths import ROOT, data_directory, version, release_channel, stable_version
 
 REQUIRED_MODULES = ('certifi', 'pypdf', 'pdfplumber', 'PIL.Image', 'pypdfium2', 'reportlab', 'tkinter')
-REQUIRED_FILES = ('review-layout.css','design-system.css', 'i18n.js', 'i18n-en.js', 'i18n-init.js', 'i18n.css', 'index.html', 'teacher-live.js', 'teacher-live.css', 'user-support.js',
+REQUIRED_FILES = ('RELEASE_CHANNEL', 'STABLE_VERSION', 'cloud-backup.js', 'cloud-backup.css', 'review-layout.css','design-system.css', 'i18n.js', 'i18n-en.js', 'i18n-init.js', 'i18n.css', 'index.html', 'teacher-live.js', 'teacher-live.css', 'user-support.js',
                   'user-support.css', 'word-reader.html', 'word-reader.js',
                   'pdf-export.js', 'pdf-export.css', 'vendor/pdfjs/pdf.mjs', 'corpus/writing_profiles.json', 'VERSION')
 
@@ -39,7 +39,8 @@ def preflight():
         tls_ready = False
     from document_preview import converter_path
     converter = converter_path()
-    return {'application': 'Labwise', 'version': version(), 'architecture': os.uname().machine if hasattr(os, 'uname') else 'unknown',
+    return {'application': 'Labwise', 'version': version(), 'release_channel':release_channel(), 'stable_version':stable_version(),
+            'default_data_directory':str(data_directory()), 'architecture': os.uname().machine if hasattr(os, 'uname') else 'unknown',
             'runtime_ok': all(modules.values()) and tls_ready, 'tls_ready':tls_ready, 'modules': modules, 'missing_resources': missing,
             'data_outside_program': not data_directory().resolve().is_relative_to(ROOT.resolve()),
             'paged_word_export': bool(converter),
@@ -168,17 +169,18 @@ def run_desktop(args):
     import tkinter as tk
     from tkinter import messagebox, ttk
     root = tk.Tk()
-    root.title('Labwise '+version()+' · 本机试用版')
+    beta = release_channel() == 'beta'
+    root.title('Labwise '+version()+(' · 测试版' if beta else ' · 本机试用版'))
     root.geometry('660x380')
     root.minsize(600, 340)
     frame = ttk.Frame(root, padding=24)
     frame.pack(fill='both', expand=True)
-    ttk.Label(frame, text='Labwise 教师工作区', font=('', 21, 'bold')).pack(anchor='w')
+    ttk.Label(frame, text='Labwise 测试工作区' if beta else 'Labwise 教师工作区', font=('', 21, 'bold')).pack(anchor='w')
     status = tk.StringVar(value='正在检查运行环境并启动…')
     ttk.Label(frame, textvariable=status, wraplength=600).pack(anchor='w', pady=(16, 8))
     location = Path(args.data_dir or data_directory()).resolve()
     ttk.Label(frame, text='资料独立保存在：\n' + str(location), wraplength=600).pack(anchor='w', pady=(0, 12))
-    notes = tk.StringVar(value='本机试用构建 · 不会自动发布学生成绩。')
+    notes = tk.StringVar(value=('测试版本；主流稳定版仍为 '+stable_version()+'。' if beta else '本机试用构建。')+'不会自动发布学生成绩。')
     ttk.Label(frame, textvariable=notes, wraplength=600).pack(anchor='w', pady=(0, 12))
     service = DesktopService(location, args.port)
     events = queue.Queue()

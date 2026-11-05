@@ -1,5 +1,11 @@
 /* English interface catalogue. Keys are application-authored Chinese UI copy. */
 globalThis.LabwiseEnglish = {
+  "测试工作区 · v1.4.1 Beta": "Test workspace · v1.4.1 Beta",
+  "Labwise 1.4.1 测试版 · 批改工作台": "Labwise 1.4.1 Beta · Review workspace",
+  "原始评价量表：": "Original evaluation scale: ",
+  "；按权重换算后计入总分。": "; converted by weight before contributing to the total.",
+  "原始评价：": "Original evaluation: ",
+  "；折算基础分：": "; converted base score: ",
   "AI 评价语言": "AI evaluation language",
   "LLM 输出的评价语言": "Language for LLM evaluations",
   "保存评价语言": "Save evaluation language",

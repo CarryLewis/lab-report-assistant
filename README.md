@@ -2,23 +2,18 @@
 
 **中文** | [English](README.en.md)
 
-## 两条版本线
+## 版本与下载
 
-**主流稳定版仍为 [1.3.7](https://github.com/CarryLewis/lab-report-assistant/releases/tag/v1.3.7)**。新增量表修复与网盘备份请主动选择 [1.4.1 Beta 测试版](https://github.com/CarryLewis/lab-report-assistant/releases/tag/v1.4.1)。
+**日常使用推荐 [1.3.7 稳定版](https://github.com/CarryLewis/lab-report-assistant/releases/tag/v1.3.7)；新功能试用选择 [1.4.1 Beta 测试版](https://github.com/CarryLewis/lab-report-assistant/releases/tag/v1.4.1)。**
 
-后续 1.3.x 在 `release/1.3` 维护，1.4.x 在 `release/1.4` 测试；1.4.1 标记为 Pre-release，不取代 1.3.7 的 Latest。完整区别和资料隔离规则见 [双版本维护说明](docs/RELEASE_CHANNELS.md)。
+- **1.3.7 / 1.3.x 稳定线**：现有教师评阅工作流与包内 LibreOffice；`Labwise.app`，继续作为主流版本。
+- **1.4.1 / 1.4.x 测试线**：新增加权量表修复、iCloud／OneDrive 文件夹快照备份、历史和独立恢复；`Labwise Beta.app` 使用独立资料目录，可与稳定版并存。
 
-## 下载安装包（macOS Apple Silicon）
+1.4.1 是预发布，不替代 1.3.7 的 Latest 状态。网盘功能不是实时双向合并，OneDrive 账号直连及真实网盘异机往返仍待验收。
 
-**[下载 Labwise 1.3.7 安装包（DMG，内置 LibreOffice）](https://github.com/CarryLewis/lab-report-assistant/releases/download/v1.3.7/Labwise-1.3.7-macOS-arm64-trial.dmg)**
+后续分别在 [`release/1.3`](https://github.com/CarryLewis/lab-report-assistant/tree/release/1.3) 和 [`release/1.4`](https://github.com/CarryLewis/lab-report-assistant/tree/release/1.4) 维护。完整差异、资料隔离与发布规则见 [双版本维护说明](docs/RELEASE_CHANNELS.md)。测试安装包也保留于本地 `output/beta-1.4.1/`。
 
-[ZIP 备用安装包](https://github.com/CarryLewis/lab-report-assistant/releases/download/v1.3.7/Labwise-1.3.7-macOS-arm64-trial.zip) · [版本说明与校验值](https://github.com/CarryLewis/lab-report-assistant/releases/tag/v1.3.7)
-
-安装包自带 Python 和完整 LibreOffice，安装 Labwise 后即可使用 Word 分页及 PDF 导出，无需另装转换组件。下载后将 `Labwise.app` 放入应用程序目录。当前为 Apple Silicon 本机试用版，尚未完成 Developer ID 签名和 Apple 公证；不适用于 Intel Mac 或 Windows。
-
-更新前保存并退出旧版，再替换应用。教师资料独立保存在用户应用支持目录；原有资料不会随程序替换而删除。旧的 `dist/labwise-pilot.zip` 原型包已由本版本的安装下载入口替代。
-
-## 下载完整项目源码
+## 下载完整项目
 
 **[下载完整项目 ZIP（main 最新源码）](https://github.com/CarryLewis/lab-report-assistant/archive/refs/heads/main.zip)**
 
@@ -39,13 +34,9 @@ cd lab-report-assistant
 
 Labwise 是一个面向高校教师的实验报告理解、评阅与反馈项目。它从中国高校非英语母语教师批改英文 Lab Report 的需求出发，关注英国大学体系下的报告写作与 Rubric（评分细则）对照，逐步探索可以融入日常教学的教师工作台。
 
-本项目由 [CarryLewis](https://github.com/CarryLewis) 发起，目前处于本地教师试点与持续开发阶段。当前开发版本为 **1.3.7**；界面版本、历史快照与未来规划不代表相同的实现状态。
+本项目由 [CarryLewis](https://github.com/CarryLewis) 发起，目前处于本地教师试点与持续开发阶段。当前开发版本为 **1.4.1 Beta**，主流稳定版为 **1.3.7**；界面版本、历史快照与未来规划不代表相同的实现状态。
 
-## 最新开发内容（1.3.7）
-
-macOS 安装包内置完整 LibreOffice，并优先使用包内转换器。104 项 Python 测试、13 类安装流程检查及包内 DOCX 到 PDF 实际转换验证通过；本机已验证保留资料升级。详见[内置组件说明](docs/26_BUNDLED_LIBREOFFICE.md)。
-
-## 上一版本（1.3.6）
+## 历史开发内容（1.3.6）
 
 批改页改为紧凑操作栏与目录、原文、评阅三栏，修复旧最小高度导致的嵌套滚动和遮挡。阅读说明及概览按需展开，保留错误提示、证据定位和草稿功能。
 
@@ -138,7 +129,7 @@ flowchart LR
 
 新学生报告采用 **DOCX 优先且仅接收 DOCX** 的流程。解析层读取 Word 正文、表格、常见内嵌图片和可用图表缓存，保留文件摘要、来源段落和对象标识。结构识别的总体设计遵循显式语义优先、规则先于 AI、推断可追溯，完整规范化能力仍按纲领逐步建设。
 
-Word 阅读视图侧重可定位的文本、表格和常见图片，并非 Microsoft Word 的排版引擎。复杂公式、原生图表、OLE 对象和字体可能影响显示或分析覆盖。分页渲染路径依赖本机 LibreOffice；历史 PDF 记录使用内置 PDF.js 阅读器。原始文件保留，转换外观需要教师核对。
+Word 阅读视图侧重可定位的文本、表格和常见图片，并非 Microsoft Word 的排版引擎。复杂公式、原生图表、OLE 对象和字体可能影响显示或分析覆盖。macOS 安装版的分页渲染使用包内 LibreOffice；源码运行需另行安装组件；历史 PDF 记录使用内置 PDF.js 阅读器。原始文件保留，转换外观需要教师核对。
 
 ### AI 辅助分析
 
@@ -206,9 +197,9 @@ lab-report-assistant/
 
 ## macOS 本机试用安装
 
-当前工作区已生成 Apple Silicon 试用 DMG／ZIP，自带 Python 与运行依赖。把应用拖入应用程序目录后启动，安装版资料独立保存在用户应用支持目录，源码版原资料不自动搬迁。v1.3.7 安装文件已发布到 [GitHub Releases](https://github.com/CarryLewis/lab-report-assistant/releases/tag/v1.3.7)。安装步骤、保留数据的更新方法和验证结果见[macOS 安装交付说明](docs/23_MACOS_INSTALLATION_AND_RELEASE.md)。
+当前工作区已生成 Apple Silicon 试用 DMG／ZIP，自带 Python 与运行依赖。把应用拖入应用程序目录后启动，安装版资料独立保存在用户应用支持目录，源码版原资料不自动搬迁。产物在 `output/installers/`，未上传为公开 Release。安装步骤、保留数据的更新方法和验证结果见[macOS 安装交付说明](docs/23_MACOS_INSTALLATION_AND_RELEASE.md)。
 
-当前为临时本机代码签名，未完成 Developer ID 签名和 Apple 公证；Intel Mac 及其他系统版本尚未验收。1.3.7 macOS 安装包内置完整 LibreOffice；源码运行仍需单独安装组件。1.2.1 试用构建曾通过 9 类包内安装验收；该记录与当前源码的 103 项 Python、10 个 JavaScript 测试脚本属于不同版本的验证，不代表 1.3.6 安装包、真实 AI 或复杂作业已全面验收。
+当前为临时本机代码签名，未完成 Developer ID 签名和 Apple 公证；Intel Mac 及其他系统版本尚未验收。自 1.3.7 起，macOS Apple Silicon 安装包内置完整 LibreOffice，Word 分页 PDF 无需另行安装组件。1.2.1 试用构建曾通过 9 类包内安装验收；该记录与当前源码的 103 项 Python、10 个 JavaScript 测试脚本属于不同版本的验证，不代表 1.3.6 安装包、真实 AI 或复杂作业已全面验收。
 
 ## 本地运行
 

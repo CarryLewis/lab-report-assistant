@@ -230,7 +230,7 @@ function renderAIScores(){
  const r=state.report,host=$('aiScoreSuggestions');if(!host)return;host.replaceChildren();host.append(node('h3',null,uiT('AI 评分建议')));
  const rubric=r.assignment.rubric;if((rubric.processing_mode||(rubric.schema_version==='rubric-understanding.v1'?'ai':'code'))==='code'){host.append(node('p','muted',uiT('本报告使用代码版本：细则由固定规则解析，沿用教师评分流程。')));return;}const basis=node('details','ai-score-basis');basis.append(node('summary',null,uiT('查看本份报告使用的评分依据')));
  if(rubric.summary)basis.append(node('p',null,rubric.summary));
- for(const criterion of rubric.criteria){basis.append(node('b',null,criterion.name+' / '+criterion.maximum_points),node('p',null,criterion.descriptor||uiT('原细则未提供详细等级描述。')));for(const level of criterion.levels||[])basis.append(node('p',null,level.label+'：'+level.descriptor));}
+ for(const criterion of rubric.criteria){basis.append(node('b',null,criterion.name+' / '+criterion.maximum_points),node('p',null,criterion.descriptor||uiT('原细则未提供详细等级描述。')));if(criterion.evaluation_maximum!=null)basis.append(node('p','muted',uiT('原始评价量表：')+'0–'+criterion.evaluation_maximum+uiT('；按权重换算后计入总分。')));for(const level of criterion.levels||[])basis.append(node('p',null,level.label+(level.minimum!=null||level.maximum!=null?`（${level.minimum??'…'}–${level.maximum??'…'}）`:'')+'：'+level.descriptor));}
  for(const rule of rubric.special_rules||[])basis.append(node('p',null,uiT('附加规则：')+rule.description));
  if(rubric.source_text)basis.append(node('pre',null,rubric.source_text));host.append(basis);
  const suggestions=r.analysis?.score_suggestions||[];
@@ -239,6 +239,7 @@ function renderAIScores(){
  host.append(node('p','ai-score-total',complete?uiT`建议总分：${Number(sum.toFixed(8))} / ${maximum}${rubric.percentage?uiT('（百分制）'):''}`:uiT('部分项目尚不能评分，暂不显示完整总分。')),node('p','muted',uiT('以下为 AI 建议，可查看依据、采纳或自行修改。采纳后需保存并确认。')));
  const apply=node('button',null,uiT('将建议填入空白评分'));apply.type='button';apply.onclick=()=>{for(const input of $('scores').querySelectorAll('input'))if(input.value==='')applyAIScore(input.dataset.id);};host.append(apply);
  for(const suggestion of suggestions){const criterion=rubric.criteria.find(c=>c.id===suggestion.criterion_id);if(!criterion)continue;const card=node('article','ai-score-card');card.append(node('b',null,criterion.name+'：'+(suggestion.score==null?uiT('暂不能评分'):suggestion.score+' / '+criterion.maximum_points)),node('p',null,suggestion.rationale));
+ if(suggestion.raw_base_score!=null&&criterion.evaluation_maximum!=null)card.append(node('p','ai-score-conversion',uiT('原始评价：')+suggestion.raw_base_score+' / '+criterion.evaluation_maximum+uiT('；折算基础分：')+suggestion.base_score+' / '+criterion.maximum_points));
  for(const adjustment of suggestion.adjustments||[])card.append(node('p','ai-score-adjustment',uiT`规则调整 ${adjustment.points>0?'+':''}${adjustment.points}：${adjustment.reason}`));
  if(suggestion.uncertainty)card.append(node('p','ai-score-uncertainty',uiT('待核对：')+suggestion.uncertainty));
  for(const evidence of suggestion.evidence||[]){const link=node('button','ai-score-evidence',evidence.quote);link.type='button';link.title=uiT('定位评分依据原文');link.onclick=()=>void reveal(evidence.paragraph_id,evidence.quote);card.append(link);}

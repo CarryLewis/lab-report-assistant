@@ -15,3 +15,7 @@ tmp/
 docx_render/
 # Generated builds, local backups, logs and previews may contain private data.
 output/
+
+work/
+
+dist/labwise-pilot.zip

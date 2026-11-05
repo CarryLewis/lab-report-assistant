@@ -28,5 +28,10 @@ vm.runInContext('showRubricPreview=p=>{assignmentEditor.ready=p.ready;}',context
  const review=fs.readFileSync('teacher-live.js','utf8');vm.runInContext(review.slice(review.indexOf('function applyAIScore'),review.indexOf('function renderReport')),context);
  vm.runInContext('renderAIScores()',context);const fill=$('aiScoreSuggestions').children.find(x=>x.textContent==='将建议填入空白评分');fill.onclick();
  assert.equal(inputs[0].value,'11');assert.equal(inputs[1].value,20);assert.equal(inputs[2].value,'');
+ context.state.report.assignment.rubric.criteria[0].evaluation_maximum=100;
+ Object.assign(context.state.report.analysis.score_suggestions[0],{raw_base_score:80,base_score:24});
+ vm.runInContext('renderAIScores()',context);
+ const conversion=$('aiScoreSuggestions').children.flatMap(x=>x.children||[]).find(x=>(x.textContent||'').includes('原始评价：80 / 100'));
+ assert.ok(conversion);assert.ok(conversion.textContent.includes('折算基础分：24 / 30'));
  console.log('Dual mode routing/cache, no implicit AI calls, stale-result rejection, teacher-score preservation and unknown-score handling passed.');
 })().catch(e=>{console.error(e);process.exitCode=1;});

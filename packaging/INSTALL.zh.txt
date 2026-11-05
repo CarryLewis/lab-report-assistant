@@ -1,16 +1,18 @@
-Labwise macOS Apple Silicon 本机试用版
+Labwise 1.4.1 Beta · macOS Apple Silicon 测试版
 
 本构建自带 Python、LibreOffice 转换组件和所需程序库，不要求使用者安装 Python。
 当前在本机 macOS 构建和验证；Intel Mac 与其他系统尚未提供安装包。
 
-安装
-1. 打开 DMG，将 Labwise.app 拖入 Applications（应用程序）。也可解压 ZIP，将应用放到自己的应用程序目录。
+版本与安装
+主流稳定版仍为 1.3.7。本包为 1.4.1 测试版，包含加权量表修复与 iCloud／OneDrive 网盘快照备份。
+1. 打开 DMG，将 Labwise Beta.app 拖入 Applications（应用程序）。也可解压 ZIP，将测试应用放到自己的应用程序目录。可与 Labwise.app 稳定版并存。
 2. 从应用程序目录启动 Labwise，等待启动窗口显示“工作区已就绪”。应用会打开本机教师工作台，也可以点击“打开教师工作台”。
 3. 首次使用在工作台设置分析服务，再创建作业、核对评分标准、导入 DOCX。
 
 资料与更新
-教师资料默认位于 ~/Library/Application Support/Labwise/data，独立于应用程序。
-替换 Labwise.app 不会替换这个资料目录。更新前仍应在“设置 → 本机资料与备份”保存备份；更新时先退出旧版，再替换程序。
+测试版资料默认位于 ~/Library/Application Support/Labwise Beta/data；稳定版资料仍位于 ~/Library/Application Support/Labwise/data，默认互不读取。
+测试真实资料前，在稳定版生成备份，再在测试版恢复为独立副本核对；不要让两个版本同时打开同一资料目录。
+替换 Labwise Beta.app 不会替换测试资料目录。更新前仍应在“设置 → 本机资料与备份”保存备份；更新时先退出旧版，再替换程序。
 此前源码版的资料不会自动搬迁。请先在源码版生成备份，再用新版恢复为独立副本核对，避免误合并课程。
 删除程序不会自动删除资料。请勿在清理程序时一并删除资料目录。
 
@@ -23,6 +25,11 @@ Word 与 PDF
 Word 原文阅读、教师评分及 Word 批改包可直接使用。
 Word 分页转换与评阅 PDF 使用随包提供的 LibreOffice，无需另行安装或设置路径。完整组件位于 Labwise.app/Contents/Helpers/LibreOffice.app，许可与源码获取说明位于 Contents/Resources/third-party-licenses/LibreOffice。复杂版式与缺失字体仍需在预览中核对。
 AI 分析需要联网与使用者获准的服务密钥；程序不内置共享密钥，安装包不含教师报告或数据库。
+
+网盘备份
+设置 → 网盘备份支持 iCloud Drive 文件夹、OneDrive 客户端文件夹的快照备份、历史查看及独立恢复；不是实时双向合并同步。
+文件夹写入完成不代表云端上传完成，请在系统网盘客户端确认。应用运行期间可选择每15／60分钟备份。
+OneDrive账号直连仍待正式应用配置和真实账号验收，本包不承诺账号直连可用；文件夹模式不依赖该配置。
 
 分发状态
 这是本机试用构建，仅作构建所需的临时本机代码签名，未进行 Developer ID 签名和 Apple 公证，不是 App Store 安装包或公开正式发布版。

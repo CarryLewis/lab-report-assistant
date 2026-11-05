@@ -13,7 +13,7 @@ public = set()
 for assignment in ast.walk(tree):
     if isinstance(assignment, ast.Assign) and any(isinstance(target, ast.Name) and target.id == 'public' for target in assignment.targets):
         public = ast.literal_eval(assignment.value)
-assets = {path.lstrip('/') for path in public if path != '/'} | {'VERSION'}
+assets = {path.lstrip('/') for path in public if path != '/'} | {'VERSION', 'RELEASE_CHANNEL', 'STABLE_VERSION'}
 datas = [(str(root / name), str(Path(name).parent)) for name in sorted(assets)]
 datas += [(str(root / 'corpus' / 'writing_profiles.json'), 'corpus'),
           (str(root / 'vendor'), 'vendor'),
@@ -40,8 +40,12 @@ exe = EXE(pyz, a.scripts, [], exclude_binaries=True, name='Labwise', debug=False
           argv_emulation=False, target_arch=platform.machine(), codesign_identity=None,
           entitlements_file=None)
 collection = COLLECT(exe, a.binaries, a.datas, strip=False, upx=False, name='Labwise')
-app = BUNDLE(collection, name='Labwise.app', icon=None, bundle_identifier='com.carrylewis.labwise',
+channel = (root / 'RELEASE_CHANNEL').read_text().strip()
+beta = channel == 'beta'
+app = BUNDLE(collection, name='Labwise Beta.app' if beta else 'Labwise.app', icon=None,
+             bundle_identifier='com.carrylewis.labwise.beta' if beta else 'com.carrylewis.labwise',
              info_plist={'CFBundleShortVersionString':(root/'VERSION').read_text().strip(),
-                         'CFBundleVersion':'20261104.1', 'NSHighResolutionCapable':True,
+                         'CFBundleVersion':'20261105.141', 'CFBundleDisplayName':'Labwise Beta' if beta else 'Labwise',
+                         'NSHighResolutionCapable':True,
                          'LSMultipleInstancesProhibited':True,
                          'NSHumanReadableCopyright':'Labwise local trial. Third-party notices are included.'})

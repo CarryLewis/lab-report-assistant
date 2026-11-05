@@ -2,19 +2,16 @@
 
 [中文](README.md) | **English**
 
-## Two release lines
+## Release channels
 
-**[1.3.7 remains the recommended stable release](https://github.com/CarryLewis/lab-report-assistant/releases/tag/v1.3.7).** Opt into [1.4.1 Beta](https://github.com/CarryLewis/lab-report-assistant/releases/tag/v1.4.1) for the weighted-scale fix and drive-folder snapshots.
+**Use [1.3.7 stable](https://github.com/CarryLewis/lab-report-assistant/releases/tag/v1.3.7) for the current recommended workflow, or opt into [1.4.1 Beta](https://github.com/CarryLewis/lab-report-assistant/releases/tag/v1.4.1) to test new features.**
 
-Maintain 1.3.x on `release/1.3` and test 1.4.x on `release/1.4`. 1.4.1 is a Pre-release, not Latest. See the [comparison and release policy](docs/RELEASE_CHANNELS.md).
+- **1.3.7 / 1.3.x stable:** the existing review workflow and bundled LibreOffice, delivered as `Labwise.app`.
+- **1.4.1 / 1.4.x Beta:** the weighted evaluation-scale fix plus iCloud/OneDrive folder snapshots, history and independent restores. `Labwise Beta.app` uses a separate default data directory.
 
-## Download the macOS app (Apple Silicon)
+1.4.1 is a pre-release and does not replace 1.3.7 as Latest. Folder snapshots are not real-time two-way merging; direct OneDrive account access and actual cloud round trips remain pending validation.
 
-**[Download Labwise 1.3.7 (DMG, bundled LibreOffice)](https://github.com/CarryLewis/lab-report-assistant/releases/download/v1.3.7/Labwise-1.3.7-macOS-arm64-trial.dmg)**
-
-[Alternative ZIP](https://github.com/CarryLewis/lab-report-assistant/releases/download/v1.3.7/Labwise-1.3.7-macOS-arm64-trial.zip) · [Release notes and checksums](https://github.com/CarryLewis/lab-report-assistant/releases/tag/v1.3.7)
-
-Python and the complete LibreOffice conversion component are included. No separate converter installation or path configuration is required for Word pagination and PDF export. This is an Apple Silicon local trial build, without Developer ID signing or Apple notarization. Intel Mac and Windows installers are not included. Save your work and quit the previous version before replacing the app; teacher data is stored separately.
+Updates are maintained separately on [`release/1.3`](https://github.com/CarryLewis/lab-report-assistant/tree/release/1.3) and [`release/1.4`](https://github.com/CarryLewis/lab-report-assistant/tree/release/1.4). See the [release-line policy and comparison](docs/RELEASE_CHANNELS.md). Local test installers are also retained under `output/beta-1.4.1/`.
 
 ## Download the complete project
 
@@ -37,9 +34,9 @@ Help university instructors understand English lab reports faster, trace feedbac
 
 Labwise is a project for understanding, reviewing and providing feedback on university lab reports. It began with the needs of instructors in China who review English reports as non-native English speakers, focusing initially on report writing and rubric-based assessment in the British university context. Its longer-term aim is a workspace that fits everyday teaching practice.
 
-Initiated by [CarryLewis](https://github.com/CarryLewis), the project is currently a local teacher pilot under active development. The current development version is **1.3.7**; interface versions, archived variants and future plans describe different implementation states.
+Initiated by [CarryLewis](https://github.com/CarryLewis), the project is currently a local teacher pilot under active development. The current development version is **1.4.1 Beta**, while **1.3.7** remains stable; interface versions, archived variants and future plans describe different implementation states.
 
-## Latest development (1.3.6)
+## Historical development (1.3.6)
 
 Compact review toolbar with outline, source and feedback panes. Removed legacy minimum heights that caused nested scrolling and clipping. Reading notes and overviews expand on demand; errors, evidence navigation and drafts remain available.
 
@@ -56,7 +53,7 @@ Unified Chinese and English UI typography, navigation and action icons, buttons 
 - Eight writing genres, 80 original draft feedback examples and eight fictional text fixtures; assignment and rubric snapshots remain authoritative.
 - A choice of code-based rubric parsing or AI interpretation, with an editable preview and evidence-linked draft scores in AI mode. Instructors confirm final judgments.
 - Chinese and English UI, startup checks, import recovery, full local backups and restoration into an independent copy.
-- Individual and assignment-merged review PDFs with previews, source highlights, numbered margin comments and complete feedback. The 1.3.7 macOS installer includes LibreOffice for PDF conversion.
+- Individual and assignment-merged review PDFs with previews, source highlights, numbered margin comments and complete feedback. macOS installers from 1.3.7 bundle LibreOffice for PDF conversion.
 - macOS trial-app build and smoke-check scripts. Generated installers, local backups and private data are excluded from source control.
 
 See [multi-genre writing](docs/24_MULTI_GENRE_WRITING.md), [dual rubric modes](docs/25_DUAL_RUBRIC_PROCESSING.md), [PDF export](docs/20_PDF_REVIEW_EXPORT.md) and [local delivery](docs/21_LOCAL_APP_DELIVERY.md).
@@ -119,7 +116,7 @@ The repository contains a locally runnable teacher workflow: assignment and rubr
 
 The current submission workflow is **Word-first and accepts DOCX only** for new student reports. The parser reads body paragraphs, tables, common embedded images and available chart caches while retaining file digests, source paragraphs and object identifiers. The structure-recognition design favors explicit semantics, rules before AI, and traceable inference; full normalization is still being implemented in stages.
 
-The Word reading view prioritizes anchored text, tables and common images. It is not Microsoft Word's layout engine. Complex equations, native charts, OLE objects and fonts may affect display or analysis coverage. Paginated rendering paths require local LibreOffice; historical PDFs use bundled PDF.js. Original files are retained, and instructors should check converted layouts.
+The Word reading view prioritizes anchored text, tables and common images. It is not Microsoft Word's layout engine. Complex equations, native charts, OLE objects and fonts may affect display or analysis coverage. macOS installers from 1.3.7 use bundled LibreOffice; source checkouts require a separate installation; historical PDFs use bundled PDF.js. Original files are retained, and instructors should check converted layouts.
 
 ### AI-assisted analysis
 

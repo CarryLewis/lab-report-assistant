@@ -4,6 +4,7 @@ import base64
 import io
 import hashlib
 import json
+import plistlib
 import os
 from pathlib import Path
 import signal
@@ -79,6 +80,17 @@ def main():
             assert record['port']!=occupied.getsockname()[1]
             assert request(record,'api/pilot/health')['instance_id']==record['instance_id']
             checks.append('packaged-runtime-and-port-fallback')
+            preflight=root/'preflight.json'
+            subprocess.run([str(binary),'--self-test','--report',str(preflight)],check=True)
+            metadata=json.loads(preflight.read_text())
+            info=plistlib.loads((installed/'Contents/Info.plist').read_bytes())
+            if metadata.get('release_channel')=='beta':
+                assert metadata['version']=='1.4.1' and metadata['stable_version']=='1.3.7'
+                assert info['CFBundleIdentifier']=='com.carrylewis.labwise.beta'
+                assert Path(metadata['default_data_directory']).parent.name=='Labwise Beta'
+                assert request(record,'api/pilot/health')['release_channel']=='beta'
+                assert '测试工作区'.encode() in request(record,'',raw=True)
+                checks.append('beta-channel-bundle-identity-and-independent-default-data')
             for path in ('','cloud-backup.js','cloud-backup.css','review-layout.css','design-system.css','user-support.js','teacher-live.js','word-reader.html','vendor/pdfjs/pdf.mjs'):
                 assert request(record,path,raw=True)
             checks.append('bundled-assets-without-source-environment')
@@ -123,6 +135,22 @@ def main():
             drafts=request(record,'api/pilot/rubric-draft')['drafts']
             assert {d['processing_mode'] for d in drafts}=={'code','ai'}
             checks.append('packaged-AI-understanding-and-separate-code-AI-drafts')
+            weighted='方法占30%，结果占70%。每个维度先按百分制评价：优秀80至100。总分20分。'
+            weighted_understanding={'schema_version':'rubric-understanding.v1','input_type':'weights','summary':'百分制评价，20分制贡献',
+                'declared_total':20,'questions':[],'special_rules':[],'source_text':weighted,
+                'context_key':hashlib.sha256(json.dumps([weighted,'实验报告',''],ensure_ascii=False).encode()).hexdigest(),
+                'criteria':[{'id':cid,'name':name,'maximum_points':None,'weight_percent':weight,
+                    'evaluation_maximum':100,'evaluation_source_quote':'每个维度先按百分制评价',
+                    'descriptor':'','source_quote':weighted,
+                    'levels':[{'label':'优秀','minimum':80,'maximum':100,'descriptor':'','source_quote':'优秀80至100'}]}
+                    for cid,name,weight in [('methods','方法',30),('results','结果',70)]]}
+            weighted_id=request(record,'api/pilot/assignments',{'title':'虚构加权量表验收','assignment_type':'实验报告',
+                'processing_mode':'ai','source_text':weighted,'rubric_understanding':weighted_understanding})['id']
+            weighted_saved=next(a for a in request(record,'api/pilot/bootstrap')['assignments'] if a['id']==weighted_id)
+            assert [c['maximum_points'] for c in weighted_saved['rubric']['criteria']]==[6,14]
+            assert all(c['evaluation_maximum']==100 and c['levels'][0]['maximum']==100 for c in weighted_saved['rubric']['criteria'])
+            assert b'raw_base_score' in request(record,'teacher-live.js',raw=True)
+            checks.append('packaged-weighted-evaluation-scale-and-contribution-persistence')
 
             assert not request(record,'api/pilot/bootstrap')['settings']['has_key']
             assignment=request(record,'api/pilot/assignments',{'title':'虚构安装验收','source_text':'方法（40分）\n说明步骤。\n结果（60分）\n说明局限。'})

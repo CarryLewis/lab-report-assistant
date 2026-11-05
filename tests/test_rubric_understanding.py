@@ -23,6 +23,19 @@ def understanding(source='方法30分，结果70分', weights=False, total=None)
                         for cid,name,maximum in [('methods','方法',30),('results','结果',70)]]}
 
 
+WEIGHTED_SOURCE = '方法占30%，结果占70%。每个维度先按百分制评价：优秀80至100，合格60至79，不合格0至59，最后按权重计算总分。'
+
+
+def weighted_understanding(total=None):
+    source = WEIGHTED_SOURCE + (f'总分{total}分。' if total is not None else '')
+    out = understanding(source, weights=True, total=total)
+    for criterion in out['criteria']:
+        criterion.update(evaluation_maximum=100, evaluation_source_quote='每个维度先按百分制评价',
+                         levels=[{'label':'优秀','minimum':80,'maximum':100,'descriptor':'',
+                                  'source_quote':'优秀80至100'}])
+    return source, out
+
+
 def response(out, finish='stop'):
     return io.BytesIO(json.dumps({'choices':[{'finish_reason':finish,'message':{'content':json.dumps(out)}}]}).encode())
 
@@ -55,6 +68,41 @@ class RubricTestCase(unittest.TestCase):
 
 
 class RubricUnderstandingTests(RubricTestCase):
+    def test_original_evaluation_scale_survives_weighting_save_and_report_snapshot(self):
+        for total, maxima in [(None,[30,70]), (20,[6,14])]:
+            with self.subTest(total=total):
+                source, out = weighted_understanding(total)
+                parsed = self.understand(source, out, assignment_type='实验报告')
+                self.assertTrue(parsed['ready'], parsed['messages'])
+                self.assertEqual([c['maximum_points'] for c in parsed['criteria']], maxima)
+                self.assertEqual([c['evaluation_maximum'] for c in parsed['criteria']], [100,100])
+                self.assertEqual(parsed['criteria'][0]['levels'][0]['maximum'], 100)
+                checked = rubric_ai.validate(parsed, source)
+                self.assertEqual(checked['criteria'], parsed['criteria'])
+                self.assertEqual(rubric_ai.validate(checked, source), checked)
+                aid = self.save(parsed)
+                report = self.call('reports', {'assignment_id':aid, 'sample':True})
+                saved = next(a for a in self.call('bootstrap')['assignments'] if a['id']==aid)
+                self.assertEqual(saved['rubric']['criteria'], parsed['criteria'])
+                self.assertEqual(report['assignment']['rubric']['criteria'], parsed['criteria'])
+
+    def test_separate_scale_requires_valid_source_and_never_relaxes_level_bounds(self):
+        source, original = weighted_understanding()
+        for value in [True, 0, -100, float('nan')]:
+            out = copy.deepcopy(original); out['criteria'][0]['evaluation_maximum'] = value
+            with self.subTest(value=value), self.assertRaises(ValueError):
+                rubric_ai.validate(out, source)
+        for quote in ['', '这是一段编造的量表依据']:
+            out = copy.deepcopy(original); out['criteria'][0]['evaluation_source_quote'] = quote
+            with self.subTest(quote=quote), self.assertRaisesRegex(ValueError, '量表'):
+                rubric_ai.validate(out, source)
+        out = copy.deepcopy(original); out['criteria'][0]['levels'][0]['maximum'] = 101
+        self.assertFalse(rubric_ai.validate(out, source)['ready'])
+        for criterion in original['criteria']:
+            criterion.pop('evaluation_maximum'); criterion.pop('evaluation_source_quote')
+        # An old/ambiguous result must be reinterpreted, not guessed from the top band.
+        self.assertFalse(rubric_ai.validate(original, source)['ready'])
+
     def test_natural_sentence_uses_model_and_save_never_regex_parses(self):
         for source in ['方法30分，结果70分','方法三十分，结果七十分','方法：30；结果：70']:
             with self.subTest(source=source):
@@ -144,6 +192,62 @@ class RubricUnderstandingTests(RubricTestCase):
 
 
 class RubricScoreTests(RubricTestCase):
+    def weighted_report(self, total=None):
+        source, out = weighted_understanding(total)
+        parsed = self.understand(source, out, assignment_type='实验报告')
+        aid = self.save(parsed)
+        report = self.call('reports', {'assignment_id':aid, 'sample':True})
+        maxima = [c['maximum_points'] for c in report['assignment']['rubric']['criteria']]
+        evidence = {'paragraph_id':'p2','quote':'Each measurement was performed once'}
+        items = [{'criterion_id':cid, 'raw_base_score':raw, 'base_score':raw/100*maximum,
+                  'score':raw/100*maximum, 'rationale':'按原量表评价，再换算贡献分。',
+                  'evidence':[evidence], 'uncertainty':'', 'adjustments':[]}
+                 for cid, raw, maximum in zip(['methods','results'], [80,90], maxima)]
+        return report, items
+
+    def test_weighted_scores_are_contributions_not_sum_of_raw_scores(self):
+        for total, expected in [(None,87), (20,17.4)]:
+            report, items = self.weighted_report(total)
+            result = rubric_scoring.validate(items, report)
+            self.assertAlmostEqual(result['suggested_total'], expected)
+            self.assertEqual(result['score_suggestions'][0]['raw_base_score'], 80)
+            self.assertEqual(rubric_scoring.validate(result['score_suggestions'],report), result)
+        report, items = self.weighted_report()
+        report['assignment']['rubric']['special_rules']=[{'id':'refs','kind':'deduction','maximum_adjustment':4}]
+        items[0].update(score=22, adjustments=[{'rule_id':'refs','points':-2,'reason':'总分贡献扣2分'}])
+        self.assertEqual(rubric_scoring.validate(items,report)['suggested_total'],85)
+
+    def test_weighted_scores_reject_missing_or_inconsistent_raw_scale(self):
+        report, original = self.weighted_report()
+        for value in [None, True, -1, 101, float('nan'), 90]:
+            items = copy.deepcopy(original); items[0]['raw_base_score'] = value
+            with self.subTest(raw=value), self.assertRaises(ValueError):
+                rubric_scoring.validate(items,report)
+        items = copy.deepcopy(original); items[0].pop('raw_base_score')
+        with self.assertRaises(ValueError):rubric_scoring.validate(items,report)
+        items = copy.deepcopy(original); items[0].update(base_score=80,score=80)
+        with self.assertRaises(ValueError):rubric_scoring.validate(items,report)
+
+    def test_weighted_unknown_score_has_no_raw_score_or_total(self):
+        report, items = self.weighted_report()
+        items[0].update(raw_base_score=None,base_score=None,score=None,evidence=[],uncertainty='材料不足')
+        self.assertIsNone(rubric_scoring.validate(items,report)['suggested_total'])
+        items[0]['raw_base_score']=80
+        with self.assertRaises(ValueError):rubric_scoring.validate(items,report)
+
+    def test_weighted_analysis_persists_candidate_conversion_without_teacher_overwrite(self):
+        report, items = self.weighted_report()
+        path = 'reports/'+report['id']
+        report = self.call(path+'/save',{'revision':report['revision'],'scores':{'methods':12},'feedback':'教师意见'})
+        output = analysis_output(); output['score_suggestions'] = items
+        with patch.object(backend,'KEY','fake'),patch.object(backend,'urlopen',return_value=response(output)):
+            reviewed = self.call(path+'/analyze', {'mode':'deepseek','revision':report['revision']})
+        self.assertEqual(reviewed['status'], 'ready', reviewed.get('error'))
+        self.assertEqual(reviewed['analysis']['suggested_total'],87)
+        self.assertEqual(reviewed['analysis']['score_suggestions'][0]['raw_base_score'],80)
+        self.assertEqual(self.call(path)['analysis'],reviewed['analysis'])
+        self.assertEqual(reviewed['scores'],{'methods':12}); self.assertEqual(reviewed['feedback'],'教师意见')
+
     def report(self):
         source='方法30分，结果30分，讨论40分'
         out=understanding(source);out['criteria'][1]['maximum_points']=30
@@ -205,6 +309,17 @@ class RubricScoreTests(RubricTestCase):
         with patch('word_source.inputs',return_value=({'objects':[],'tables':[]},[],coverage)),patch.object(backend,'KEY','fake'),patch.object(backend,'urlopen',return_value=response(output)):
             result=backend.analyze(report,'deepseek',{'model':'deepseek-flash'},None)
         self.assertIsNone(result['suggested_total']);self.assertTrue(all(s['score'] is None for s in result['score_suggestions']))
+
+    def test_unreadable_visual_material_also_clears_original_scale_candidates(self):
+        report, items = self.weighted_report()
+        report['word_source']={'version':'word-native-v1','objects':[{'id':'fig1'}]}
+        output=analysis_output();output['score_suggestions']=items
+        output['visual_checks']=[{'object_id':'fig1','status':'unclear','summary':'无法读取图像'}]
+        coverage={'objects':[{'id':'fig1','status':'image_sent'}],'warnings':[],'state':'complete'}
+        with patch('word_source.inputs',return_value=({'objects':[],'tables':[]},[],coverage)),patch.object(backend,'KEY','fake'),patch.object(backend,'urlopen',return_value=response(output)):
+            result=backend.analyze(report,'deepseek',{'model':'deepseek-flash'},None)
+        self.assertFalse(result['scoring_complete'])
+        self.assertTrue(all(s['raw_base_score'] is None for s in result['score_suggestions']))
 
 
 class DualProcessingTests(RubricTestCase):

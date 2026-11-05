@@ -21,11 +21,27 @@ class DesktopRuntimeTests(unittest.TestCase):
             home = Path(folder)
             with patch.dict(os.environ, {'LABWISE_DATA_DIR':''}), patch.object(app_paths.Path,'home',return_value=home), patch.object(app_paths.sys,'platform','darwin'):
                 with patch.object(app_paths.sys,'frozen',True,create=True):
-                    self.assertEqual(app_paths.data_directory(),home/'Library/Application Support/Labwise/data')
+                    for channel, name in [('stable','Labwise'),('beta','Labwise Beta')]:
+                        with patch.object(app_paths,'release_channel',return_value=channel):
+                            self.assertEqual(app_paths.data_directory(),home/'Library/Application Support'/name/'data')
                 with patch.object(app_paths.sys,'frozen',False,create=True):
                     self.assertEqual(app_paths.data_directory(),app_paths.ROOT/'.labwise')
             with patch.dict(os.environ, {'LABWISE_DATA_DIR':str(home/'restored')}):
                 self.assertEqual(app_paths.data_directory(),(home/'restored').resolve())
+
+    def test_beta_metadata_and_default_workspace_are_explicit(self):
+        self.assertEqual(app_paths.version(),'1.4.1')
+        self.assertEqual(app_paths.release_channel(),'beta')
+        self.assertEqual(app_paths.stable_version(),'1.3.7')
+        status=runtime.preflight()
+        self.assertEqual(status['release_channel'],'beta')
+        self.assertEqual(status['stable_version'],'1.3.7')
+
+    def test_older_program_resources_default_to_stable_channel(self):
+        with tempfile.TemporaryDirectory() as folder,patch.object(app_paths,'ROOT',Path(folder)):
+            (Path(folder)/'VERSION').write_text('1.3.7')
+            self.assertEqual(app_paths.release_channel(),'stable')
+            self.assertEqual(app_paths.stable_version(),'1.3.7')
 
     def test_missing_component_is_optional_and_invalid_override_is_not_accepted(self):
         with tempfile.TemporaryDirectory() as folder, patch.dict(os.environ,{'LABWISE_SOFFICE':str(Path(folder)/'not-installed')}):

@@ -11,8 +11,12 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
-BUILD = Path(os.environ.get('LABWISE_BUILD_DIR', str(ROOT / 'output' / 'build'))).expanduser().resolve()
-RELEASE = Path(os.environ.get('LABWISE_RELEASE_DIR', str(ROOT / 'output' / 'installers'))).expanduser().resolve()
+sys.path.insert(0, str(ROOT))
+from app_paths import release_channel, stable_version, version as app_version
+
+beta_build = release_channel() == 'beta'
+BUILD = Path(os.environ.get('LABWISE_BUILD_DIR', str(ROOT / 'output' / (f'build-beta-{app_version()}' if beta_build else 'build')))).expanduser().resolve()
+RELEASE = Path(os.environ.get('LABWISE_RELEASE_DIR', str(ROOT / 'output' / (f'beta-{app_version()}' if beta_build else 'installers')))).expanduser().resolve()
 
 
 def bundle_libreoffice(app):
@@ -96,6 +100,9 @@ def main():
     if sys.platform != 'darwin':
         raise SystemExit('macOS 应用需要在 macOS 上构建。')
     version = (ROOT/'VERSION').read_text().strip()
+    channel = release_channel()
+    beta = channel == 'beta'
+    app_name = 'Labwise Beta.app' if beta else 'Labwise.app'
     architecture = platform.machine()
     assets = BUILD / 'package-assets'
     if assets.exists():
@@ -103,6 +110,7 @@ def main():
     assets.mkdir(parents=True)
     notices(assets / 'third-party-licenses')
     info = {'application':'Labwise','version':version,'architecture':architecture,
+            'release_channel':channel,'stable_version':stable_version(), 'application_bundle':app_name,
             'tested_build_os':platform.mac_ver()[0], 'distribution':'local-trial',
             'developer_id_signed':False,'notarized':False,
             'source_hashes':{file.name:hashlib.sha256(file.read_bytes()).hexdigest() for file in sorted(ROOT.glob('*.py'))}}
@@ -113,7 +121,7 @@ def main():
     subprocess.run([sys.executable,'-m','PyInstaller','--noconfirm','--clean',
                     '--distpath',str(BUILD/'macos-dist'),'--workpath',str(BUILD/'macos-work'),
                     str(ROOT/'packaging'/'macos.spec')],cwd=ROOT,env=environment,check=True)
-    app = BUILD/'macos-dist'/'Labwise.app'
+    app = BUILD/'macos-dist'/app_name
     info['libreoffice'] = bundle_libreoffice(app)
     run('codesign','--verify','--deep','--strict',app)
     preflight = BUILD/'packaged-preflight.json'
@@ -121,6 +129,10 @@ def main():
     status = json.loads(preflight.read_text())
     if not status['runtime_ok'] or status['missing_resources'] or not status.get('data_outside_program'):
         raise SystemExit('打包后的运行检查失败，未生成安装交付物。')
+    if status.get('version') != version or status.get('release_channel') != channel or status.get('stable_version') != stable_version():
+        raise SystemExit('包内版本或发布渠道标识不一致，停止生成安装包。')
+    if beta and Path(status['default_data_directory']).parent.name != 'Labwise Beta':
+        raise SystemExit('测试版默认资料目录未独立，停止生成安装包。')
     expected_converter = app / 'Contents/Helpers/LibreOffice.app/Contents/MacOS/soffice'
     if status.get('word_converter') != str(expected_converter) or not status['paged_word_export']:
         raise SystemExit('未启用包内 Word 转换组件，停止生成安装包。')
@@ -142,13 +154,13 @@ def main():
     if stage.exists():
         shutil.rmtree(stage)
     stage.mkdir()
-    run('ditto',app,stage/'Labwise.app')
+    run('ditto',app,stage/app_name)
     (stage/'Applications').symlink_to('/Applications')
     shutil.copy2(ROOT/'packaging'/'INSTALL.zh.txt',stage/'安装与使用说明.txt')
     RELEASE.mkdir(parents=True,exist_ok=True)
-    stem = f'Labwise-{version}-macOS-{architecture}-trial'
+    stem = f'Labwise-{version}{"-beta" if beta else ""}-macOS-{architecture}-trial'
     dmg = RELEASE/(stem+'.dmg')
-    run('hdiutil','create','-volname','Labwise 本机试用','-srcfolder',stage,'-format','UDZO','-ov',dmg)
+    run('hdiutil','create','-volname','Labwise '+version+(' 测试版' if beta else ' 本机试用'),'-srcfolder',stage,'-format','UDZO','-ov',dmg)
     run('hdiutil','verify',dmg)
     archive = RELEASE/(stem+'.zip')
     run('ditto','-c','-k','--sequesterRsrc','--keepParent',app,archive)
