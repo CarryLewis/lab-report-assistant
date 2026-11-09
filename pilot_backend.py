@@ -665,11 +665,12 @@ def dispatch(method, path, body, tls):
             if 'file' in body and not str(body.get('filename','')).lower().endswith('.docx'):raise ValueError('评分细则文件仅接收 Word（.docx）。')
             from rubric_import import extract
             return extract(body,parse=not body.get('extract_only'))
-        if len(parts)==5 and parts[:3]==['api','pilot','assignments'] and parts[4]=='export-pdf' and method in ('GET','POST'):
+        if len(parts)==5 and parts[:3]==['api','pilot','assignments'] and parts[4] in ('export-pdf','export-pdf-zip') and method in ('GET','POST'):
             import pdf_export
             rows=[json.loads(row['payload']) for row in c.execute('SELECT payload FROM reports ORDER BY id')]
-            reports=[r for r in rows if r['assignment']['id']==parts[3] and not r.get('archived') and not r.get('sample')]
-            return pdf_export.export(reports,DATA,reports[0]['assignment']['title'] if reports else 'assignment',body.get('options'))
+            reports=[r for r in rows if (r.get('assignment') or {}).get('id')==parts[3] and not r.get('archived') and not r.get('sample')]
+            export = pdf_export.export_zip if parts[4]=='export-pdf-zip' else pdf_export.export
+            return export(reports,DATA,reports[0]['assignment']['title'] if reports else 'assignment',body.get('options'))
         if len(parts)==5 and parts[:3]==['api','pilot','assignments'] and parts[4]=='export-review' and method=='GET':
             import word_export
             rows=[json.loads(row['payload']) for row in c.execute('SELECT payload FROM reports')]

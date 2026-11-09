@@ -6,6 +6,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
+from zipfile import ZipFile
 
 from pypdf import PdfReader, PdfWriter
 from reportlab.pdfgen import canvas
@@ -172,6 +173,38 @@ class PdfExportTests(unittest.TestCase):
         second['confirmed'] = False
         with self.assertRaisesRegex(ValueError, '全部作业'):
             pdf.export([self.report, second], self.root, '全班')
+
+    def test_assignment_zip_contains_one_confirmed_pdf_per_active_submission(self):
+        second = dict(self.report, id='second', feedback='SECOND_STUDENT_FEEDBACK')
+        (self.root / 'sources' / 'second.bin').write_bytes((self.root / 'sources' / 'fictional.bin').read_bytes())
+        archived = dict(self.report, id='archived', archived=True, confirmed=False)
+        sample = dict(self.report, id='sample', sample=True, confirmed=False)
+        other = dict(self.report, id='other', assignment=dict(self.report['assignment'], id='other-task'), confirmed=False)
+        route = '/api/pilot/assignments/task/export-pdf-zip'
+        with patch.object(backend, 'DATA', self.root):
+            backend.init()
+            with backend.db() as c:
+                for report in (self.report, second, archived, sample, other):
+                    backend.persist(c, report)
+            package = backend.dispatch('POST', route, {}, None)
+            self.assertEqual(package['content_type'], 'application/zip')
+            self.assertEqual(package['filename'], '生长曲线实验-reviewed-pdfs.zip')
+            with ZipFile(io.BytesIO(base64.b64decode(package['content']))) as archive:
+                names = archive.namelist()
+                self.assertEqual(len(names), 2)
+                self.assertEqual(len(set(names)), 2)
+                self.assertTrue(all(n.endswith('.pdf') and '/' not in n for n in names))
+                texts = ['\n'.join(p.extract_text() for p in PdfReader(io.BytesIO(archive.read(n))).pages)
+                         for n in names]
+            self.assertEqual(sum('SECOND_STUDENT_FEEDBACK' in value for value in texts), 1)
+            for value in texts:
+                self.assertIn('TEACHER_ANNOTATION', value)
+                self.assertIn('Each measurement was performed once.', value)
+                self.assertNotIn('PRIVATE_TEACHER_NOTE', value)
+            with backend.db() as c:
+                backend.persist(c, dict(second, confirmed=False))
+            with self.assertRaisesRegex(ValueError, '全部作业'):
+                backend.dispatch('POST', route, {}, None)
 
 
 if __name__ == '__main__':

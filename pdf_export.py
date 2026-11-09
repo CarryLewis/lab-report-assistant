@@ -5,6 +5,7 @@ import io
 import re
 import threading
 import unicodedata
+from zipfile import ZIP_DEFLATED, ZipFile
 from collections import defaultdict
 from pathlib import Path
 from xml.sax.saxutils import escape
@@ -413,22 +414,27 @@ def build(report, root, options=None):
                               'warnings': warnings}
 
 
-def export(reports, root, title, options=None):
+def batch_reports(reports, root):
     if not reports:
         raise ValueError('没有可导出的作业。')
     if len(reports) > 200:
         raise ValueError('单次最多导出 200 份作业。')
     if any(not report.get('confirmed') for report in reports):
-        raise ValueError('请先完成全部作业的教师确认，再合并导出 PDF。')
-    options_check(options)
+        raise ValueError('请先完成全部作业的教师确认，再批量导出 PDF。')
     source_total = sum((root / 'sources' / (r['id'] + '.bin')).stat().st_size
                        for r in reports if (root / 'sources' / (r['id'] + '.bin')).is_file())
     if source_total > MAX_BYTES:
         raise ValueError('原文件总量超过 120 MB，请按学生分别导出。')
+    return sorted(reports, key=lambda r: (r.get('student_alias', ''), r['filename'], r['id']))
+
+
+def export(reports, root, title, options=None):
+    reports = batch_reports(reports, root)
+    options_check(options)
     combined = PdfWriter()
     details = []
     generated_size = 0
-    for report in sorted(reports, key=lambda r: (r.get('student_alias', ''), r['filename'], r['id'])):
+    for report in reports:
         raw, info = build(report, root, options)
         generated_size += len(raw)
         if generated_size > MAX_BYTES:
@@ -447,3 +453,32 @@ def export(reports, root, title, options=None):
             'summary': {'reports': len(reports), 'pages': len(combined.pages),
                         'comments': sum(d['comments'] for d in details),
                         'unlocated': sum(d['unlocated'] for d in details), 'details': details}}
+
+
+def export_zip(reports, root, title, options=None):
+    reports = batch_reports(reports, root)
+    options = options_check(options)
+
+    def zip_stem(label):
+        # Leave room for the sequence number and extension on extraction.
+        return safe_name(label).encode('utf-8')[:220].decode('utf-8', 'ignore').rstrip('. ')
+
+    output = io.BytesIO()
+    generated_size = 0
+    with ZipFile(output, 'w', compression=ZIP_DEFLATED, compresslevel=1) as archive:
+        for number, report in enumerate(reports, 1):
+            try:
+                raw, _ = build(report, root, options)
+            except ValueError as error:
+                raise ValueError(f'{report["filename"]}：{error}') from error
+            generated_size += len(raw)
+            if generated_size > MAX_BYTES:
+                raise ValueError('批注 PDF 压缩包超过 120 MB，请按学生分别导出。')
+            stem = Path(report['filename']).stem
+            label = ' - '.join(filter(None, (report.get('student_alias'), stem)))
+            # Numbered names stay unique even when students submit identical filenames.
+            archive.writestr(f'{number:03d}-{zip_stem(label)}-reviewed.pdf', raw)
+    if output.tell() > MAX_BYTES:
+        raise ValueError('批注 PDF 压缩包超过 120 MB，请按学生分别导出。')
+    return {'filename': zip_stem(title) + '-reviewed-pdfs.zip', 'encoding': 'base64',
+            'content_type': 'application/zip', 'content': base64.b64encode(output.getbuffer()).decode()}

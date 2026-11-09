@@ -102,6 +102,7 @@ async function refresh(){
 }
 // Keep branch expansion and keyboard focus stable during automatic status polling.
 const reportGroupOpen=new Map();
+const assignmentZipExports=new Set();
 let reportListSignature='';
 function drawReportList(){
   const query=$('reportSearch').value.trim().toLowerCase(),filter=$('reportFilter').value;
@@ -158,12 +159,39 @@ function drawReportList(){
       if(r.status==='waiting_key'){const connect=node('button','archive-action',uiT('配置连接'));connect.onclick=()=>openTeacherSection('settings');row.append(connect);}
       const archive=node('button','archive-action',uiT('归档'));archive.onclick=safeAction(async()=>{if(!window.confirm(uiT('将此报告移出任务列表？已保存的内容仍会保留。')))return;const current=await api('reports/'+r.id);await api('reports/'+r.id+'/archive',{revision:current.revision});await refresh();});row.append(archive);children.append(row);
     });
+    if(total&&done===total){
+      const exports=node('div','assignment-review-exports');
+      const zip=node('button','assignment-export-button primary',uiT('导出全部批注 PDF（ZIP）'));
+      zip.type='button';
+      zip.disabled=assignmentZipExports.has(group.id);
+      if(zip.disabled)zip.textContent=uiT('正在生成批注 PDF…');
+      zip.onclick=safeAction(async()=>{
+        if(assignmentZipExports.has(group.id))return;
+        assignmentZipExports.add(group.id);
+        zip.disabled=true;
+        zip.textContent=uiT('正在生成批注 PDF…');
+        try{
+          const pack=await api('assignments/'+encodeURIComponent(group.id)+'/export-pdf-zip',{});
+          downloadBase64Package(pack);
+          message(uiT('已开始下载批注 PDF 压缩包。'));
+        }finally{
+          assignmentZipExports.delete(group.id);
+          zip.disabled=false;
+          zip.textContent=uiT('导出全部批注 PDF（ZIP）');
+          if(!zip.isConnected){reportListSignature='';drawReportList();}
+        }
+      });
+      const pdfAll=node('button','assignment-export-button',uiT('合并导出 PDF'));
+      pdfAll.type='button';
+      pdfAll.onclick=()=>window.LabwisePdfExport.open({path:'assignments/'+encodeURIComponent(group.id)+'/export-pdf',label:group.title+' · '+total+uiT(' 份已确认作业')});
+      exports.append(zip,pdfAll);
+      children.append(exports);
+    }
     branch.append(children);task.append(branch);
     const action=total===0?uiT('等待导入'):done===total?uiT('全部已完成'):drafts.length||done?uiT('继续批改'):uiT('开始批改');
     const resume=node('button','assignment-resume-button',action);
     resume.disabled=total===0||done===total;resume.setAttribute('aria-label',action+'：'+group.title);
     resume.onclick=safeAction(()=>continueAssignment(group.id));task.append(resume);
-    if(total&&done===total){const pdfAll=node('button','assignment-export-button assignment-pdf-export',uiT('合并导出 PDF'));pdfAll.onclick=()=>window.LabwisePdfExport.open({path:'assignments/'+encodeURIComponent(group.id)+'/export-pdf',label:group.title+' · '+total+uiT(' 份已确认作业')});task.append(pdfAll);const exportAll=node('button','assignment-export-button',uiT('导出批改包'));exportAll.onclick=safeAction(async()=>{exportAll.disabled=true;try{const pack=await api('assignments/'+encodeURIComponent(group.id)+'/export-review');downloadBase64Package(pack);message(uiT('已开始下载 Word 批改包，请查看浏览器下载记录。'));}finally{exportAll.disabled=false;}});task.append(exportAll);}
     list.append(task);
   }
   if(!visible)list.append(node('p','muted',groups.size?uiT('暂无匹配作业，请调整搜索或批改状态。'):uiT('尚无作业题。先创建作业题，再导入学生作业。')));

@@ -5,7 +5,7 @@
 ## 教师操作
 
 单份报告：完成教师确认 →「导出反馈」→「预览并下载评阅 PDF」。
-同一作业题：全部有效作业确认后，在工作台点击「合并导出 PDF」。导出顺序为学生姓名/编号、文件名、记录 ID，每份报告均有 PDF 书签。
+同一作业题：全部有效作业确认后，在工作台展开作业题，在作业列表末尾选择「导出全部批注 PDF（ZIP）」或「合并导出 PDF」。ZIP 内每份作业对应一个独立 PDF，可逐份分发。导出顺序为学生姓名/编号、文件名、记录 ID，每份报告均有 PDF 书签。
 
 预览使用本地 PDF.js 阅读器。预览和下载共享同一份生成结果。可以开关原文高亮、教师原文批注、评分细则；设置改变后必须重新生成，避免下载旧设置对应的 PDF。生成失败保留重试入口。关闭窗口会清除浏览器中的预览文件地址。
 
@@ -40,6 +40,7 @@ PDF 导出会区分缺少组件、组件无法启动、60 秒转换超时和文�
 - `pdf-export.js` / `pdf-export.css`：带内容设置的导出预览窗口。
 - `GET/POST /api/pilot/reports/{id}/export-pdf`：单份 PDF。POST 必须携带当前 `revision`，可附 `options`。
 - `GET/POST /api/pilot/assignments/{id}/export-pdf`：合并全部未归档、非样例、已确认作业。存在未确认记录时整体拒绝，不生成不完整包。
+- `GET/POST /api/pilot/assignments/{id}/export-pdf-zip`：同一范围内每份作业生成独立评阅 PDF，打包为 ZIP，按序号区分同名文件。
 - `options`：`highlights`、`annotations`、`rubric`，均为布尔值，默认 true。
 - 返回 PDF base64、文件名及份数/页数/评语数/未定位数。单原文上限 200 页，批量最多 200 份、2000 页，输入与输出限额 120 MB。
 - 新增运行依赖 `reportlab`；复用 `pypdf`、`pdfplumber` 和已有 Word 转换。Docker 已加入新文件。
