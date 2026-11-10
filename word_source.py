@@ -60,6 +60,9 @@ def extract(raw):
                     item['kind']='chart'
                     try:
                         chart=E.fromstring(blob)
+                        title = chart.find(f'.//{{{C}}}chart/{{{C}}}title')
+                        if title is not None:
+                            item['chart_title'] = ' '.join(node.text or '' for node in title.iter(f'{{{A}}}t'))[:500]
                         item['chart_series']=[{'name':' '.join(n.text or '' for n in ser.findall('.//{'+C+'}tx//{'+C+'}v')),'categories':[n.text or '' for n in ser.findall('.//{'+C+'}cat//{'+C+'}v')][:2000],'values':[n.text or '' for n in ser.findall('.//{'+C+'}val//{'+C+'}v')][:2000],'x':[n.text or '' for n in ser.findall('.//{'+C+'}xVal//{'+C+'}v')][:2000],'y':[n.text or '' for n in ser.findall('.//{'+C+'}yVal//{'+C+'}v')][:2000]} for ser in chart.iter('{'+C+'}ser')]
                         item['chart_text']=' | '.join((n.text or '') for n in chart.iter() if n.tag in ('{'+C+'}v','{'+A+'}t'))[:24000]
                         item['status']='chart_data_only'
@@ -97,6 +100,7 @@ def inputs(report, root):
                     from PIL import Image
                     im=Image.open(io.BytesIO(data));im.seek(0);im.thumbnail((2400,2400));output=io.BytesIO();im.convert('RGB').save(output,format='PNG');data=output.getvalue()
                     if len(data)>5*1024*1024: raise ValueError('图像过大')
+                    item['image_block_index'] = len(blocks) + 1
                     blocks.extend([{'type':'text','text':'Word object '+obj['id']+' at paragraph '+obj['paragraph_id']},
                                    {'type':'image_url','image_url':{'url':'data:image/png;base64,'+base64.b64encode(data).decode()}}]);total+=len(data);item['status']='image_sent'
                 except Exception: item['status']='unreadable_image'

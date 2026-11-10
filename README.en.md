@@ -120,6 +120,8 @@ The Word reading view prioritizes anchored text, tables and common images. It is
 
 ### AI-assisted analysis
 
+See the [AI review development archive](docs/ai-review/README.md) for backend rules, calibration notes and regression tests.
+
 The backend assembles necessary content from the current assignment, rubric and report before calling the configured DeepSeek service. The Word analysis path can assemble text, tables and supported images. Resource exclusions, missing renderings and unsupported objects should appear as incomplete coverage.
 
 Outputs pass field, rubric-dimension, paragraph and quotation checks before becoming suggestions. Network failures, missing credentials and invalid responses need recoverable states. Live analysis records exist for fictional examples; the latest Word multimodal path and representative complex submissions still require further acceptance testing.
