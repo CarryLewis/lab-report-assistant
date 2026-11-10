@@ -4,6 +4,7 @@ import io
 import json
 import tempfile
 import unittest
+from collections import OrderedDict
 from pathlib import Path
 from unittest.mock import patch
 from urllib.error import URLError
@@ -54,7 +55,9 @@ class RubricTestCase(unittest.TestCase):
         return backend.dispatch('GET' if body is None else 'POST','/api/pilot/'+path,body or {},None)
 
     def understand(self,source='方法30分，结果70分',out=None,**context):
-        with patch.object(backend,'KEY','fictional-key'),patch.object(backend,'urlopen',return_value=response(out or understanding(source))) as upstream:
+        with (patch.object(rubric_ai, '_cache', OrderedDict()),
+              patch.object(backend,'KEY','fictional-key'),
+              patch.object(backend,'urlopen',return_value=response(out or understanding(source))) as upstream):
             result=self.call('rubric-understand',{'source_text':source,**context})
         self.assertEqual(upstream.call_count,1)
         payload=json.loads(upstream.call_args.args[0].data)
@@ -68,6 +71,66 @@ class RubricTestCase(unittest.TestCase):
 
 
 class RubricUnderstandingTests(RubricTestCase):
+    def test_ready_preview_is_reused_only_for_the_same_review_context(self):
+        source = '方法30分，结果70分'
+        request = {'source_text': source, 'assignment_type': '实验报告', 'instructions': '检查实验方法。'}
+        with (patch.object(backend, 'KEY', 'first-credential'),
+              patch.object(backend, 'urlopen', side_effect=lambda *a, **k: response(understanding(source))) as upstream,
+              patch.object(rubric_ai, 'monotonic', return_value=100) as clock):
+            first = self.call('rubric-understand', request)
+            first['criteria'][0]['descriptor'] = '未保存的修改'
+            repeat = self.call('rubric-understand', request)
+            self.assertEqual(repeat['criteria'][0]['descriptor'], '')
+            upstream.assert_called_once()
+
+            self.call('rubric-understand', {**request, 'instructions': '核对结果。'})
+            self.call('rubric-understand', {**request, 'source_text': source + '。以原文证据为准。'})
+            with patch.object(backend, 'KEY', 'second-credential'):
+                self.call('rubric-understand', request)
+            with patch.object(backend, 'DATA', Path(self.temp.name) / 'other-workspace'):
+                rubric_ai.interpret(source, request['assignment_type'], request['instructions'],
+                                    {'model': 'deepseek-flash'}, None)
+            rubric_ai.interpret(source, request['assignment_type'], request['instructions'],
+                                {'model': 'deepseek-v4-pro'}, None)
+            clock.return_value = 401
+            self.call('rubric-understand', request)
+            self.assertEqual(upstream.call_count, 7)
+
+    def test_unresolved_preview_is_not_reused(self):
+        source = '方法30分，结果70分'
+        unresolved = understanding(source, total=80)
+        with (patch.object(backend, 'KEY', 'fictional-key'),
+              patch.object(backend, 'urlopen', side_effect=[response(unresolved), response(understanding(source))]) as upstream):
+            self.assertFalse(self.call('rubric-understand', {'source_text': source})['ready'])
+            self.assertTrue(self.call('rubric-understand', {'source_text': source})['ready'])
+            self.assertEqual(upstream.call_count, 2)
+
+    def test_saved_rubric_forms_a_stable_prefix_across_report_reviews(self):
+        source, out = weighted_understanding(20)
+        parsed = self.understand(source, out, assignment_type='实验报告', instructions='按教师评分表评阅。')
+        aid = self.save(parsed, instructions='按教师评分表评阅。', original_source_text=source)
+        saved = self.call('reports', {'assignment_id': aid, 'sample': True})
+        scores = [{'criterion_id': criterion['id'], 'base_score': None, 'score': None,
+                   'uncertainty': '待核实', 'rationale': '材料不足', 'evidence': []}
+                  for criterion in parsed['criteria']]
+        result = {'summary': '待核实', 'outline': [], 'claims': [], 'findings': [], 'score_suggestions': scores}
+        with (patch.object(backend, 'KEY', 'test-key'),
+              patch.object(backend, 'urlopen', side_effect=lambda *a, **k: response(result)) as upstream):
+            for body in ('第一份报告', '另一份报告'):
+                report = {**saved, 'paragraphs': [{'id': 'p1', 'text': body}]}
+                backend.analyze(report, 'deepseek', {'model': 'deepseek-flash'}, None)
+        first, second = [json.loads(call.args[0].data)['messages'] for call in upstream.call_args_list]
+        self.assertEqual(first[0], second[0])
+        first_input, second_input = first[1]['content'], second[1]['content']
+        self.assertNotEqual(first_input, second_input)
+        self.assertEqual(first_input.split(',"paragraphs":', 1)[0], second_input.split(',"paragraphs":', 1)[0])
+        context = json.loads(first_input)['assignment']
+        self.assertNotIn('id', context)
+        self.assertEqual(context['instructions'], '按教师评分表评阅。')
+        self.assertEqual(context['rubric']['criteria'], parsed['criteria'])
+        self.assertEqual(context['rubric']['source_text'], source)
+        self.assertNotIn('original_source_text', context['rubric'])
+
     def test_original_evaluation_scale_survives_weighting_save_and_report_snapshot(self):
         for total, maxima in [(None,[30,70]), (20,[6,14])]:
             with self.subTest(total=total):
@@ -337,7 +400,7 @@ class DualProcessingTests(RubricTestCase):
             result=backend.analyze(report,'deepseek',{'model':'deepseek-flash'},None)
         self.assertNotIn('score_suggestions',result)
         self.assertNotIn('score_suggestions',json.loads(request.call_args.args[0].data)['messages'][0]['content'])
-        self.assertEqual(result['prompt_version'],'writing-review-v3')
+        self.assertEqual(result['prompt_version'],'writing-review-v4')
         with self.assertRaisesRegex(ValueError,'代码版本'):
             self.call('reports/'+report['id']+'/score',{'revision':report['revision']})
 
